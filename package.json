@@ -1,18 +1,21 @@
 {
   "name": "krizova-prirucka",
   "version": "1.0.0",
-  "description": "Krízová príručka – kniha, aplikácia a web",
-  "main": "index.js",
+  "description": "Krízová príručka – interaktívna kniha, aplikácia a web (SK, CS, EN)",
   "scripts": {
     "build": "node tools/build.mjs",
+    "build:web": "node tools/build.mjs --no-pdf --no-epub",
     "serve": "npx http-server dist -p 8080 -c-1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "SEE LICENSE IN README.md",
   "dependencies": {
     "leaflet": "^1.9.4"
   },
   "type": "module",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "playwright": "1.56.1"
+  }
 }

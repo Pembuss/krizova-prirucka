@@ -8,7 +8,7 @@ export const LANGS = [
 ];
 
 export const UI = {
-  now: L('Okamžite urob', 'Okamžitě udělej', 'Do this now'),
+  now: L('Okamžite urob', 'Okamžitě udělej', 'Act now'),
   next: L('Kam ďalej', 'Kam dál', 'Where next'),
   doNow: L('Urob hneď', 'Udělej hned', 'Act now'),
   plan: L('Naplánuj', 'Naplánuj', 'Plan'),

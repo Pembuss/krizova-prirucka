@@ -55,7 +55,7 @@ async function route() {
     console.error(e);
     view.innerHTML = `<div class="wrap"><p class="error">${esc(e.message)}</p></div>`;
   }
-  document.title = `${t('nav.' + r.nav)} – Krízová príručka`;
+  document.title = `${t('nav.' + r.nav)} – ${t('app.title')}`;
   if (!hash.includes('?')) view.focus({ preventScroll: true });
   window.scrollTo(0, 0);
 }

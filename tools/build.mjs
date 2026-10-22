@@ -55,6 +55,16 @@ function renderChapters(lang) {
     return { ...ch, label, html, ids, title: t(ch.title, lang) };
   });
 }
+
+// Preklady musia mať rovnaké zástupné značky ako slovenčina (odkazy kontroluje buildBook).
+function checkConsistency(lang) {
+  if (lang === 'sk') return;
+  const ph = (s) => [...s.matchAll(/\{\{[^}]+\}\}/g)].map((m) => m[0]).join(' ');
+  for (const ch of CHAPTERS) {
+    const skFile = path.join(ROOT, 'content', 'sk', `${ch.id}.md`);
+    if (fs.existsSync(skFile) && ph(read(path.join(ROOT, 'content', lang, `${ch.id}.md`))) !== ph(read(skFile))) warn(`${lang}/${ch.id}: zástupné značky {{…}} sa líšia od slovenskej verzie`);
+  }
+}
 function linkMap(chs) {
   const map = new Map();
   for (const c of chs) for (const id of c.ids) if (!map.has(id)) map.set(id, c.id);
@@ -349,8 +359,15 @@ function copyAssets() {
 }
 
 // ---------- Ikony, obálka, PDF, EPUB (Chromium) ----------
+function loadPlaywright() {
+  // Bežne z devDependencies; v predpripravenom prostredí z globálnej inštalácie.
+  for (const id of ['playwright', process.env.PLAYWRIGHT_MODULE, '/opt/node-tools/node_modules/playwright'].filter(Boolean)) {
+    try { return require(id); } catch { /* skús ďalší */ }
+  }
+  throw new Error('Chýba Playwright: spusti „npm install“ a „npx playwright install chromium“, alebo build s --no-pdf --no-epub.');
+}
 async function withBrowser(fn) {
-  const { chromium } = require('/opt/node-tools/node_modules/playwright');
+  const { chromium } = loadPlaywright();
   const browser = await chromium.launch();
   try { return await fn(browser); } finally { await browser.close(); }
 }
@@ -436,10 +453,12 @@ async function main() {
   if (!ONLY) fs.rmSync(DIST, { recursive: true, force: true });
   fs.mkdirSync(DIST, { recursive: true });
   copyAssets();
+  fs.writeFileSync(path.join(DIST, '.nojekyll'), ''); // GitHub Pages bez Jekyllu
   buildRoot();
   const books = {};
   for (const lang of BUILD_LANGS) {
     const chs = renderChapters(lang);
+    checkConsistency(lang);
     books[lang] = chs;
     buildBook(lang, chs);
     buildSite(lang, chs);
