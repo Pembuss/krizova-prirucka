@@ -6,6 +6,7 @@ import crypto from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
+import { buildSync } from 'esbuild';
 import { CHAPTERS, PARTS, PATHS, SITUATIONS, BOOK_TITLE, BOOK_SUBTITLE, chapterById } from '../src/data/book.js';
 import { CRISES, ACTIONS, CRISIS_GROUPS } from '../src/data/crises.js';
 import { CHECKLISTS } from '../src/data/checklists.js';
@@ -129,8 +130,8 @@ function layout({ lang, title, body, rel, active, page, description = '', bodyCl
 <p>${esc(t(UI.disclaimer, lang))}</p>
 <p>${esc(t(UI.dataNote, lang))} · ${esc(t(SITE.license, lang))}</p>
 </div></footer>
-<script type="module" src="${rel}assets/js/site.js"></script>
-${scripts.map((s) => `<script type="module" src="${rel}${s}"></script>`).join('\n')}
+<script defer src="${rel}assets/js/site.js"></script>
+${scripts.map((s) => `<script defer src="${rel}${s}"></script>`).join('\n')}
 </body></html>`;
 }
 
@@ -330,6 +331,9 @@ function buildRoot() {
 <title>Krízová príručka · Krizová příručka · Crisis Handbook</title><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/img/logo.svg" type="image/svg+xml"><link rel="stylesheet" href="assets/css/site.css">
 <script>(function(){try{var p=JSON.parse(localStorage.getItem('kp.prefs')||'{}');var l=p.lang||(navigator.language||'sk').slice(0,2);if(['sk','cs','en'].indexOf(l)<0)l=l==='cz'?'cs':'en';if(location.hash!=='#choose')location.replace(l+'/index.html');}catch(e){location.replace('sk/index.html');}})();</script>
 </head><body><main class="wrap narrow" style="text-align:center;padding-top:3rem">${LOGO.replace('<svg', '<svg width="96" height="96"')}<h1>Krízová príručka · Krizová příručka · Crisis Handbook</h1><div class="btn-row" style="justify-content:center">${choices}</div></main></body></html>`);
+  // Zrozumiteľný vstup pre verziu otváranú priamo z disku (rozbalený ZIP, USB kľúč).
+  fs.copyFileSync(path.join(DIST, 'index.html'), path.join(DIST, 'OTVOR-PRIRUCKU.html'));
+  fs.copyFileSync(path.join(ROOT, 'src/NAVOD.txt'), path.join(DIST, 'NAVOD.txt'));
   const manifest = {
     name: 'Krízová príručka – Crisis Handbook', short_name: 'Krízová príručka', start_url: './app/index.html', scope: './', display: 'standalone',
     background_color: '#ffffff', theme_color: '#c2410c', lang: 'sk', description: t(SITE.tagline, 'sk'),
@@ -348,10 +352,18 @@ function buildRoot() {
   write(path.join(DIST, 'app/index.html'), appHtml);
 }
 
+// Skripty zabalené do bežných (nie modulových) súborov – fungujú aj po otvorení z disku (file://).
+function bundleScripts() {
+  buildSync({
+    entryPoints: { site: 'src/js/site.js', app: 'src/js/app/main.js', maptool: 'src/js/maptool.js' },
+    absWorkingDir: ROOT, outdir: path.join(DIST, 'assets/js'), bundle: true, format: 'iife', target: 'es2020',
+    minify: true, charset: 'utf8', legalComments: 'none', logLevel: 'warning',
+  });
+}
+
 function copyAssets() {
   copyDir(path.join(ROOT, 'src/css'), path.join(DIST, 'assets/css'));
-  copyDir(path.join(ROOT, 'src/js'), path.join(DIST, 'assets/js'));
-  copyDir(path.join(ROOT, 'src/data'), path.join(DIST, 'assets/data'));
+  bundleScripts();
   fs.mkdirSync(path.join(DIST, 'assets/img'), { recursive: true });
   fs.copyFileSync(path.join(ROOT, 'src/img/logo.svg'), path.join(DIST, 'assets/img/logo.svg'));
   copyDir(path.join(ROOT, 'node_modules/leaflet/dist'), path.join(DIST, 'assets/vendor/leaflet'));
@@ -438,7 +450,7 @@ function listFiles(dir, base = dir) {
   });
 }
 function buildServiceWorker() {
-  const files = listFiles(DIST).filter((f) => !f.startsWith('downloads/') && f !== 'sw.js' && !f.endsWith('.map'));
+  const files = listFiles(DIST).filter((f) => !f.startsWith('downloads/') && f !== 'sw.js' && !f.endsWith('.map') && !f.endsWith('.txt') && !f.startsWith('.'));
   const hash = crypto.createHash('sha1');
   for (const f of files) hash.update(fs.readFileSync(path.join(DIST, f)));
   const version = hash.digest('hex').slice(0, 10);

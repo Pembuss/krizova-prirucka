@@ -8,6 +8,15 @@ Príručka pre domácnosti: ako sa pripraviť, ako konať a ako sa zotaviť pri 
 
 Všetko je statický web bez servera. Funguje ako inštalovateľná PWA a aj bez internetu. Údaje používateľa zostávajú iba v jeho zariadení.
 
+## Vyskúšanie bez inštalácie
+
+1. Rozbaľ `Krizova-prirucka.zip`.
+2. V priečinku `Krizova-prirucka` otvor dvojklikom súbor **`OTVOR-PRIRUCKU.html`**.
+
+Príručka sa otvorí v prehliadači priamo z disku, bez servera a bez inštalácie (podrobnosti sú v `NAVOD.txt`). Kniha, zoznamy a plánovač fungujú aj bez internetu. Mapa, vyhľadanie adresy a trasy internet potrebujú. Rovnaký priečinok môžeš skopírovať aj na USB kľúč.
+
+Balík vznikne tak, že po `npm run build` premenuješ priečinok `dist/` na `Krizova-prirucka` a zabalíš ho do ZIP.
+
 ## Štruktúra
 
 | Cesta | Obsah |
@@ -15,7 +24,7 @@ Všetko je statický web bez servera. Funguje ako inštalovateľná PWA a aj bez
 | `content/{sk,cs,en}/*.md` | Kapitoly knihy (Markdown, pandoc). V každom jazyku sú rovnaké súbory, ID sekcií `{#…}` aj zástupné značky `{{…}}`. |
 | `src/data/` | Spoločné dáta v troch jazykoch: krízy a postupy, položky zásob, kontrolné zoznamy, krajiny, zdroje, jadrové elektrárne, štruktúra knihy, texty webu. |
 | `src/js/calc.js` | Výpočty: kalórie a voda podľa veku, nákupný zoznam, rozpočet, rizikový profil, energie. |
-| `src/js/app/` | Aplikácia: smerovač, sprievodca profilom, pohľady a tlačové dokumenty. |
+| `src/js/app/` | Aplikácia: smerovač, sprievodca profilom, pohľady a tlačové dokumenty. Build ich zabalí (esbuild) do `assets/js/app.js`, aby fungovali aj z disku. |
 | `src/js/map/` | Mapa a trasy: Nominatim, Overpass a OSRM. |
 | `src/css/`, `src/img/` | Štýly webu, aplikácie a tlače, logo. |
 | `src/sw.js` | Šablóna service workera (offline). |
@@ -26,7 +35,7 @@ Všetko je statický web bez servera. Funguje ako inštalovateľná PWA a aj bez
 
 ## Požiadavky na build
 
-- Node.js 20 alebo novší.
+- Node.js 20 alebo novší (`npm install` doinštaluje esbuild, Leaflet a Playwright).
 - `pandoc` 3.x na prevod Markdown → HTML a HTML → EPUB.
 - `pdftotext` (balík poppler-utils) na číslovanie strán v obsahu PDF.
 - Chromium cez Playwright na PDF, ikony a obálku EPUB.

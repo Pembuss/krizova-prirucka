@@ -1,0 +1,33 @@
+KRÍZOVÁ PRÍRUČKA – AKO JU SPUSTIŤ
+=================================
+
+Nič netreba inštalovať. Stačí počítač (Windows, Mac alebo Linux)
+a webový prehliadač (Chrome, Edge, Safari alebo Firefox).
+
+1. Rozbaľ ZIP súbor.
+   Windows: pravé tlačidlo na súbor → „Extrahovať všetko…“
+   Mac: dvojklik na ZIP súbor.
+
+2. Otvor priečinok „Krizova-prirucka“.
+
+3. Dvojklikom otvor súbor  OTVOR-PRIRUCKU.html
+   Príručka sa otvorí v prehliadači.
+
+Na úvodnej stránke vyber:
+  ⚡ Kríza práve teraz – postupy krok za krokom
+  🧮 Pripraviť sa – aplikácia (plánovač pre tvoju domácnosť)
+  📖 Čítať knihu
+
+Jazyk (SK / CS / EN) prepneš vpravo hore.
+
+DOBRÉ VEDIEŤ
+- Kniha, zoznamy a plánovač fungujú aj bez internetu.
+- Mapa, vyhľadanie adresy a únikové trasy potrebujú internet.
+- Tvoje údaje sa ukladajú iba v tomto prehliadači na tomto počítači.
+  Zálohu si urobíš v aplikácii: Nastavenia → Stiahnuť zálohu.
+- Tlač: v aplikácii otvor „Tlač“, zaškrtni dokumenty a stlač „Tlačiť vybrané“.
+- Knihu na tlač alebo do čítačky nájdeš v priečinku „downloads“
+  (PDF a EPUB v troch jazykoch).
+- Priečinok môžeš skopírovať aj na USB kľúč – funguje rovnako.
+
+Príručka nenahrádza pokyny úradov. V ohrození života volaj 112.

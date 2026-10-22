@@ -3,18 +3,18 @@ import { store } from './store.js';
 import { t, LANG, setLang, $, $$, esc } from './core.js';
 
 const ROUTES = {
-  '': { mod: './views/home.js', nav: 'home', icon: '🏠' },
-  teraz: { mod: './views/now.js', nav: 'now', icon: '⚡' },
-  plan: { mod: './views/plan.js', nav: 'plan', icon: '📋' },
-  profil: { mod: './views/profile.js', nav: 'profile', icon: '👪' },
-  zasoby: { mod: './views/supplies.js', nav: 'supplies', icon: '🥫' },
-  energia: { mod: './views/energy.js', nav: 'energy', icon: '🔋' },
-  batohy: { mod: './views/bags.js', nav: 'bags', icon: '🎒' },
-  rodina: { mod: './views/family.js', nav: 'family', icon: '📞' },
-  mapa: { mod: './views/map.js', nav: 'map', icon: '🗺️' },
-  trasy: { mod: './views/routes.js', nav: 'routes', icon: '🧭' },
-  tlac: { mod: './views/print.js', nav: 'print', icon: '🖨️' },
-  nastavenia: { mod: './views/settings.js', nav: 'settings', icon: '⚙️' },
+  '': { load: () => import('./views/home.js'), nav: 'home', icon: '🏠' },
+  teraz: { load: () => import('./views/now.js'), nav: 'now', icon: '⚡' },
+  plan: { load: () => import('./views/plan.js'), nav: 'plan', icon: '📋' },
+  profil: { load: () => import('./views/profile.js'), nav: 'profile', icon: '👪' },
+  zasoby: { load: () => import('./views/supplies.js'), nav: 'supplies', icon: '🥫' },
+  energia: { load: () => import('./views/energy.js'), nav: 'energy', icon: '🔋' },
+  batohy: { load: () => import('./views/bags.js'), nav: 'bags', icon: '🎒' },
+  rodina: { load: () => import('./views/family.js'), nav: 'family', icon: '📞' },
+  mapa: { load: () => import('./views/map.js'), nav: 'map', icon: '🗺️' },
+  trasy: { load: () => import('./views/routes.js'), nav: 'routes', icon: '🧭' },
+  tlac: { load: () => import('./views/print.js'), nav: 'print', icon: '🖨️' },
+  nastavenia: { load: () => import('./views/settings.js'), nav: 'settings', icon: '⚙️' },
 };
 const SIDE = ['', 'teraz', 'plan', 'profil', 'zasoby', 'energia', 'batohy', 'rodina', 'mapa', 'trasy', 'tlac', 'nastavenia'];
 const TABS = ['', 'teraz', 'plan', 'mapa', 'more'];
@@ -47,7 +47,7 @@ async function route() {
   if (cleanup) { try { cleanup(); } catch { /* */ } cleanup = null; }
   current = key;
   try {
-    const mod = await import(r.mod);
+    const mod = await r.load();
     if (current !== key) return;
     view.innerHTML = '';
     cleanup = (await mod.render(view, params.map(decodeURIComponent))) || null;
