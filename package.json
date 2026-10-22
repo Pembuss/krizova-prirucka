@@ -1,0 +1,18 @@
+{
+  "name": "krizova-prirucka",
+  "version": "1.0.0",
+  "description": "Krízová príručka – kniha, aplikácia a web",
+  "main": "index.js",
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "serve": "npx http-server dist -p 8080 -c-1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "leaflet": "^1.9.4"
+  },
+  "type": "module",
+  "private": true
+}

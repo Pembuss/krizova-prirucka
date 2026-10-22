@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Krízová príručka – aplikácia</title>
+<meta name="description" content="Plánovač krízovej pripravenosti: zásoby, rodinný plán, mapa krytov, únikové trasy a tlač.">
+<meta name="theme-color" content="#c2410c">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="../assets/img/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../assets/img/icon-180.png">
+<link rel="stylesheet" href="../assets/vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="stylesheet" href="../assets/css/app.css">
+<link rel="stylesheet" href="../assets/css/print.css">
+<script>try{var s=JSON.parse(localStorage.getItem('kp.prefs')||'{}');var d=document.documentElement;if(s.theme)d.dataset.theme=s.theme;if(s.size)d.dataset.size=s.size;if(s.contrast)d.dataset.contrast=s.contrast;}catch(e){}</script>
+<script src="../assets/vendor/leaflet/leaflet.js" defer></script>
+</head>
+<body class="app">
+<a class="skip" href="#view">↓</a>
+<header class="app-header no-print">
+  <a class="brand" href="#/" aria-label="Krízová príručka">{{LOGO}}<span data-i="appTitle">Krízová príručka</span></a>
+  <a class="btn btn-urgent btn-sm" href="#/teraz" data-nav="now">⚡ <span data-t="nav.now"></span></a>
+  <a class="iconbtn call" href="tel:112" aria-label="112">📞 112</a>
+  <select class="langsel" id="app-lang" aria-label="Language"><option value="sk">SK</option><option value="cs">CS</option><option value="en">EN</option></select>
+</header>
+<div class="app-body">
+  <nav class="app-nav no-print" id="app-nav" aria-label="Menu"></nav>
+  <main id="view" tabindex="-1"></main>
+</div>
+<nav class="app-tabs no-print" id="app-tabs" aria-label="Menu"></nav>
+<div id="print-root" class="print-root"></div>
+<script type="module" src="../assets/js/app/main.js"></script>
+</body>
+</html>
