@@ -2,6 +2,8 @@
 import { store, exportData, importData, download } from '../store.js';
 import { t, esc, LANG, setLang, toast, $ } from '../core.js';
 
+const LOCAL = location.protocol === 'file:';
+
 export function render(el) {
   const pr = store.prefs;
   const draw = () => {
@@ -19,7 +21,7 @@ export function render(el) {
 <label class="btn btn-ghost">⬆️ ${esc(t('set.import'))}<input type="file" accept=".json,application/json" data-import hidden></label></div>
 <button class="btn btn-ghost danger" data-reset>🗑️ ${esc(t('set.reset'))}</button></section>
 <section class="card"><h2 class="card-h">${esc(t('set.offline'))}</h2><p id="sw-status" class="muted">…</p>
-<div class="btn-row"><button class="btn btn-ghost" data-docs>💾 ${esc(t('set.saveDocs'))}</button><button class="btn btn-ghost" data-install hidden>📲 ${esc(t('set.install'))}</button></div><p id="docs-status" class="muted" aria-live="polite"></p></section>
+<div class="btn-row">${LOCAL ? '' : `<button class="btn btn-ghost" data-docs>💾 ${esc(t('set.saveDocs'))}</button>`}<button class="btn btn-ghost" data-install hidden>📲 ${esc(t('set.install'))}</button></div><p id="docs-status" class="muted" aria-live="polite"></p></section>
 <section class="card"><h2 class="card-h">${esc(t('set.about'))}</h2><p>${esc(t('c.disclaimer'))}</p>
 <p><a href="../${LANG}/o-projekte.html">${esc(t('nav.web'))}</a> · <a href="../${LANG}/kniha/index.html">${esc(t('nav.book'))}</a></p>
 <p class="muted small">© OpenStreetMap contributors (ODbL) · Leaflet (BSD-2) · OSRM / FOSSGIS</p></section>
@@ -34,8 +36,9 @@ export function render(el) {
   };
   async function swStatus() {
     const out = $('#sw-status');
+    if (LOCAL) { out.textContent = '✓ ' + t('set.offlineLocal'); return; }
     if (!('serviceWorker' in navigator) || !location.protocol.startsWith('http')) { out.textContent = t('set.offlineOff'); return; }
-    const reg = await navigator.serviceWorker.getRegistration('../');
+    const reg = await navigator.serviceWorker.getRegistration('../').catch(() => null);
     if (!reg?.active) { out.textContent = t('set.offlineOff'); return; }
     const ch = new MessageChannel();
     ch.port1.onmessage = (e) => { out.textContent = t('set.offlineOn', { v: e.data.version }); };
@@ -54,7 +57,7 @@ export function render(el) {
     }
     if (e.target.closest('[data-reset]') && confirm(t('set.resetConfirm'))) { store.reset(); toast(t('c.saved')); location.hash = '#/'; }
     if (e.target.closest('[data-docs]')) {
-      const reg = await navigator.serviceWorker?.getRegistration('../');
+      const reg = await navigator.serviceWorker?.getRegistration('../').catch(() => null);
       if (!reg?.active) { $('#docs-status').textContent = t('set.offlineOff'); return; }
       const urls = ['sk', 'cs', 'en'].flatMap((x) => [`../downloads/krizova-prirucka-${x}.pdf`, `../downloads/krizova-prirucka-${x}.epub`]).map((u) => new URL(u, location.href).href);
       const ch = new MessageChannel();

@@ -4,6 +4,17 @@ A terrorist attack or an active-shooter attack is rare but unfolds very quickly 
 
 {{now:terror}}
 
+::: choices
+**What is happening?**
+
+- [An attacker is nearby and I can escape](#terorizmus-utec)
+- [I cannot escape](#terorizmus-skry)
+- [I am safe and want to report it](#terorizmus-oznam)
+- [Someone is bleeding heavily](#terorizmus-krvacanie)
+- [I can see a suspicious object](#terorizmus-predmet)
+- [I am in a crowd or near unrest](#terorizmus-nepokoje)
+:::
+
 ## What you need to know {#terorizmus-vediet}
 
 - **Attacks target** places with many people: squares, concerts, shopping centres, schools, transport hubs, places of worship.

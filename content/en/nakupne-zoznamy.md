@@ -6,6 +6,17 @@ This chapter contains ready-made shopping lists for typical households. The list
 **Assumptions:** an adult needs 2,200 kcal a day (children and older people less), 3 l of water per person per day for drinking and cooking plus 1 l for hygiene, and at least half of the food can be eaten without cooking. Prices are **indicative** (Slovak retail, October 2026, in euros) and are for budget estimates only – in the app you can overwrite them with prices from your own shop.
 :::
 
+::: choices
+**What is your household like?**
+
+- [I live alone](#nakupne-zoznamy-jednotlivec){.if-alone}
+- [A family with children](#nakupne-zoznamy-rodina){.if-kids}
+- [Older people](#nakupne-zoznamy-seniori){.if-seniors}
+- [A diet, allergy or a baby](#nakupne-zoznamy-diety){.if-baby}
+- [I am on a small budget](#nakupne-zoznamy-rozpocet)
+- [What to buy besides food](#nakupne-zoznamy-vybavenie)
+:::
+
 ## How to use the lists {#nakupne-zoznamy-pouzitie}
 
 1. Choose the list that best matches your household and the period you want to prepare for. **Start with 3 days**, then expand.

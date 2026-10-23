@@ -4,6 +4,17 @@ Tap water can stop flowing because of a burst main, a power cut (pumps), drought
 
 {{now:water}}
 
+::: choices
+**What is wrong with the water?**
+
+- [No water is coming out](#vypadok-vody-pocas)
+- [They say the water is unsafe – what can I use it for](#vypadok-vody-vediet)
+- [I need to treat water](#sebestacnost-voda)
+- [The toilet does not work](#hygiena-zachod)
+- [I have a baby – water for formula](#zranitelni-deti){.if-baby}
+- [I want a supply in advance](#vypadok-vody-pred)
+:::
+
 ## What you need to know {#vypadok-vody-vediet}
 
 **Types of restriction:**

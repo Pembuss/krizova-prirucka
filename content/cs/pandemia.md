@@ -4,6 +4,17 @@ Epidemie je neobvykle rychlé šíření nakažlivé nemoci v určité oblasti, 
 
 {{now:pandemic}}
 
+::: choices
+**Co právě řešíš?**
+
+- [Šíří se nákaza – jak se chránit](#pandemia-ochrana)
+- [Někdo v domácnosti onemocněl](#pandemia-chory)
+- [Průjem, zvracení, hrozí dehydratace](#prva-pomoc-dehydratacia)
+- [Izolace a strach mě vyčerpávají](#pandemia-psychika)
+- [Připravit se na karanténu](#energie-scenare-6)
+- [Starám se o seniora](#zranitelni-seniori){.if-seniors}
+:::
+
 ## Co potřebuješ vědět {#pandemia-vediet}
 
 - Respirační nemoci se šíří hlavně **kapénkami a aerosolem** (kašel, kýchání, rozhovor v uzavřeném prostoru), méně dotykem kontaminovaných povrchů. Střevní nákazy se šíří **znečištěnýma rukama, vodou a potravinami**.

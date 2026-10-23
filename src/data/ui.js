@@ -9,6 +9,23 @@ export const LANGS = [
 
 export const UI = {
   now: L('Okamžite urob', 'Okamžitě udělej', 'Act now'),
+  // Kniha-hra
+  choose: L('Rozhodni sa', 'Rozhodni se', 'Your choice'),
+  nextQ: L('Čo potrebuješ teraz? Vyber si ďalšiu cestu:', 'Co teď potřebuješ? Vyber si další cestu:', 'What do you need now? Choose your next step:'),
+  chShort: L('Kap.', 'Kap.', 'Ch.'),
+  appShort: L('Príl.', 'Příl.', 'App.'),
+  pageShort: L('str.', 'str.', 'p.'),
+  forYou: L('pre teba', 'pro tebe', 'for you'),
+  playStory: L('Zahraj si to ako príbeh', 'Zahraj si to jako příběh', 'Play it as a story'),
+  good: L('Dobré rozhodnutie', 'Dobré rozhodnutí', 'Good decision'),
+  bad: L('Riskantné rozhodnutie', 'Riskantní rozhodnutí', 'Risky decision'),
+  cont: L('Pokračuj', 'Pokračuj', 'Continue'),
+  gbGo: L('pokračuj na', 'pokračuj na', 'turn to'),
+  gbStart: L('Príbeh začína na', 'Příběh začíná na', 'The story starts at'),
+  gbEnd: L('Koniec príbehu', 'Konec příběhu', 'The end'),
+  gbScore: L('Spočítaj si ✔ na svojej ceste. Každé ✖ ukazuje, čo si oplatí doplniť – tip pri ňom ťa pošle na správnu kapitolu.', 'Spočítej si ✔ na své cestě. Každé ✖ ukazuje, co se vyplatí doplnit – tip u něj tě pošle na správnou kapitolu.', 'Count the ✔ marks on your path. Each ✖ shows something worth improving – its tip sends you to the right chapter.'),
+  gbPrepare: L('Čo si pripraviť vopred', 'Co si připravit předem', 'What to prepare in advance'),
+  gbPaper: L('Kniha-hra na papier (číslované odseky)', 'Kniha-hra na papír (číslované odstavce)', 'Paper gamebook (numbered sections)'),
   next: L('Kam ďalej', 'Kam dál', 'Where next'),
   doNow: L('Urob hneď', 'Udělej hned', 'Act now'),
   plan: L('Naplánuj', 'Naplánuj', 'Plan'),

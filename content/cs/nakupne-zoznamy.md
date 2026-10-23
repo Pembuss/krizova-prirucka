@@ -6,6 +6,17 @@ Tato kapitola obsahuje hotové nákupní seznamy pro typické domácnosti. Sezna
 **Předpoklady výpočtu:** dospělý potřebuje 2 200 kcal denně (děti a senioři méně), na pití a vaření 3 l vody na osobu a den plus 1 l na hygienu, alespoň polovina potravin je jedlá bez vaření. Ceny jsou **orientační v eurech** (slovenský maloobchod, říjen 2026; 1 € ≈ 25 Kč) a slouží k odhadu rozpočtu – v aplikaci si je můžeš přepsat podle svého obchodu.
 :::
 
+::: choices
+**Jaká je tvoje domácnost?**
+
+- [Jsem sám](#nakupne-zoznamy-jednotlivec){.if-alone}
+- [Rodina s dětmi](#nakupne-zoznamy-rodina){.if-kids}
+- [Senioři](#nakupne-zoznamy-seniori){.if-seniors}
+- [Dieta, alergie nebo kojenec](#nakupne-zoznamy-diety){.if-baby}
+- [Mám malý rozpočet](#nakupne-zoznamy-rozpocet)
+- [Co koupit kromě jídla](#nakupne-zoznamy-vybavenie)
+:::
+
 ## Jak seznamy používat {#nakupne-zoznamy-pouzitie}
 
 1. Vyber seznam, který se nejvíce podobá tvé domácnosti, a dobu, na kterou se chceš připravit. **Začni 3 dny**, potom rozšiřuj.

@@ -4,6 +4,17 @@ An epidemic is an unusually rapid spread of an infectious disease in a particula
 
 {{now:pandemic}}
 
+::: choices
+**What are you dealing with?**
+
+- [An infection is spreading – how to protect myself](#pandemia-ochrana)
+- [Someone in the household is ill](#pandemia-chory)
+- [Diarrhoea, vomiting, risk of dehydration](#prva-pomoc-dehydratacia)
+- [Isolation and fear are wearing me down](#pandemia-psychika)
+- [Preparing for quarantine](#energie-scenare-6)
+- [I care for an older person](#zranitelni-seniori){.if-seniors}
+:::
+
 ## What you need to know {#pandemia-vediet}
 
 - Respiratory diseases spread mainly through **droplets and aerosols** (coughing, sneezing, talking in enclosed spaces), less through touching contaminated surfaces. Intestinal infections spread through **dirty hands, water and food**.

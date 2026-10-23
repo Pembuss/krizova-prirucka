@@ -12,6 +12,17 @@ Ve velké krizi se záchranné složky, nemocnice a úřady musí soustředit na
 - Měj u dveří připravené evakuační zavazadlo ([Zavazadlo](#batozina)).
 :::
 
+::: choices
+**Jak jsi na tom s přípravou?**
+
+- [Nemám nic připraveno](#rozcestnik-zacat)
+- [Nevím, jaká rizika mi hrozí](#principy-rizika)
+- [Nevím, jestli zůstat, ukrýt se, nebo odejít](#principy-rozhodnutia)
+- [Mám základ a chci víc](#principy-urovne)
+- [Bydlím u řeky](#povodne){.if-river}
+- [Bydlím u jaderné elektrárny](#jadrova){.if-npp}
+:::
+
 ## Proč se připravovat {#principy-preco}
 
 Krize přicházejí častěji, než si myslíme. Česko, Slovensko a jejich sousedy v posledních letech zasáhly povodně (například v září 2024), extrémní vedra, vichřice, tornádo na jižní Moravě, pandemie covidu-19, energetická krize, rozsáhlý výpadek elektřiny v Česku v červenci 2025 a válka na Ukrajině nedaleko našich hranic. Většina krizí není katastrofou celého státu, ale *místní* událostí, která však zasáhne právě tvou domácnost: zatopená ulice, týden bez elektřiny po vichřici, uzavřená obec kvůli úniku chemikálie.

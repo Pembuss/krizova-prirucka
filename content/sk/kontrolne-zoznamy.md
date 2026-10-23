@@ -6,6 +6,17 @@ Všetky kontrolné zoznamy na jednom mieste, pripravené na tlač a odškrtávan
 **Ako s nimi pracovať:** zoznam si vytlač, pri každej položke, ktorú máš, urob ✓ a k chýbajúcim si napíš dátum, dokedy ich zaobstaráš. Pri pravidelnej kontrole dvakrát ročne použi nový výtlačok.
 :::
 
+::: choices
+**Čo ideš skontrolovať?**
+
+- [Domácu zásobu](#kontrolne-zoznamy-zasoba)
+- [Evakuačnú batožinu](#kontrolne-zoznamy-batozina)
+- [Lekárničku](#kontrolne-zoznamy-lekarnicka)
+- [Výbavu auta](#kontrolne-zoznamy-auto){.if-car}
+- [Pripravenosť na konkrétnu krízu](#kontrolne-zoznamy-krizy)
+- [Pravidelnú kontrolu dvakrát ročne](#kontrolne-zoznamy-kontrola)
+:::
+
 ## Domáca zásoba {#kontrolne-zoznamy-zasoba}
 
 {{checklist:homeStock}}

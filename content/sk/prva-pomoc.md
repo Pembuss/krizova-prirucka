@@ -14,6 +14,18 @@ V kríze môže záchranka meškať alebo nebyť dostupná vôbec. Prvé minúty
 7. **Dýcha, ale nereaguje** – stabilizovaná poloha na boku a sleduj dýchanie.
 :::
 
+::: choices
+**Čo sa stalo?**
+
+- [Nereaguje a nedýcha normálne](#prva-pomoc-resuscitacia)
+- [Dusí sa](#prva-pomoc-dusenie)
+- [Silno krvácá](#prva-pomoc-krvacanie)
+- [Popálil sa](#prva-pomoc-popaleniny)
+- [Spadol, zlomenina alebo úder do hlavy](#prva-pomoc-zlomeniny)
+- [Bolesť na hrudi, porážka alebo záchvat](#prva-pomoc-ochorenia)
+- [Hnačka alebo zvracanie](#prva-pomoc-dehydratacia)
+:::
+
 ## Bezvedomie a resuscitácia {#prva-pomoc-resuscitacia}
 
 - **Lapavé, nepravidelné dychy** nie sú normálne dýchanie – začni resuscitáciu.

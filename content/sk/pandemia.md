@@ -4,6 +4,17 @@ Epidémia je nezvyčajne rýchle šírenie nákazlivej choroby v určitej oblast
 
 {{now:pandemic}}
 
+::: choices
+**Čo práve riešiš?**
+
+- [Šíri sa nákaza – ako sa chrániť](#pandemia-ochrana)
+- [Niekto v domácnosti ochorel](#pandemia-chory)
+- [Hnačka, zvracanie, hrozí dehydratácia](#prva-pomoc-dehydratacia)
+- [Izolácia a strach ma vyčerpávajú](#pandemia-psychika)
+- [Pripraviť sa na karanténu](#energie-scenare-6)
+- [Starám sa o seniora](#zranitelni-seniori){.if-seniors}
+:::
+
 ## Čo potrebuješ vedieť {#pandemia-vediet}
 
 - Respiračné choroby sa šíria najmä **kvapôčkami a aerosólom** (kašeľ, kýchanie, rozhovor v uzavretom priestore), menej cez dotyk s kontaminovanými povrchmi. Črevné nákazy sa šíria **znečistenými rukami, vodou a potravinami**.

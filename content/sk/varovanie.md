@@ -13,6 +13,16 @@ Včasné varovanie zachraňuje životy – ale len vtedy, ak mu rozumieš a vie�
 - Upozorni susedov, najmä starších a nepočujúcich.
 :::
 
+::: choices
+**Čo práve riešiš?**
+
+- [Zaznela siréna](#varovanie-sireny)
+- [Nejde elektrina ani signál](#varovanie-bez-signalu)
+- [Neviem, či je správa pravdivá](#varovanie-dezinformacie)
+- [Potrebujem volať o pomoc](#varovanie-112)
+- [Chcem sa s rodinou dohodnúť na spojení](#varovanie-spojenie)
+:::
+
 ## Varovné signály na Slovensku {#varovanie-sireny}
 
 Na Slovensku sa používajú tri varovné signály. Po každom signáli nasleduje **hovorená informácia** – v rozhlase, televízii, obecnom rozhlase alebo z elektronickej sirény – ktorá povie, o aké nebezpečenstvo ide a čo robiť.

@@ -4,6 +4,16 @@ Ekonomická kríza môže prísť pomaly (vysoká inflácia, rast cien energií,
 
 {{now:economic}}
 
+::: choices
+**Čo ťa trápi?**
+
+- [Ceny rastú a peňazí je menej](#ekonomicka-pocas)
+- [V obchodoch chýba tovar](#ekonomicka-vediet)
+- [Chcem si vytvoriť rezervu](#ekonomicka-pred)
+- [Potrebujem nakupovať s malým rozpočtom](#nakupne-zoznamy-rozpocet)
+- [Chcem si pomáhať so susedmi](#komunita-priprava)
+:::
+
 ## Čo potrebuješ vedieť {#ekonomicka-vediet}
 
 - **Panické nákupy** spôsobia prázdne regály aj vtedy, keď tovaru je dostatok – stačí, aby každý kúpil trojnásobok. Kto má zásoby vopred, nemusí sa do nich zapájať.

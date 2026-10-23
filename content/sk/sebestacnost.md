@@ -11,6 +11,17 @@ Keď nefungujú siete, potrebuješ vlastné riešenia pre päť základných pot
 - Pri bolesti hlavy, závrate či nevoľnosti viacerých ľudí v miestnosti **ihneď vyvetraj a odíď** – môže ísť o otravu CO.
 :::
 
+::: choices
+**Čo ti chýba?**
+
+- [Pitná voda](#sebestacnost-voda)
+- [Varenie](#sebestacnost-varenie)
+- [Teplo](#sebestacnost-teplo)
+- [Svetlo](#sebestacnost-svetlo)
+- [Nabíjanie mobilu a prístrojov](#sebestacnost-energia)
+- [Mám dom a záhradu – čo ešte zvládnem sám](#sebestacnost-zrucnosti){.if-house}
+:::
+
 ## Úprava vody {#sebestacnost-voda}
 
 Ak dôjde balená voda, musíš vodu zo studne, dažďa, potoka alebo cisterny upraviť. **Postupuj v tomto poradí:**

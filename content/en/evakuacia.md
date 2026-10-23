@@ -8,6 +8,18 @@ Evacuation means leaving your home or area because staying is more dangerous tha
 {{actionsteps:evacuate}}
 :::
 
+::: choices
+**What are you dealing with?**
+
+- [We are leaving now](#evakuacia-pred-odchodom)
+- [Where to go](#evakuacia-ciele)
+- [How to plan routes](#evakuacia-trasy)
+- [We are going by car](#evakuacia-auto){.if-car}
+- [We have no car](#evakuacia-pesi){.if-nocar}
+- [Someone needs help to move](#evakuacia-pomoc){.if-care}
+- [We have pets](#evakuacia-zvierata){.if-pets}
+:::
+
 ## Types of evacuation {#evakuacia-druhy}
 
 - **Short-term** – for a few hours to days (gas leak, discovery of unexploded ordnance, flood). You usually go to an evacuation centre or to relatives.

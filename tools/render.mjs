@@ -7,6 +7,8 @@ import { SOURCES, CRITERIA, avgScore } from '../src/data/sources.js';
 import { CATEGORIES, FOOD_GROUPS, itemById } from '../src/data/items.js';
 import { shoppingList, purchaseSchedule, energyPlan, householdNeeds } from '../src/js/calc.js';
 import { UI, t } from '../src/data/ui.js';
+import { SCENARIOS, scenarioForCrisis } from '../src/data/scenarios.js';
+import { READER_TAGS } from '../src/data/reader.js';
 
 const L = (sk, cs, en) => ({ sk, cs, en });
 export const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -42,6 +44,29 @@ function box(cls, title, inner) {
 const ol = (arr, lang) => `<ol class="steps">${arr.map((s) => `<li>${esc(t(s, lang))}</li>`).join('')}</ol>`;
 const checkUl = (arr, lang) => `<ul class="checklist">${arr.map((s) => `<li><span class="cb" aria-hidden="true">☐</span> ${esc(t(s.t || s, lang))}</li>`).join('')}</ul>`;
 
+// Ďalšie voľby podľa domácnosti na konci kapitol o krízach
+const NEXT_TAGS = { all: ['kids', 'seniors', 'pets'], power: ['device'], move: ['car', 'nocar', 'care'] };
+const CRISIS_GROUP = { flood: 'move', fire: 'move', chemical: 'move', nuclear: 'move', war: 'move', quake: 'move', blackout: 'power', cold: 'power', storm: 'power', heat: 'power', water: 'power' };
+const TAG_TARGET = { kids: 'zranitelni-deti', seniors: 'zranitelni-seniori', pets: 'zranitelni-zvierata', device: 'vypadok-elektriny-pristroje', car: 'evakuacia-auto', nocar: 'evakuacia-pesi', care: 'evakuacia-pomoc' };
+
+// Poradie odsekov scenára: začiatok prvý, koniec posledný, ostatné premiešané (pevne), aby ďalší odsek neprezradil výsledok.
+export function scenarioOrder(s) {
+  const start = s.nodes.find((n) => n.id === 'start');
+  const end = s.nodes.filter((n) => n.end);
+  const rest = s.nodes.filter((n) => n !== start && !n.end);
+  let seed = [...s.id].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
+  const rnd = () => { seed = (seed * 1103515245 + 12345) >>> 0; return seed / 2 ** 32; };
+  for (let i = rest.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [rest[i], rest[j]] = [rest[j], rest[i]]; }
+  return [start, ...rest, ...end];
+}
+// Čísla odsekov § naprieč všetkými scenármi
+export function scenarioNumbers() {
+  const m = new Map();
+  let n = 0;
+  for (const s of SCENARIOS) for (const node of scenarioOrder(s)) m.set(`${s.id}/${node.id}`, ++n);
+  return m;
+}
+
 const R = {
   now(id, lang) {
     const c = crisisById(id);
@@ -49,14 +74,48 @@ const R = {
   },
   before(id, lang) { return checkUl(crisisById(id).before, lang); },
   after(id, lang) { return checkUl(crisisById(id).after, lang); },
+  // Koniec kapitoly o kríze: voľby ďalšej cesty ako v knihe-hre (odkazy doplní build).
   next(id, lang) {
     const p = PATHS[id];
     const self = crisisById(id).chapter;
-    const li = (k, label) => {
-      const ids = p[k].filter((x) => x !== self);
-      return ids.length ? `<li><strong>${esc(t(label, lang))}:</strong> ${ids.map((x) => chLink(x, lang)).join(', ')}</li>` : '';
-    };
-    return box('next', t(UI.next, lang), `<ul>${li('now', UI.doNow)}${li('plan', UI.plan)}${li('know', UI.know)}</ul>`);
+    const items = [];
+    const add = (href, text, tag) => items.push(`<li><a href="#${href}"${tag ? ` class="if-${tag}"` : ''}>${esc(text)}</a></li>`);
+    const pick = (k, n) => p[k].filter((x) => x !== self).slice(0, n);
+    for (const x of pick('now', 2)) add(x, `⚡ ${t(UI.doNow, lang)}: ${t(chapterById(x).title, lang)}`);
+    for (const x of pick('plan', 2)) add(x, `🗓️ ${t(UI.plan, lang)}: ${t(chapterById(x).title, lang)}`);
+    for (const x of pick('know', 1)) add(x, `📘 ${t(UI.know, lang)}: ${t(chapterById(x).title, lang)}`);
+    const sc = scenarioForCrisis(id);
+    if (sc) add(`scenar-${sc.id}`, `🎲 ${t(UI.playStory, lang)}: ${t(sc.title, lang)}`);
+    for (const tag of [...NEXT_TAGS.all, ...(NEXT_TAGS[CRISIS_GROUP[id]] || [])]) {
+      const def = READER_TAGS.find((x) => x.id === tag);
+      add(TAG_TARGET[tag], `${def.icon} ${t(def.name, lang)}`, tag);
+    }
+    return `<div class="choices next"><p><strong>${esc(t(UI.next, lang))}</strong> – ${esc(t(UI.nextQ, lang))}</p><ul>${items.join('')}</ul></div>`;
+  },
+  // Príbehové scenáre ako kniha-hra: číslované odseky, voľby „pokračuj na §N“.
+  scenarios(_, lang) {
+    const num = scenarioNumbers();
+    return SCENARIOS.map((s) => {
+      const sec = (id) => num.get(`${s.id}/${id}`);
+      const nodes = scenarioOrder(s).map((node) => {
+        const mark = node.verdict ? `<span class="gb-v ${node.verdict}">${node.verdict === 'good' ? '✔' : '✖'} ${esc(t(UI[node.verdict], lang))}.</span> ` : '';
+        const tip = node.tip ? `<p class="gb-tip">💡 ${esc(t(node.tip.text, lang))} <a class="xref" href="#${node.tip.ref}"></a></p>` : '';
+        const next = node.end
+          ? `<p class="gb-end"><strong>${esc(t(UI.gbEnd, lang))}.</strong> ${esc(t(UI.gbScore, lang))}</p>`
+          : `<ul class="gb-choices">${node.choices.map((c) => `<li><a href="#gb-${s.id}-${c.to}">${esc(c.text ? t(c.text, lang) : t(UI.cont, lang))} → ${esc(t(UI.gbGo, lang))} §${sec(c.to)}</a></li>`).join('')}</ul>`;
+        return `<div class="gb-node${node.verdict ? ' ' + node.verdict : ''}${node.end ? ' end' : ''}" id="gb-${s.id}-${node.id}"><p class="gb-num">§${sec(node.id)}</p><p>${mark}${esc(t(node.text, lang))}</p>${tip}${next}</div>`;
+      }).join('\n');
+      return `<section class="scenario" data-scenario="${s.id}">
+<h2 id="scenar-${s.id}">${s.icon} ${esc(t(s.title, lang))}</h2>
+<p class="sc-setting">${esc(t(s.setting, lang))}</p>
+<div class="sc-player no-print" data-player="${s.id}"></div>
+<div class="gamebook" data-gamebook="${s.id}">
+<p class="gb-start">📖 ${esc(t(UI.gbPaper, lang))}: ${esc(t(UI.gbStart, lang))} <a href="#gb-${s.id}-start">§${sec('start')}</a>.</p>
+${nodes}
+</div>
+<div class="gb-prepare"><p><strong>${esc(t(UI.gbPrepare, lang))}</strong></p><ul class="checklist">${s.prepare.map((x) => `<li><span class="cb" aria-hidden="true">☐</span> ${esc(t(x, lang))}</li>`).join('')}</ul></div>
+</section>`;
+    }).join('\n');
   },
   action(id, lang) {
     const a = crisisById(id);

@@ -4,6 +4,18 @@ Válka na Ukrajině ukázala, že ozbrojený konflikt v Evropě není minulostí
 
 {{now:war}}
 
+::: choices
+**Co se děje?**
+
+- [Zní letecký poplach](#konflikt-utok)
+- [Úkryt je daleko](#ukrytie-dve-steny)
+- [Našel jsem podezřelý předmět](#konflikt-municia)
+- [Konflikt trvá déle](#konflikt-zivot)
+- [Musíme odejít z oblasti](#evakuacia)
+- [Chci se připravit](#konflikt-pred)
+- [Chci si to vyzkoušet jako příběh](#scenar-war)
+:::
+
 ## Co potřebuješ vědět {#konflikt-vediet}
 
 - **Hybridní hrozby** předcházejí nebo doprovázejí konflikt: kybernetické útoky, sabotáže infrastruktury, dezinformace, zastrašování. Jejich cílem je oslabit důvěru a vyvolat chaos ([Komunikace](#komunikacie), [Varování – dezinformace](#varovanie-dezinformacie)).

@@ -1,6 +1,9 @@
 // Kríza teraz: výber situácie a veľká karta s krokmi na odškrtávanie.
 import { store } from '../store.js';
 import { t, T, esc, bookHref } from '../core.js';
+
+// Krízy, ku ktorým je v knihe príbehový scenár (src/data/scenarios.js)
+const STORIES = ['blackout', 'flood', 'chemical', 'fire', 'heat', 'war'];
 import { CRISES, ACTIONS, CRISIS_GROUPS, crisisById } from '../../../data/crises.js';
 import { printDocs } from '../printdocs.js';
 
@@ -25,6 +28,7 @@ ${personal.length ? `<div class="box note">${personal.map((x) => `<p><strong>${e
   ${['war', 'nuclear', 'chemical', 'shelter', 'storm', 'terror'].includes(id) ? `<a class="btn" href="#/mapa">🗺️ ${esc(t('now.shelters'))}</a>` : ''}
   ${['flood', 'fire', 'evacuate', 'chemical', 'nuclear', 'war', 'quake'].includes(id) ? `<a class="btn" href="#/trasy">🧭 ${esc(t('now.routes'))}</a>` : ''}
   <a class="btn btn-ghost" href="${bookHref(c.chapter)}">📖 ${esc(t('now.details'))}</a>
+  ${STORIES.includes(id) ? `<a class="btn btn-ghost" href="${bookHref('scenare', 'scenar-' + id)}">🎲 ${esc(t('now.story'))}</a>` : ''}
   <button class="btn btn-ghost" data-print>🖨️ ${esc(t('c.print'))}</button>
   <button class="btn btn-ghost" data-reset>↺ ${esc(t('now.reset'))}</button>
 </div>

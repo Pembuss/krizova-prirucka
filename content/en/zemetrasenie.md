@@ -4,6 +4,16 @@ Central Europe is not a region of strong earthquakes, but it is not risk-free ei
 
 {{now:quake}}
 
+::: choices
+**What is happening?**
+
+- [The ground is shaking right now](#zemetrasenie-pocas)
+- [The shaking has stopped](#zemetrasenie-po)
+- [I can see cracks in the ground or the house](#zemetrasenie-zosuvy)
+- [Someone is injured](#prva-pomoc-zlomeniny)
+- [I want to prepare](#zemetrasenie-pred)
+:::
+
 ## What you need to know {#zemetrasenie-vediet}
 
 - **Earthquakes cannot be predicted.** Shaking usually lasts from a few seconds to a few tens of seconds. The main shock is followed by **aftershocks**, which can bring down damaged buildings.

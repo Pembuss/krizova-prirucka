@@ -4,6 +4,17 @@ Silné mrazy, sněhové bouře a náledí komplikují dopravu, poškozují elekt
 
 {{now:cold}}
 
+::: choices
+**Co právě řešíš?**
+
+- [Přichází mráz nebo sněhová kalamita](#mrazy-pred)
+- [Netopí a doma se ochlazuje](#mrazy-vypadok)
+- [Jsem na cestě nebo jsem uvízl v autě](#mrazy-vonku)
+- [Někdo je podchlazený nebo má omrzliny](#mrazy-zdravie)
+- [Nejde ani elektřina](#vypadok-elektriny)
+- [Někdo potřebuje přístroj na elektřinu](#vypadok-elektriny-pristroje){.if-device}
+:::
+
 ## Co potřebuješ vědět {#mrazy-vediet}
 
 - **Většina topení závisí na elektřině** – i plynový kotel, tepelné čerpadlo a dálkové topení potřebují elektřinu na čerpadla a řízení. Při výpadku elektřiny v zimě přestane topit téměř každý byt.

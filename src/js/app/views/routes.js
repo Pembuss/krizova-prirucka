@@ -2,6 +2,8 @@
 import { store, uid } from '../store.js';
 import { t, esc, fmtDuration, toast, $, $$, num } from '../core.js';
 import { route as osrm, overpass } from '../../map/geo.js';
+import { addBasemap } from '../../map/tiles.js';
+import { locationPicker } from '../../map/picker.js';
 import { distanceKm } from '../../calc.js';
 import { NPP } from '../../../data/npp.js';
 import { printDocs, riskText } from '../printdocs.js';
@@ -106,7 +108,7 @@ export function render(el, params, opts = {}) {
   let modes = new Set(store.prefs.routeModes || ['car', 'foot']);
   let selected = new Set((p.mobility.destinations || []).map((d) => d.id));
   let results = (p.routes || []).map((r) => ({ ...r, full: r.geometry }));
-  let map, layer;
+  let map, layer, picker = null;
 
   const destinations = () => [...(p.mobility.destinations || []), ...(p.places || []).filter((x) => ['family', 'shelter', 'meet'].includes(x.type)).map((x) => ({ ...x, label: x.name }))];
   const home = () => (p.location.lat != null ? { lat: p.location.lat, lon: p.location.lon } : null);
@@ -117,6 +119,10 @@ ${opts.standalone ? `<h2 id="trasy">${esc(t('rt.title'))}</h2>` : `<h1>${esc(t('
 <div class="grid two-col">
 <section><h3>${esc(t('rt.origin'))}</h3><p id="rt-origin"></p>
 <h3>${esc(t('rt.dest'))}</h3><ul class="destpick" id="rt-dests"></ul>
+<details class="add-dest" id="rt-add"><summary>＋ ${esc(t('dest.add'))}</summary>
+<label class="field-row"><span class="lbl">${esc(t('dest.name'))}</span><input type="text" id="rt-dest-name"></label>
+<div id="rt-dest-picker"></div>
+<div class="btn-row"><button class="btn" type="button" data-add-dest>${esc(t('dest.addBtn'))}</button></div></details>
 <h3>${esc(t('rt.modes'))}</h3><div class="chips">${['car', 'foot', 'bike'].map((m) => `<button type="button" class="chip" data-mode="${m}" aria-pressed="${modes.has(m)}">${m === 'car' ? '🚗' : m === 'foot' ? '🚶' : '🚲'} ${esc(t('mode.' + m))}</button>`).join('')}</div>
 <div class="btn-row"><button class="btn" data-compute>🧭 ${esc(t('rt.compute'))}</button><button class="btn btn-ghost" data-print>🖨️ ${esc(t('rt.print'))}</button></div>
 <p id="rt-status" class="muted" aria-live="polite"></p></section>
@@ -205,6 +211,17 @@ ${r.via ? `<p class="small muted">${esc(t('rt.via', { roads: r.via }))}</p>` : '
     const m = e.target.closest('[data-mode]');
     if (m) { const k = m.dataset.mode; modes.has(k) ? modes.delete(k) : modes.add(k); m.setAttribute('aria-pressed', String(modes.has(k))); store.prefs.routeModes = [...modes]; store.savePrefs(); }
     if (e.target.closest('[data-compute]')) compute();
+    if (e.target.closest('[data-add-dest]')) {
+      const r = picker?.get();
+      if (!r) { toast(t('dest.pickFirst'), 3500); return; }
+      const name = $('#rt-dest-name', el).value.trim() || (r.label || '').split(',')[0] || `${r.lat.toFixed(4)}, ${r.lon.toFixed(4)}`;
+      const d = { id: uid(), name, label: r.label, lat: r.lat, lon: r.lon };
+      (p.mobility.destinations ||= []).push(d);
+      selected.add(d.id);
+      store.saveProfile();
+      $('#rt-dest-name', el).value = ''; picker.clear(); $('#rt-add', el).open = false;
+      drawPickers(); drawResults(); toast(t('dest.added', { name }));
+    }
     if (e.target.closest('[data-print]')) printDocs(['routes']);
     const s = e.target.closest('[data-show]');
     if (s && map) { const r = results[Number(s.dataset.show)]; map.fitBounds(L.latLngBounds(r.geometry).pad(0.1)); $('#rt-map', el).scrollIntoView({ behavior: 'smooth', block: 'center' }); }
@@ -214,15 +231,22 @@ ${r.via ? `<p class="small muted">${esc(t('rt.via', { roads: r.via }))}</p>` : '
     if (d) { d.checked ? selected.add(d.dataset.dest) : selected.delete(d.dataset.dest); }
   });
   const unsub = store.on(() => { if (!el.isConnected) return; drawPickers(); });
+  $('#rt-add', el).addEventListener('toggle', (e) => {
+    if (!e.target.open || !L) return;
+    if (picker) { picker.refresh(); return; }
+    const h = home();
+    picker = locationPicker($('#rt-dest-picker', el), { icon: '🏁', color: '#0f766e', label: t('rt.dest'), height: 260, markers: h ? [{ lat: h.lat, lon: h.lon, icon: '🏠', title: t('map.home') }] : [] });
+    if (h) picker.map.setView([h.lat, h.lon], 9);
+  });
 
   if (L) {
     const h = home();
     map = L.map($('#rt-map', el)).setView(h ? [h.lat, h.lon] : [48.7, 19.5], h ? 11 : 7);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
+    addBasemap(map);
     layer = L.layerGroup().addTo(map);
     setTimeout(() => map.invalidateSize(), 200);
   }
   drawPickers();
   drawResults();
-  return () => { unsub(); map?.remove(); };
+  return () => { unsub(); map?.remove(); picker?.destroy(); };
 }

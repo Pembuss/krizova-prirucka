@@ -6,6 +6,16 @@ Táto príručka nie je román, ktorý treba prečítať od začiatku do konca. 
 **Ak sa kríza deje práve teraz,** nečítaj ďalej. Nájdi svoju situáciu v rozcestníku nižšie a choď rovno na rámček **Okamžite urob** v príslušnej kapitole. Ak ide o život, volaj **112**.
 :::
 
+::: choices
+**Kde začneš?**
+
+- [Kríza sa deje práve teraz](#rozcestnik-krizy)
+- [Chcem sa začať pripravovať](#rozcestnik-zacat)
+- [Starám sa o niekoho zraniteľného](#zranitelni)
+- [Chcem si to vyskúšať ako príbeh](#scenare)
+- [Hľadám kryty a útočiská](#kryty-europa)
+:::
+
 ## Ako je kniha usporiadaná {#rozcestnik-struktura}
 
 - **Časť I – Základy pripravenosti** vysvetľuje, čo platí pre každú krízu: ako posúdiť riziká, ako sa dozvieš o nebezpečenstve, ako zostaviť rodinný plán, zásoby a evakuačnú batožinu, ako sa ukryť a ako evakuovať.

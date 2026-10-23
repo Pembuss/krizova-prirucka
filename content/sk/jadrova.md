@@ -4,6 +4,17 @@ Slovensko prevádzkuje jadrové elektrárne v **Jaslovských Bohuniciach** a **M
 
 {{now:nuclear}}
 
+::: choices
+**Čo sa deje?**
+
+- [Siréna a hlásenie o radiačnej havárii](#jadrova-pocas)
+- [Mám užiť jódové tablety?](#jadrova-jod)
+- [Som vonku – kam sa ukryť](#ukrytie-kedy)
+- [Mám deti – dávky jódu pre deti](#jadrova-jod){.if-kids}
+- [Bývam pri jadrovej elektrárni](#jadrova-pred){.if-npp}
+- [Havária skončila – potraviny a návrat](#jadrova-po)
+:::
+
 ## Čo potrebuješ vedieť {#jadrova-vediet}
 
 - Pri havárii môže uniknúť **rádioaktívny oblak**, ktorý sa šíri vetrom a z ktorého padá **rádioaktívny prach (spád)** na zem, strechy, rastliny a vodné plochy.

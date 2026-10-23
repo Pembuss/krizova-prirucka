@@ -13,6 +13,17 @@ Pokud musíš odejít rychle – při povodni, požáru, úniku chemikálie nebo
 6. **Domov** – vypni plyn, vodu a elektřinu, zavři okna, zamkni.
 :::
 
+::: choices
+**Pro koho balíš?**
+
+- [Pro sebe – co patří do batohu](#batozina-obsah)
+- [Pro dítě](#zranitelni-deti){.if-kids}
+- [Pro seniora](#zranitelni-seniori){.if-seniors}
+- [Pro zvíře](#zranitelni-zvierata){.if-pets}
+- [Které dokumenty vzít](#batozina-dokumenty)
+- [Kolik mít hotovosti](#batozina-peniaze)
+:::
+
 ## Zásady {#batozina-zasady}
 
 - **Každý člen domácnosti má vlastní zavazadlo** – dospělý batoh do **25 kg**, dítě podle věku (orientačně do 10 kg). Batoh je lepší než kufr – máš volné ruce.

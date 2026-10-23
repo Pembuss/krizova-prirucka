@@ -4,6 +4,17 @@ Teroristický útok nebo útok aktivního střelce je vzácný, ale probíhá ve
 
 {{now:terror}}
 
+::: choices
+**Co se děje?**
+
+- [Útočník je blízko a dá se utéct](#terorizmus-utec)
+- [Utéct se nedá](#terorizmus-skry)
+- [Jsem v bezpečí a chci to oznámit](#terorizmus-oznam)
+- [Někdo silně krvácí](#terorizmus-krvacanie)
+- [Vidím podezřelý předmět](#terorizmus-predmet)
+- [Jsem v davu nebo u nepokojů](#terorizmus-nepokoje)
+:::
+
 ## Co potřebuješ vědět {#terorizmus-vediet}
 
 - **Útoky se zaměřují** na místa s velkým počtem lidí: náměstí, koncerty, nákupní centra, školy, dopravní uzly, bohoslužby.

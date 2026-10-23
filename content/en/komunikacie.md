@@ -4,6 +4,17 @@ The mobile network, the internet, payment systems and digital public services ha
 
 {{now:comms}}
 
+::: choices
+**What is not working?**
+
+- [My phone and the internet](#komunikacie-pocas)
+- [I cannot reach my family](#varovanie-spojenie)
+- [Someone has hacked my computer or account](#komunikacie-utok)
+- [Cards and cash machines are down](#batozina-peniaze)
+- [I want to prepare](#komunikacie-pred)
+- [I live alone](#plan-sam){.if-alone}
+:::
+
 ## What you need to know {#komunikacie-vediet}
 
 - **Network overload** is common right after a major event – everyone calls at once. Text messages and short messages often get through; calls do not.

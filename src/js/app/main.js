@@ -35,7 +35,7 @@ function renderNav(active) {
 }
 
 let cleanup = null;
-let current = null;
+let renderSeq = 0;
 async function route() {
   const hash = location.hash.replace(/^#\/?/, '');
   const [name, ...params] = hash.split('/');
@@ -43,13 +43,17 @@ async function route() {
   const r = ROUTES[key];
   renderNav(key);
   document.body.classList.remove('more-open');
-  const view = $('#view');
+  let view = $('#view');
   if (cleanup) { try { cleanup(); } catch { /* */ } cleanup = null; }
-  current = key;
+  const my = ++renderSeq;
   try {
     const mod = await r.load();
-    if (current !== key) return;
-    view.innerHTML = '';
+    if (my !== renderSeq) return;
+    // Nový prázdny kontajner zahodí obsluhy udalostí predchádzajúcej obrazovky
+    // (inak by sa po návrate klik spracoval dvakrát a prepínače by sa vrátili späť).
+    const fresh = view.cloneNode(false);
+    view.replaceWith(fresh);
+    view = fresh;
     cleanup = (await mod.render(view, params.map(decodeURIComponent))) || null;
   } catch (e) {
     console.error(e);

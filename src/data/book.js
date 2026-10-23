@@ -13,6 +13,7 @@ export const PARTS = [
   { id: 'p2', name: L('Časť II – Krízy krok za krokom', 'Část II – Krize krok za krokem', 'Part II – Crises step by step') },
   { id: 'p3', name: L('Časť III – Zdravie, zručnosti a komunita', 'Část III – Zdraví, dovednosti a komunita', 'Part III – Health, skills and community') },
   { id: 'p4', name: L('Časť IV – Zoznamy, plány a príprava', 'Část IV – Seznamy, plány a příprava', 'Part IV – Lists, plans and preparation') },
+  { id: 'p6', name: L('Časť V – Precvič si to: príbehové scenáre', 'Část V – Procvič si to: příběhové scénáře', 'Part V – Practise: story scenarios') },
   { id: 'p5', name: L('Prílohy', 'Přílohy', 'Appendices') },
 ];
 
@@ -49,6 +50,7 @@ export const CHAPTERS = [
   { id: 'energie-scenare', part: 'p4', title: L('Energie a nevyhnutné potreby podľa scenárov', 'Energie a nezbytné potřeby podle scénářů', 'Power and essentials by scenario') },
   { id: 'kontrolne-zoznamy', part: 'p4', title: L('Kontrolné zoznamy', 'Kontrolní seznamy', 'Checklists') },
   { id: 'sablony', part: 'p4', title: L('Šablóny: rodinný plán, kontakty, kartička', 'Šablony: rodinný plán, kontakty, kartička', 'Templates: family plan, contacts, wallet card') },
+  { id: 'scenare', part: 'p6', title: L('Príbehové scenáre: rozhoduješ ty', 'Příběhové scénáře: rozhoduješ ty', 'Story scenarios: you decide') },
   { id: 'kryty-europa', part: 'p5', title: L('Kryty a útočiská v Európe', 'Kryty a útočiště v Evropě', 'Shelters and refuges in Europe') },
   { id: 'zdroje', part: 'p5', title: L('Knižnica zdrojov a hodnotenie príručiek', 'Knihovna zdrojů a hodnocení příruček', 'Source library and handbook ratings') },
   { id: 'slovnik', part: 'p5', title: L('Slovník pojmov a dôležité čísla', 'Slovník pojmů a důležitá čísla', 'Glossary and key numbers') },

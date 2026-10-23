@@ -4,6 +4,17 @@ Severe frost, snowstorms and freezing rain disrupt transport, damage power lines
 
 {{now:cold}}
 
+::: choices
+**What are you dealing with?**
+
+- [Frost or a snowstorm is coming](#mrazy-pred)
+- [The heating is off and the home is cooling down](#mrazy-vypadok)
+- [I am on the road or stuck in my car](#mrazy-vonku)
+- [Someone is hypothermic or has frostbite](#mrazy-zdravie)
+- [The power is out too](#vypadok-elektriny)
+- [Someone needs a powered medical device](#vypadok-elektriny-pristroje){.if-device}
+:::
+
 ## What you need to know {#mrazy-vediet}
 
 - **Most heating systems depend on electricity** – even gas boilers, heat pumps and district heating need electricity for pumps and controls. During a winter power cut, almost every home stops being heated.

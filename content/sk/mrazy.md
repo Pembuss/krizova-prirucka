@@ -4,6 +4,17 @@ Silné mrazy, snehové búrky a poľadovica komplikujú dopravu, poškodzujú el
 
 {{now:cold}}
 
+::: choices
+**Čo práve riešiš?**
+
+- [Prichádza mráz alebo snehová kalamita](#mrazy-pred)
+- [Nekúri a doma chladne](#mrazy-vypadok)
+- [Som na ceste alebo som uviazol v aute](#mrazy-vonku)
+- [Niekto je podchladený alebo má omrzliny](#mrazy-zdravie)
+- [Nejde ani elektrina](#vypadok-elektriny)
+- [Niekto potrebuje prístroj na elektrinu](#vypadok-elektriny-pristroje){.if-device}
+:::
+
 ## Čo potrebuješ vedieť {#mrazy-vediet}
 
 - **Väčšina kúrení závisí od elektriny** – aj plynový kotol, tepelné čerpadlo a diaľkové kúrenie potrebujú elektrinu na čerpadlá a riadenie. Pri výpadku elektriny v zime prestane kúriť takmer každý byt.

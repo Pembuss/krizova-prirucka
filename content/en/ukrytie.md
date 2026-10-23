@@ -13,6 +13,18 @@ Sheltering protects you from a danger that comes from outside and is relatively 
 - Go outside only after the **All clear** signal or when instructed.
 :::
 
+::: choices
+**What are you sheltering from?**
+
+- [An air-raid alarm – I am going to a shelter](#ukrytie-odchod)
+- [A chemical or radiation release](#ukrytie-vnutri)
+- [The shelter is too far away](#ukrytie-dve-steny)
+- [I do not know where my shelter is](#ukrytie-kde)
+- [I want to prepare my cellar](#ukrytie-domov){.if-house}
+- [I live in a flat without a cellar](#ukrytie-vyber){.if-flat}
+- [I have a pet – is it allowed in the shelter?](#ukrytie-zivot){.if-pets}
+:::
+
 ## When to shelter and when not {#ukrytie-kedy}
 
 | Situation | Where |

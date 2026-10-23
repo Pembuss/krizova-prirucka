@@ -13,6 +13,17 @@ Home supplies allow you to stay at home when shops, water, electricity or transp
 - Do not buy more than you need – others need supplies too.
 :::
 
+::: choices
+**What do you need?**
+
+- [Water first](#zasoby-voda)
+- [How much of what to buy](#nakupne-zoznamy)
+- [I am on a small budget](#zasoby-postupne)
+- [I have a baby or toddler](#nakupne-zoznamy-diety){.if-baby}
+- [I live in a flat – where to store supplies](#zasoby-sklad){.if-flat}
+- [How to rotate supplies](#zasoby-obmena)
+:::
+
 ## Water – the most important supply {#zasoby-voda}
 
 People can survive weeks without food but only a few days without water. During a power cut the pumps in apartment buildings often stop; during a flood tap water may become unsafe to drink.

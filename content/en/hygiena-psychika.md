@@ -12,6 +12,17 @@ In a prolonged crisis, **diseases spread by dirty hands, water and waste** and *
 - Without a fridge, eat opened **food** as soon as possible.
 :::
 
+::: choices
+**What are you dealing with?**
+
+- [No running water – how to wash](#hygiena-osobna)
+- [The toilet does not work](#hygiena-zachod)
+- [I am scared and cannot sleep](#hygiena-psychika-pomaha)
+- [I want to help someone else](#hygiena-psychika-ppp)
+- [The children are frightened](#hygiena-psychika-deti){.if-kids}
+- [I need professional help](#hygiena-psychika-pomoc)
+:::
+
 ## Personal hygiene with minimal water {#hygiena-osobna}
 
 - **Hand washing:** fix soap on a string to a canister or bottle with a tap and put a basin underneath. About 0.5 litres of water is enough to wash your hands. Between washes use sanitiser with at least 60 % alcohol.

@@ -32,7 +32,7 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-  if (url.hostname.endsWith('tile.openstreetmap.org')) {
+  if (/(^|\.)tile\.(openstreetmap\.(org|fr|de)|opentopomap\.org)$/.test(url.hostname)) {
     event.respondWith((async () => {
       const cache = await caches.open(TILES);
       const hit = await cache.match(req);

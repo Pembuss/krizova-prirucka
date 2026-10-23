@@ -13,6 +13,18 @@ Ukrytí chrání před nebezpečím, které přichází zvenku a je relativně k
 - Ven vyjdi až po odvolání nebezpečí nebo na pokyn.
 :::
 
+::: choices
+**Před čím se ukrýváš?**
+
+- [Letecký poplach – jdu do úkrytu](#ukrytie-odchod)
+- [Únik chemikálie nebo radiace](#ukrytie-vnutri)
+- [Úkryt je daleko](#ukrytie-dve-steny)
+- [Nevím, kde je můj úkryt](#ukrytie-kde)
+- [Chci si připravit sklep](#ukrytie-domov){.if-house}
+- [Bydlím v bytě bez sklepa](#ukrytie-vyber){.if-flat}
+- [Mám zvíře – smí do úkrytu?](#ukrytie-zivot){.if-pets}
+:::
+
 ## Kdy se ukrývat a kdy ne {#ukrytie-kedy}
 
 | Situace | Kam |

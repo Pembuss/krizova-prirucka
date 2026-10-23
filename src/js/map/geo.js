@@ -1,4 +1,4 @@
-// Prístup k verejným službám OpenStreetMap: geokódovanie (Nominatim), Overpass, smerovanie (OSRM).
+// Prístup k verejným službám OpenStreetMap: geokódovanie (Nominatim, Photon), Overpass, smerovanie (OSRM).
 const NOMINATIM = 'https://nominatim.openstreetmap.org';
 const OVERPASS = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter', 'https://maps.mail.ru/osm/tools/overpass/api/interpreter', 'https://overpass.private.coffee/api/interpreter'];
 const ROUTERS = {
@@ -17,15 +17,84 @@ async function fetchJson(url, opts = {}, timeout = 25000) {
   } finally { clearTimeout(tm); }
 }
 
-export async function geocode(q, lang = 'sk') {
-  const url = `${NOMINATIM}/search?format=jsonv2&limit=6&addressdetails=1&accept-language=${lang}&q=${encodeURIComponent(q)}`;
-  const r = await fetchJson(url);
-  return r.map((x) => ({ lat: Number(x.lat), lon: Number(x.lon), label: x.display_name, country: (x.address?.country_code || '').toUpperCase() }));
+// Z disku (file://) prehliadač neposiela Referer a Nominatim takéto žiadosti odmieta – vtedy ide prvý Photon.
+const LOCAL = typeof location !== 'undefined' && location.protocol === 'file:';
+const PHOTON = 'https://photon.komoot.io';
+const photonLang = (lang) => (['de', 'en', 'fr'].includes(lang) ? lang : 'default');
+
+function photonLabel(pr) {
+  const street = pr.street ? `${pr.street}${pr.housenumber ? ' ' + pr.housenumber : ''}` : '';
+  const place = pr.city || pr.town || pr.village || pr.locality || pr.district || '';
+  const parts = [pr.name, street, place, pr.county, pr.state, pr.country].filter(Boolean);
+  return [...new Set(parts)].join(', ');
+}
+function fromPhoton(f) {
+  const [lon, lat] = f.geometry.coordinates;
+  return { lat, lon, label: photonLabel(f.properties || {}), country: (f.properties?.countrycode || '').toUpperCase(), kind: f.properties?.osm_value || '' };
+}
+async function photonSearch(q, lang, near, limit = 7) {
+  const bias = near ? `&lat=${near.lat.toFixed(4)}&lon=${near.lon.toFixed(4)}` : '';
+  const r = await fetchJson(`${PHOTON}/api/?q=${encodeURIComponent(q)}&limit=${limit}&lang=${photonLang(lang)}${bias}`, {}, 12000);
+  // rovnaký názov (napr. obec a jej katastrálne územie) ukáž len raz
+  const seen = new Set();
+  return (r.features || []).map(fromPhoton).filter((x) => x.label && !seen.has(x.label) && seen.add(x.label));
+}
+async function nominatimSearch(q, lang) {
+  const r = await fetchJson(`${NOMINATIM}/search?format=jsonv2&limit=7&addressdetails=1&accept-language=${lang}&q=${encodeURIComponent(q)}`, {}, 12000);
+  return r.map((x) => ({ lat: Number(x.lat), lon: Number(x.lon), label: x.display_name, country: (x.address?.country_code || '').toUpperCase(), kind: x.type || '' }));
+}
+
+// Súradnice zadané priamo: „48.1486, 17.1077“, „48,1486; 17,1077“ alebo „48°08'55\"N 17°06'28\"E“
+export function parseCoords(q) {
+  const s = String(q).trim();
+  const dms = [...s.matchAll(/(\d{1,3})[°\s]+(\d{1,2})['’′\s]+(\d{1,2}(?:[.,]\d+)?)?["”″]?\s*([NSEWnsewSJVZ])/g)];
+  if (dms.length === 2) {
+    const v = dms.map((m) => { const x = Number(m[1]) + Number(m[2]) / 60 + Number((m[3] || '0').replace(',', '.')) / 3600; return /[SWsw]|Z/.test(m[4]) ? -x : x; });
+    const latFirst = /[NSns]|J/.test(dms[0][4]) || !/[NSns]|J/.test(dms[1][4]);
+    const [lat, lon] = latFirst ? v : [v[1], v[0]];
+    if (Math.abs(lat) <= 90 && Math.abs(lon) <= 180) return { lat, lon };
+  }
+  // obe čísla s desatinnou časťou, aby sa za súradnice nepovažovalo napr. číslo domu
+  const m = s.match(/^(-?\d{1,2}[.,]\d+)\s*[;,\s]\s*(-?\d{1,3}[.,]\d+)$/);
+  if (m) {
+    const lat = Number(m[1].replace(',', '.')), lon = Number(m[2].replace(',', '.'));
+    if (Math.abs(lat) <= 90 && Math.abs(lon) <= 180) return { lat, lon };
+  }
+  return null;
+}
+
+// Vyhľadanie adresy: najprv vhodnejšia služba, pri chybe alebo prázdnom výsledku druhá.
+export async function geocode(q, lang = 'sk', { near } = {}) {
+  const c = parseCoords(q);
+  if (c) return [{ ...c, label: `${c.lat.toFixed(5)}, ${c.lon.toFixed(5)}`, country: '', kind: 'coords' }];
+  const order = LOCAL ? [() => photonSearch(q, lang, near), () => nominatimSearch(q, lang)] : [() => nominatimSearch(q, lang), () => photonSearch(q, lang, near)];
+  let lastErr = null;
+  for (const run of order) {
+    try { const r = await run(); if (r.length) return r; } catch (e) { lastErr = e; }
+  }
+  if (lastErr) throw lastErr;
+  return [];
+}
+// Návrhy počas písania – iba Photon (Nominatim automatické dopĺňanie nepovoľuje).
+export async function suggest(q, lang = 'sk', near) {
+  if (parseCoords(q)) return geocode(q, lang);
+  return photonSearch(q, lang, near, 6);
 }
 export async function reverse(lat, lon, lang = 'sk') {
-  const url = `${NOMINATIM}/reverse?format=jsonv2&zoom=16&addressdetails=1&accept-language=${lang}&lat=${lat}&lon=${lon}`;
-  const x = await fetchJson(url);
-  return { label: x.display_name || `${lat.toFixed(5)}, ${lon.toFixed(5)}`, country: (x.address?.country_code || '').toUpperCase() };
+  const fallback = { label: `${lat.toFixed(5)}, ${lon.toFixed(5)}`, country: '' };
+  const viaNominatim = async () => {
+    const x = await fetchJson(`${NOMINATIM}/reverse?format=jsonv2&zoom=17&addressdetails=1&accept-language=${lang}&lat=${lat}&lon=${lon}`, {}, 12000);
+    return { label: x.display_name || fallback.label, country: (x.address?.country_code || '').toUpperCase() };
+  };
+  const viaPhoton = async () => {
+    const r = await fetchJson(`${PHOTON}/reverse?lat=${lat}&lon=${lon}&limit=1&lang=${photonLang(lang)}`, {}, 12000);
+    const f = r.features?.[0];
+    return f ? { label: photonLabel(f.properties || {}), country: (f.properties?.countrycode || '').toUpperCase() } : fallback;
+  };
+  for (const run of LOCAL ? [viaPhoton, viaNominatim] : [viaNominatim, viaPhoton]) {
+    try { return await run(); } catch { /* skús ďalšiu službu */ }
+  }
+  return fallback;
 }
 
 export async function overpass(query, timeout = 40000) {
@@ -84,7 +153,7 @@ export function classify(tags) {
 }
 
 // Rozdelenie mapy na dlaždice v okruhu (na offline uloženie)
-export function tileUrls(lat, lon, km, zmin = 12, zmax = 16) {
+export function tileUrls(lat, lon, km, zmin = 12, zmax = 16, tpl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png') {
   const urls = [];
   const toTile = (la, lo, z) => {
     const n = 2 ** z;
@@ -97,7 +166,7 @@ export function tileUrls(lat, lon, km, zmin = 12, zmax = 16) {
   for (let z = zmin; z <= zmax; z++) {
     const [x1, y1] = toTile(lat + dLat, lon - dLon, z);
     const [x2, y2] = toTile(lat - dLat, lon + dLon, z);
-    for (let x = x1; x <= x2; x++) for (let y = y1; y <= y2; y++) urls.push(`https://tile.openstreetmap.org/${z}/${x}/${y}.png`);
+    for (let x = x1; x <= x2; x++) for (let y = y1; y <= y2; y++) urls.push(tpl.replace('{s}', 'abc'[(x + y) % 3]).replace('{z}', z).replace('{x}', x).replace('{y}', y));
   }
   return urls;
 }

@@ -12,6 +12,16 @@ A crisis rarely finds the whole family at home. Parents are at work, children at
 - Show all adults where the **main shut-offs** for water, gas and electricity are.
 :::
 
+::: choices
+**What do you want to sort out?**
+
+- [Where we will meet](#plan-miesta)
+- [Who will pick up the children](#plan-ulohy){.if-kids}
+- [I live alone](#plan-sam){.if-alone}
+- [Where our shelter is and where we will go](#plan-ukryt)
+- [I want to fill in and print the plan](#sablony-plan)
+:::
+
 ## What the plan should contain {#plan-obsah}
 
 ### 1. Contacts {#plan-kontakty}

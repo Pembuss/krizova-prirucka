@@ -8,6 +8,15 @@ Evropské země chrání obyvatelstvo velmi rozdílně. **Švýcarsko a Finsko**
 Údaje jsou aktuální k říjnu 2026 a mění se. **Před cestou nebo v krizi si je ověř na oficiálních stránkách** uvedených u každé země. Kryty z otevřených dat (OpenStreetMap) jsou neúplné a jejich stav ani přístupnost nejsou ověřené.
 :::
 
+::: choices
+**Co hledáš?**
+
+- [Jaké druhy útočišť existují](#kryty-europa-druhy)
+- [Jak najít útočiště v cizí zemi](#kryty-europa-hladanie)
+- [Informace o konkrétní zemi](#kryty-europa-krajiny)
+- [Kryty v okolí na mapě](#kryty-europa-mapa)
+:::
+
 ## Druhy útočišť {#kryty-europa-druhy}
 
 | Druh | Popis | Kde se vyskytuje |

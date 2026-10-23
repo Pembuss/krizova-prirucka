@@ -4,6 +4,17 @@ There are more than 100 nuclear power reactors in the EU. Central Europe alone h
 
 {{now:nuclear}}
 
+::: choices
+**What is happening?**
+
+- [Sirens and an announcement of a radiation accident](#jadrova-pocas)
+- [Should I take iodine tablets?](#jadrova-jod)
+- [I am outdoors – where to take shelter](#ukrytie-kedy)
+- [I have children – iodine doses for children](#jadrova-jod){.if-kids}
+- [I live near a nuclear power plant](#jadrova-pred){.if-npp}
+- [The accident is over – food and returning home](#jadrova-po)
+:::
+
 ## What you need to know {#jadrova-vediet}
 
 - In an accident a **radioactive cloud** may be released. It drifts with the wind, and **radioactive dust (fallout)** falls from it onto the ground, roofs, plants and water.

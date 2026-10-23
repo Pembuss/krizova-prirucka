@@ -4,6 +4,17 @@ Letné búrky prinášajú blesky, prívalový dážď, krupobitie a nárazy vet
 
 {{now:storm}}
 
+::: choices
+**Kde ťa búrka zastihla?**
+
+- [Búrka sa blíži a mám ešte čas](#burky-pred)
+- [Som doma, vonku alebo v aute a búrka je tu](#burky-pocas)
+- [Niekoho zasiahol blesk](#prva-pomoc-resuscitacia)
+- [Búrka prešla – spadnuté stromy, poškodená strecha](#burky-po)
+- [Po búrke nejde elektrina](#vypadok-elektriny)
+- [Bývam v dome – strecha a stromy pri dome](#burky-pred){.if-house}
+:::
+
 ## Čo potrebuješ vedieť {#burky-vediet}
 
 - **Výstrahy SHMÚ** majú tri stupne: žltá (1. stupeň – buď pozorný), oranžová (2. stupeň – buď pripravený), červená (3. stupeň – konaj, hrozí veľké nebezpečenstvo). Rovnaké farby používa celoeurópsky systém Meteoalarm.

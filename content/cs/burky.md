@@ -4,6 +4,17 @@ Letní bouřky přinášejí blesky, přívalový déšť, krupobití a nárazy 
 
 {{now:storm}}
 
+::: choices
+**Kde tě bouřka zastihla?**
+
+- [Bouřka se blíží a mám ještě čas](#burky-pred)
+- [Jsem doma, venku nebo v autě a bouřka je tady](#burky-pocas)
+- [Někoho zasáhl blesk](#prva-pomoc-resuscitacia)
+- [Bouřka přešla – spadlé stromy, poškozená střecha](#burky-po)
+- [Po bouřce nejde elektřina](#vypadok-elektriny)
+- [Bydlím v domě – střecha a stromy u domu](#burky-pred){.if-house}
+:::
+
 ## Co potřebuješ vědět {#burky-vediet}
 
 - **Výstrahy ČHMÚ** mají tři stupně nebezpečí: nízký (žlutá – buď pozorný), vysoký (oranžová – buď připravený) a velmi vysoký (červená – jednej, hrozí velké nebezpečí). Barvy odpovídají celoevropskému systému Meteoalarm; na Slovensku vydává výstrahy SHMÚ.

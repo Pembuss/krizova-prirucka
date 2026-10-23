@@ -12,6 +12,17 @@ In a major crisis, the emergency services, hospitals and authorities have to con
 - Keep a grab bag ready by the door ([Grab bag](#batozina)).
 :::
 
+::: choices
+**How prepared are you?**
+
+- [I have nothing ready](#rozcestnik-zacat)
+- [I do not know what risks I face](#principy-rizika)
+- [I do not know whether to stay, shelter or leave](#principy-rozhodnutia)
+- [I have the basics and want more](#principy-urovne)
+- [I live near a river](#povodne){.if-river}
+- [I live near a nuclear power plant](#jadrova){.if-npp}
+:::
+
 ## Why prepare {#principy-preco}
 
 Crises come more often than we think. In recent years Central Europe has been hit by floods (for example in September 2024), extreme heatwaves, windstorms, the COVID-19 pandemic, an energy crisis, the Iberian blackout in April 2025, a large power outage in Czechia in July 2025 and the war in Ukraine close to our borders. Most crises are not a disaster for the whole country but a *local* event that nevertheless hits your household: a flooded street, a week without power after a storm, a village sealed off because of a chemical leak.

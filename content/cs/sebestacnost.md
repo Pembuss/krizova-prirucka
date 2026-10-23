@@ -11,6 +11,17 @@ Když nefungují sítě, potřebuješ vlastní řešení pro pět základních p
 - Při bolesti hlavy, závrati nebo nevolnosti více lidí v místnosti **ihned vyvětrej a odejdi** – může jít o otravu CO.
 :::
 
+::: choices
+**Co ti chybí?**
+
+- [Pitná voda](#sebestacnost-voda)
+- [Vaření](#sebestacnost-varenie)
+- [Teplo](#sebestacnost-teplo)
+- [Světlo](#sebestacnost-svetlo)
+- [Nabíjení mobilu a přístrojů](#sebestacnost-energia)
+- [Mám dům a zahradu – co ještě zvládnu sám](#sebestacnost-zrucnosti){.if-house}
+:::
+
 ## Úprava vody {#sebestacnost-voda}
 
 Pokud dojde balená voda, musíš vodu ze studny, deště, potoka nebo cisterny upravit. **Postupuj v tomto pořadí:**

@@ -14,6 +14,18 @@ In a crisis the ambulance may be delayed or not available at all. Yet the first 
 7. **Breathing but unresponsive** – recovery position on the side, and keep checking their breathing.
 :::
 
+::: choices
+**What happened?**
+
+- [Unresponsive and not breathing normally](#prva-pomoc-resuscitacia)
+- [Choking](#prva-pomoc-dusenie)
+- [Bleeding heavily](#prva-pomoc-krvacanie)
+- [A burn](#prva-pomoc-popaleniny)
+- [A fall, fracture or blow to the head](#prva-pomoc-zlomeniny)
+- [Chest pain, stroke or a seizure](#prva-pomoc-ochorenia)
+- [Diarrhoea or vomiting](#prva-pomoc-dehydratacia)
+:::
+
 ## Unconsciousness and resuscitation {#prva-pomoc-resuscitacia}
 
 - **Gasping, irregular breaths** are not normal breathing – start resuscitation.

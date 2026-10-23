@@ -4,6 +4,19 @@ Povodně jsou ve střední Evropě nejčastější živelní pohromou. Ohrožuj�
 
 {{now:flood}}
 
+::: choices
+**Co se děje právě teď? Vyber, co platí pro tebe:**
+
+- [Prší a hrozí povodeň – mám ještě čas se připravit](#povodne-pred)
+- [Voda stoupá a jsem ještě doma](#povodne-stupa)
+- [Obec vyhlásila evakuaci](#evakuacia)
+- [Voda mě zastihla – v domě nebo v autě](#povodne-zastihne)
+- [Voda opadla – vracím se domů](#povodne-po)
+- [Máme malé děti – na co myslet](#zranitelni-deti){.if-kids}
+- [Máme psa nebo jiné zvíře](#evakuacia-zvierata){.if-pets}
+- [Nemáme auto – jak odejít](#evakuacia-pesi){.if-nocar}
+:::
+
 ## Co potřebuješ vědět {#povodne-vediet}
 
 - **Regionální povodeň** přichází po dlouhotrvajících deštích nebo tání sněhu. Bývá předpovězena dny dopředu – je čas se připravit.

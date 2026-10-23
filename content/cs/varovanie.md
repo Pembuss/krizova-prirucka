@@ -13,6 +13,16 @@ Včasné varování zachraňuje životy – ale jen tehdy, když mu rozumíš a 
 - Upozorni sousedy, hlavně starší a neslyšící.
 :::
 
+::: choices
+**Co právě řešíš?**
+
+- [Zazněla siréna](#varovanie-sireny)
+- [Nejde elektřina ani signál](#varovanie-bez-signalu)
+- [Nevím, jestli je zpráva pravdivá](#varovanie-dezinformacie)
+- [Potřebuji volat o pomoc](#varovanie-112)
+- [Chci se s rodinou domluvit na spojení](#varovanie-spojenie)
+:::
+
 ## Varovné signály v Česku {#varovanie-sireny}
 
 V Česku se obyvatelstvo varuje jediným signálem **„Všeobecná výstraha“**. Po něm vždy následuje **mluvená informace** z elektronické sirény, rozhlasu nebo televize, která řekne, o jaké nebezpečí jde a co dělat.

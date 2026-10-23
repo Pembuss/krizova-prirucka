@@ -3,18 +3,19 @@ import { store, uid } from '../store.js';
 import { t, tp, T, esc, input, textarea, select, check, chips, bindForm, toast, LANG, $, $$ } from '../core.js';
 import { COUNTRIES } from '../../../data/countries.js';
 import { CRISES } from '../../../data/crises.js';
-import { geocode, reverse, overpass } from '../../map/geo.js';
+import { overpass } from '../../map/geo.js';
+import { locationPicker } from '../../map/picker.js';
 import { nearestNpp } from '../../calc.js';
 
 const STEPS = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8'];
 
 export function render(el, [stepParam]) {
   let step = Math.min(Math.max(Number(stepParam) || 1, 1), STEPS.length);
-  let map = null;
+  let picker = null;
   const p = store.profile;
 
   const draw = () => {
-    if (map) { map.remove(); map = null; }
+    if (picker) { picker.destroy(); picker = null; }
     el.innerHTML = `<div class="wrap narrow wizard">
 <h1>${esc(t('wiz.title'))}</h1>
 <ol class="steps-nav">${STEPS.map((s, i) => `<li><a href="#/profil/${i + 1}" ${i + 1 === step ? 'aria-current="step"' : ''}>${i + 1}<span class="visually-hidden"> ${esc(t('wiz.' + s))}</span></a></li>`).join('')}</ol>
@@ -26,6 +27,7 @@ export function render(el, [stepParam]) {
   ${step < STEPS.length ? `<a class="btn" href="#/profil/${step + 1}">${esc(t('wiz.next'))} →</a>` : `<button class="btn" type="button" data-finish>✓ ${esc(t('wiz.finish'))}</button>`}
 </div></div>`;
     if (step === 1) initLocation();
+    if (step === 6) initDestPicker();
   };
 
   function stepHtml(s) {
@@ -33,13 +35,8 @@ export function render(el, [stepParam]) {
       case 1: {
         const loc = p.location;
         const npp = nearestNpp(loc);
-        return `<div class="field-row"><span class="lbl">${esc(t('loc.search'))}</span>
-<div class="inline"><input type="search" id="loc-q" placeholder="${esc(t('loc.search'))}" value=""><button class="btn" type="button" data-geocode>${esc(t('loc.searchBtn'))}</button></div>
-<button class="btn btn-ghost" type="button" data-gps>📍 ${esc(t('loc.gps'))}</button>
-<ul class="results" id="loc-results"></ul></div>
-<div id="loc-map" class="minimap"></div><p class="muted small">${esc(t('loc.pick'))}</p>
-<p><strong>${esc(t('loc.current'))}:</strong> <span id="loc-label">${loc.lat != null ? esc(loc.label || `${loc.lat.toFixed(4)}, ${loc.lon.toFixed(4)}`) : esc(t('loc.none'))}</span></p>
-${npp ? `<p class="muted">☢️ ${esc(t('home.npp', { name: npp.name, km: npp.km }))}</p>` : ''}
+        return `<div id="loc-picker"></div>
+<p class="muted" id="loc-npp">${npp ? `☢️ ${esc(t('home.npp', { name: npp.name, km: npp.km }))}` : ''}</p>
 <div class="field-row"><span class="lbl">${esc(t('loc.setting'))}</span>${chips('location.setting', [['city', t('setting.city')], ['town', t('setting.town')], ['rural', t('setting.rural')]])}</div>
 ${select('location.country', t('loc.country'), COUNTRIES.map((c) => [c.cc, `${c.flag} ${T(c.name)}`]).sort((a, b) => a[1].localeCompare(b[1], LANG)))}
 <fieldset><legend>${esc(t('loc.risks'))}</legend>
@@ -77,7 +74,10 @@ ${check('mobility.bike', t('mob.bike'))}${check('mobility.publicTransport', t('m
 ${input('mobility.walkKm', t('mob.walkKm'), { type: 'number', attrs: 'min="0" inputmode="decimal"' })}
 <fieldset><legend>${esc(t('mob.dest'))}</legend><p class="muted small">${esc(t('mob.destHint'))}</p>
 <ul class="destlist">${(p.mobility.destinations || []).map((d, i) => `<li><span>🏁 ${esc(d.name || d.label)}</span><small class="muted">${esc(d.label || '')}</small><button class="btn btn-ghost btn-sm" type="button" data-del-dest="${i}">${esc(t('c.delete'))}</button></li>`).join('') || `<li class="muted">${esc(t('dest.none'))}</li>`}</ul>
-<div class="field-row"><input type="text" id="dest-name" placeholder="${esc(t('dest.name'))}"><div class="inline"><input type="search" id="dest-q" placeholder="${esc(t('loc.search'))}"><button class="btn" type="button" data-dest-search>${esc(t('loc.searchBtn'))}</button></div><ul class="results" id="dest-results"></ul></div></fieldset>`;
+<h3>${esc(t('dest.add'))}</h3>
+<label class="field-row"><span class="lbl">${esc(t('dest.name'))}</span><input type="text" id="dest-name"></label>
+<div id="dest-picker"></div>
+<div class="btn-row"><button class="btn" type="button" data-add-dest>${esc(t('dest.addBtn'))}</button></div></fieldset>`;
       case 7:
         return `<div class="field-row"><span class="lbl">${esc(t('sup.current'))}</span>${chips('supplies.currentDays', [0, 1, 3, 7, 14, 30].map((d) => [d, String(d)]))}</div>
 <div class="field-row"><span class="lbl">${esc(t('sup.target'))}</span>${chips('supplies.targetDays', [3, 7, 14, 30].map((d) => [d, tp('c.days', d)]))}</div>
@@ -108,35 +108,30 @@ ${select(`${b}.powerDevice`, t('mem.device'), [['', t('dev.none')], ...['oxygen'
 ${p.members.length > 1 ? `<button class="btn btn-ghost btn-sm" type="button" data-del-member="${i}">${esc(t('c.delete'))}</button>` : ''}</fieldset>`;
   }
 
-  function setLocation(lat, lon, label, country) {
-    p.location.lat = lat; p.location.lon = lon;
-    if (label) p.location.label = label;
-    if (country && COUNTRIES.some((c) => c.cc === country)) p.location.country = country;
+  function setLocation(loc) {
+    p.location.lat = loc.lat; p.location.lon = loc.lon;
+    p.location.label = loc.label || '';
+    if (loc.country && COUNTRIES.some((c) => c.cc === loc.country)) {
+      p.location.country = loc.country;
+      const sel = $('[data-bind="location.country"]', el); if (sel) sel.value = loc.country;
+    }
     store.saveProfile();
-    draw();
-    if (!label) reverse(lat, lon, LANG).then((r) => { p.location.label = r.label; if (COUNTRIES.some((c) => c.cc === r.country)) p.location.country = r.country; store.saveProfile(); const lab = $('#loc-label'); if (lab) lab.textContent = r.label; }).catch(() => {});
+    const npp = nearestNpp(p.location);
+    const out = $('#loc-npp', el); if (out) out.textContent = npp ? `☢️ ${t('home.npp', { name: npp.name, km: npp.km })}` : '';
+    const rb = $('[data-rivers]', el); if (rb) rb.disabled = false;
   }
 
   function initLocation() {
-    const L = window.L;
-    if (!L) return;
-    const loc = p.location;
-    const center = loc.lat != null ? [loc.lat, loc.lon] : [48.7, 19.5];
-    map = L.map('loc-map', { zoomControl: true }).setView(center, loc.lat != null ? 14 : 7);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
-    if (loc.lat != null) L.marker(center).addTo(map);
-    map.on('click', (e) => setLocation(e.latlng.lat, e.latlng.lng));
+    if (!window.L) return;
+    picker = locationPicker($('#loc-picker', el), { value: p.location, onChange: setLocation, icon: '🏠', label: t('loc.current'), height: 320 });
   }
 
-  async function search(q, out, onPick) {
-    if (!q.trim()) return;
-    out.innerHTML = `<li class="muted">${esc(t('c.loading'))}</li>`;
-    try {
-      const res = await geocode(q, LANG);
-      if (!res.length) { out.innerHTML = `<li class="muted">${esc(t('loc.notFound'))}</li>`; return; }
-      out.innerHTML = res.map((r, i) => `<li><button type="button" data-pick="${i}">${esc(r.label)}</button></li>`).join('');
-      out.onclick = (e) => { const b = e.target.closest('[data-pick]'); if (b) onPick(res[Number(b.dataset.pick)]); };
-    } catch { out.innerHTML = `<li class="muted">${esc(t('map.error'))}</li>`; }
+  function initDestPicker() {
+    if (!window.L) return;
+    const h = p.location.lat != null ? [{ lat: p.location.lat, lon: p.location.lon, icon: '🏠', title: t('map.home') }] : [];
+    const ds = (p.mobility.destinations || []).map((d) => ({ lat: d.lat, lon: d.lon, icon: '🏁', color: '#0f766e', title: d.name }));
+    picker = locationPicker($('#dest-picker', el), { icon: '🏁', color: '#0f766e', markers: [...h, ...ds], label: t('rt.dest'), height: 280 });
+    if (h.length) picker.map.setView([h[0].lat, h[0].lon], 9);
   }
 
   bindForm(el, (path, v) => {
@@ -151,10 +146,6 @@ ${p.members.length > 1 ? `<button class="btn btn-ghost btn-sm" type="button" dat
 
   el.addEventListener('click', async (e) => {
     const tg = e.target;
-    if (tg.closest('[data-geocode]')) search($('#loc-q').value, $('#loc-results'), (r) => setLocation(r.lat, r.lon, r.label, r.country));
-    if (tg.closest('[data-gps]')) {
-      navigator.geolocation?.getCurrentPosition((pos) => setLocation(pos.coords.latitude, pos.coords.longitude), () => toast(t('loc.gpsErr')), { enableHighAccuracy: true, timeout: 15000 });
-    }
     if (tg.closest('[data-rivers]')) {
       const out = $('#river-out');
       out.textContent = t('c.loading');
@@ -171,11 +162,12 @@ ${p.members.length > 1 ? `<button class="btn btn-ghost btn-sm" type="button" dat
     if (tg.closest('[data-add-pet]')) { p.pets.push({ id: uid(), type: 'dog', name: '', weight: 15 }); store.saveProfile(); draw(); }
     const dp = tg.closest('[data-del-pet]');
     if (dp) { p.pets.splice(Number(dp.dataset.delPet), 1); store.saveProfile(); draw(); }
-    if (tg.closest('[data-dest-search]')) {
-      search($('#dest-q').value, $('#dest-results'), (r) => {
-        p.mobility.destinations.push({ id: uid(), name: $('#dest-name').value.trim() || r.label.split(',')[0], label: r.label, lat: r.lat, lon: r.lon });
-        store.saveProfile(); draw();
-      });
+    if (tg.closest('[data-add-dest]')) {
+      const r = picker?.get();
+      if (!r) { toast(t('dest.pickFirst'), 3500); return; }
+      const name = $('#dest-name', el).value.trim() || (r.label || '').split(',')[0] || `${r.lat.toFixed(4)}, ${r.lon.toFixed(4)}`;
+      p.mobility.destinations.push({ id: uid(), name, label: r.label, lat: r.lat, lon: r.lon });
+      store.saveProfile(); draw(); toast(t('dest.added', { name }));
     }
     const dd = tg.closest('[data-del-dest]');
     if (dd) { p.mobility.destinations.splice(Number(dd.dataset.delDest), 1); store.saveProfile(); draw(); }
@@ -183,5 +175,5 @@ ${p.members.length > 1 ? `<button class="btn btn-ghost btn-sm" type="button" dat
   });
 
   draw();
-  return () => { if (map) map.remove(); };
+  return () => { if (picker) picker.destroy(); };
 }

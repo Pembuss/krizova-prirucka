@@ -14,6 +14,18 @@ V krizi může záchranná služba přijet pozdě nebo nemusí být dostupná v�
 7. **Dýchá, ale nereaguje** – zotavovací poloha na boku a sleduj dýchání.
 :::
 
+::: choices
+**Co se stalo?**
+
+- [Nereaguje a nedýchá normálně](#prva-pomoc-resuscitacia)
+- [Dusí se](#prva-pomoc-dusenie)
+- [Silně krvácí](#prva-pomoc-krvacanie)
+- [Popálil se](#prva-pomoc-popaleniny)
+- [Upadl, zlomenina nebo úder do hlavy](#prva-pomoc-zlomeniny)
+- [Bolest na hrudi, mrtvice nebo záchvat](#prva-pomoc-ochorenia)
+- [Průjem nebo zvracení](#prva-pomoc-dehydratacia)
+:::
+
 ## Bezvědomí a resuscitace {#prva-pomoc-resuscitacia}
 
 - **Lapavé, nepravidelné nádechy** nejsou normální dýchání – začni resuscitovat.

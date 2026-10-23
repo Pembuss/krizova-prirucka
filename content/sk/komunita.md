@@ -11,6 +11,16 @@ V každej veľkej kríze prvú pomoc poskytnú **ľudia v okolí** – susedia, 
 - **Dohodnite sa** na spoločnom mieste a čase stretnutí v dome alebo na ulici.
 :::
 
+::: choices
+**V akej fáze si?**
+
+- [Chceme sa pripraviť so susedmi](#komunita-priprava)
+- [Kríza práve prebieha](#komunita-pocas)
+- [Vraciame sa domov](#komunita-navrat)
+- [Škody a poisťovňa](#komunita-poistenie)
+- [Bývam sám](#plan-sam){.if-alone}
+:::
+
 ## Susedská pripravenosť {#komunita-priprava}
 
 - **Spoznaj susedov** – meno, telefón, kto má aké zručnosti a vybavenie, kto potrebuje pomoc.

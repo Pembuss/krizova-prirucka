@@ -6,6 +6,17 @@ Táto kapitola obsahuje hotové nákupné zoznamy pre typické domácnosti. Zozn
 **Predpoklady výpočtu:** dospelý potrebuje 2 200 kcal denne (deti a seniori menej), pitie a varenie 3 l vody na osobu a deň plus 1 l na hygienu, aspoň polovica potravín je jedlá bez varenia. Ceny sú **orientačné** (slovenský maloobchod, október 2026) a slúžia na odhad rozpočtu – v aplikácii si ich môžeš prepísať podľa svojho obchodu.
 :::
 
+::: choices
+**Aká je tvoja domácnosť?**
+
+- [Som sám](#nakupne-zoznamy-jednotlivec){.if-alone}
+- [Rodina s deťmi](#nakupne-zoznamy-rodina){.if-kids}
+- [Seniori](#nakupne-zoznamy-seniori){.if-seniors}
+- [Diéta, alergia alebo dojča](#nakupne-zoznamy-diety){.if-baby}
+- [Mám malý rozpočet](#nakupne-zoznamy-rozpocet)
+- [Čo kúpiť okrem jedla](#nakupne-zoznamy-vybavenie)
+:::
+
 ## Ako zoznamy používať {#nakupne-zoznamy-pouzitie}
 
 1. Vyber zoznam, ktorý sa najviac podobá tvojej domácnosti, a dobu, na ktorú sa chceš pripraviť. **Začni 3 dňami**, potom rozširuj.

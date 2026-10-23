@@ -4,6 +4,16 @@
 
 {{now:quake}}
 
+::: choices
+**Co se děje?**
+
+- [Země se právě třese](#zemetrasenie-pocas)
+- [Otřesy přestaly](#zemetrasenie-po)
+- [Vidím praskliny v terénu nebo na domě](#zemetrasenie-zosuvy)
+- [Někdo je zraněný](#prva-pomoc-zlomeniny)
+- [Chci se připravit](#zemetrasenie-pred)
+:::
+
 ## Co potřebuješ vědět {#zemetrasenie-vediet}
 
 - **Zemětřesení se nedá předpovědět.** Otřesy trvají obvykle několik sekund až desítek sekund. Po hlavním otřesu přicházejí **dotřesy**, které mohou zřítit poškozené budovy.

@@ -4,6 +4,18 @@ A fire in a flat spreads within minutes. Most victims do not die from burns but 
 
 {{now:fire}}
 
+::: choices
+**What is happening?**
+
+- [There is a fire at home and we can get out safely](#poziare-budova)
+- [There is smoke in the corridor and I cannot get out](#poziare-uviaznuty){.if-flat}
+- [Someone's clothes are on fire](#poziare-oblecenie)
+- [A forest or field fire is approaching](#poziare-priroda)
+- [Someone has burns](#prva-pomoc-popaleniny)
+- [I want to prevent fires](#poziare-pred)
+- [I want to try it as a story](#scenar-fire)
+:::
+
 ## What you need to know {#poziare-vediet}
 
 - **Smoke is deadlier than fire.** It contains carbon monoxide and other toxic gases; a person can lose consciousness after a few breaths. Smoke rises – there is most air close to the floor.

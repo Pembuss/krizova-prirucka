@@ -4,6 +4,17 @@ Voda z vodovodu může přestat téct při poruše potrubí, výpadku elektřiny
 
 {{now:water}}
 
+::: choices
+**Co se děje s vodou?**
+
+- [Voda neteče](#vypadok-vody-pocas)
+- [Hlásí nepitnou vodu – co smím](#vypadok-vody-vediet)
+- [Potřebuji upravit vodu](#sebestacnost-voda)
+- [Nefunguje záchod](#hygiena-zachod)
+- [Mám kojence – voda na mléko](#zranitelni-deti){.if-baby}
+- [Chci mít zásobu předem](#vypadok-vody-pred)
+:::
+
 ## Co potřebuješ vědět {#vypadok-vody-vediet}
 
 **Druhy omezení:**

@@ -4,6 +4,18 @@ Požiar v byte sa rozšíri za niekoľko minút. Väčšina obetí nezomiera na 
 
 {{now:fire}}
 
+::: choices
+**Čo sa deje?**
+
+- [Horí u nás a dá sa bezpečne odísť](#poziare-budova)
+- [Na chodbe je dym a von sa nedostanem](#poziare-uviaznuty){.if-flat}
+- [Niekomu horí oblečenie](#poziare-oblecenie)
+- [K domu sa blíži lesný alebo poľný požiar](#poziare-priroda)
+- [Niekto má popáleniny](#prva-pomoc-popaleniny)
+- [Chcem požiaru predísť](#poziare-pred)
+- [Chcem si to vyskúšať ako príbeh](#scenar-fire)
+:::
+
 ## Čo potrebuješ vedieť {#poziare-vediet}
 
 - **Dym je smrteľnejší ako oheň.** Obsahuje oxid uhoľnatý a ďalšie jedovaté plyny; po niekoľkých nádychoch môže človek stratiť vedomie. Dym stúpa – pri zemi je najviac vzduchu.

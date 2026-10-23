@@ -4,6 +4,18 @@ Požár v bytě se rozšíří během několika minut. Většina obětí neumír
 
 {{now:fire}}
 
+::: choices
+**Co se děje?**
+
+- [Hoří u nás a dá se bezpečně odejít](#poziare-budova)
+- [Na chodbě je kouř a ven se nedostanu](#poziare-uviaznuty){.if-flat}
+- [Někomu hoří oblečení](#poziare-oblecenie)
+- [K domu se blíží lesní nebo polní požár](#poziare-priroda)
+- [Někdo má popáleniny](#prva-pomoc-popaleniny)
+- [Chci požáru předejít](#poziare-pred)
+- [Chci si to vyzkoušet jako příběh](#scenar-fire)
+:::
+
 ## Co potřebuješ vědět {#poziare-vediet}
 
 - **Kouř je smrtelnější než oheň.** Obsahuje oxid uhelnatý a další jedovaté plyny; po několika nádeších může člověk ztratit vědomí. Kouř stoupá – u země je nejvíce vzduchu.

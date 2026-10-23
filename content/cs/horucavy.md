@@ -4,6 +4,18 @@ Vedra jsou v Evropě nejsmrtelnějším přírodním jevem – v létě 2022 si 
 
 {{now:heat}}
 
+::: choices
+**Co právě řešíš?**
+
+- [Blíží se vlna veder](#horucavy-pred)
+- [Je horko – jak to vydržet doma](#horucavy-pocas)
+- [Někomu je z horka špatně](#horucavy-priznaky)
+- [Dochází voda, je sucho](#horucavy-sucho)
+- [Starám se o seniora](#zranitelni-seniori){.if-seniors}
+- [Mám malé dítě](#zranitelni-deti){.if-kids}
+- [Chci si to vyzkoušet jako příběh](#scenar-heat)
+:::
+
 ## Co potřebuješ vědět {#horucavy-vediet}
 
 - **Tropický den** má maximální teplotu 30 °C a více, **tropická noc** neklesne pod 20 °C. Právě horké noci jsou nebezpečné, protože se tělo nestihne zotavit.

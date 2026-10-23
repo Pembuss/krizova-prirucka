@@ -4,6 +4,16 @@ Slovensko nepatrí medzi krajiny so silnými zemetraseniami, ale nie je ani bez 
 
 {{now:quake}}
 
+::: choices
+**Čo sa deje?**
+
+- [Zem sa práve trasie](#zemetrasenie-pocas)
+- [Otrasy prestali](#zemetrasenie-po)
+- [Vidím praskliny v teréne alebo na dome](#zemetrasenie-zosuvy)
+- [Niekto je zranený](#prva-pomoc-zlomeniny)
+- [Chcem sa pripraviť](#zemetrasenie-pred)
+:::
+
 ## Čo potrebuješ vedieť {#zemetrasenie-vediet}
 
 - **Zemetrasenie sa nedá predpovedať.** Otrasy trvajú obvykle niekoľko sekúnd až desiatok sekúnd. Po hlavnom otrase prichádzajú **dotrasy**, ktoré môžu zrútiť poškodené budovy.

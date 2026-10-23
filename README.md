@@ -2,7 +2,11 @@
 
 Príručka pre domácnosti: ako sa pripraviť, ako konať a ako sa zotaviť pri živelných pohromách, výpadkoch energií, epidémiách a ďalších krízach. Projekt má tri výstupy v troch jazykoch (slovenčina, čeština, angličtina):
 
-1. **Interaktívna kniha.** Má 35 kapitol a rozcestník podľa krízy a potreby (*urob hneď / naplánuj / vedieť*). Vychádza ako HTML, PDF a EPUB.
+1. **Interaktívna kniha-hra.** Má 36 kapitol a rozcestník podľa krízy a potreby (*urob hneď / naplánuj / vedieť*). Vychádza ako HTML, PDF a EPUB.
+   - Rozhodovacie body v kapitolách („Rozhodni sa“) vedú na ďalšiu vhodnú kapitolu alebo sekciu. V PDF majú čísla strán.
+   - Profil čitateľa (deti, seniori, zvieratá, byt alebo dom, auto…) zvýrazní voľby „pre teba“ a na konci kapitoly odporučí ďalšie čítanie.
+   - Kniha si pamätá prečítané kapitoly a ponúka návrat na poslednú voľbu.
+   - Šesť príbehových scenárov sa na webe hrá interaktívne a v tlači ako číslované odseky (§).
 2. **Aplikácia (plánovač).** Z profilu domácnosti zostaví osobný plán, zásoby a nákupný zoznam s rozpočtom, energie podľa scenárov, batohy, rodinný plán, mapu krytov, únikové trasy a tlač.
 3. **Webstránka.** Obsahuje všetok obsah knihy, karty „Okamžite urob“, kontrolné zoznamy, prehľad 35 európskych krajín, knižnicu zdrojov, mapu a súbory na stiahnutie.
 
@@ -23,9 +27,12 @@ Balík vznikne tak, že po `npm run build` premenuješ priečinok `dist/` na `Kr
 |---|---|
 | `content/{sk,cs,en}/*.md` | Kapitoly knihy (Markdown, pandoc). V každom jazyku sú rovnaké súbory, ID sekcií `{#…}` aj zástupné značky `{{…}}`. |
 | `src/data/` | Spoločné dáta v troch jazykoch: krízy a postupy, položky zásob, kontrolné zoznamy, krajiny, zdroje, jadrové elektrárne, štruktúra knihy, texty webu. |
+| `src/data/scenarios.js` | Príbehové scenáre (uzly, voľby, hodnotenie ✔/✖, tipy s odkazmi do knihy). |
+| `src/data/reader.js` | Značky profilu čitateľa (`if-kids`, `if-pets`…) a odporúčané sekcie. |
+| `src/js/book.js` | Kniha na webe: profil čitateľa, zvýraznenie volieb, odporúčania, prečítané kapitoly, prehrávač scenárov. |
+| `src/js/map/` | Mapa a trasy: vyhľadávanie (Nominatim, Photon), výber miesta na mape (`picker.js`), mapové podklady s automatickým prepínaním (`tiles.js`), Overpass a OSRM. |
 | `src/js/calc.js` | Výpočty: kalórie a voda podľa veku, nákupný zoznam, rozpočet, rizikový profil, energie. |
 | `src/js/app/` | Aplikácia: smerovač, sprievodca profilom, pohľady a tlačové dokumenty. Build ich zabalí (esbuild) do `assets/js/app.js`, aby fungovali aj z disku. |
-| `src/js/map/` | Mapa a trasy: Nominatim, Overpass a OSRM. |
 | `src/css/`, `src/img/` | Štýly webu, aplikácie a tlače, logo. |
 | `src/sw.js` | Šablóna service workera (offline). |
 | `tools/build.mjs`, `tools/render.mjs` | Build všetkých výstupov. |
@@ -82,12 +89,29 @@ Pri plánovaní (keď je internet) aplikácia a mapa používajú bezplatné slu
 
 | Služba | Na čo | Podmienky |
 |---|---|---|
-| tile.openstreetmap.org | mapové dlaždice | [Tile Usage Policy](https://operations.osmfoundation.org/policies/tiles/). Pri veľkej návštevnosti treba vlastný server alebo komerčného poskytovateľa. |
+| tile.openstreetmap.org | mapové dlaždice (len na webe – pri otvorení z disku server bez hlavičky Referer vracia „Access blocked“) | [Tile Usage Policy](https://operations.osmfoundation.org/policies/tiles/). Pri veľkej návštevnosti treba vlastný server alebo komerčného poskytovateľa. |
+| tile.openstreetmap.fr (HOT), tile.openstreetmap.de, tile.opentopomap.org | ďalšie mapové podklady; z disku sa predvolene používa humanitárna mapa HOT, prepínač je vpravo hore v mape | podmienky jednotlivých prevádzkovateľov |
+| photon.komoot.io | vyhľadanie adresy a návrhy počas písania (z disku ako prvé, inak záloha za Nominatim) | verejná služba Komoot, primeraná záťaž |
 | nominatim.openstreetmap.org | vyhľadanie adresy | [Usage Policy](https://operations.osmfoundation.org/policies/nominatim/), najviac 1 požiadavka za sekundu |
 | overpass-api.de (+ 3 záložné) | kryty, nemocnice, voda, rizikové miesta na trase | verejné inštancie, občas preťažené – aplikácia prepína medzi nimi |
 | routing.openstreetmap.de, router.project-osrm.org | únikové trasy autom, pešo a na bicykli | demo servery FOSSGIS / OSRM, nie na veľkú záťaž |
 
 Adresy služieb sú v `src/js/map/geo.js`. Pri verejnom nasadení s väčšou návštevnosťou ich odporúčam nahradiť vlastnými inštanciami alebo platenými službami.
+
+## Rozhodovacie body v kapitolách
+
+Voľba sa v Markdowne píše ako blok `choices`. Cieľom je ľubovoľné `{#id}` v knihe. Trieda `if-…` označí voľbu pre konkrétnu domácnosť (zoznam značiek je v `src/data/reader.js`):
+
+```markdown
+::: choices
+**Čo sa deje práve teraz?**
+
+- [Voda stúpa a som ešte doma](#povodne-stupa)
+- [Nemáme auto – ako odísť](#evakuacia-pesi){.if-nocar}
+:::
+```
+
+Build ku každej voľbe doplní číslo a názov cieľovej kapitoly a sekcie a v PDF aj číslo strany. Sekcie „Kam ďalej“ (`…-dalej`) sa zobrazia ako voľby automaticky.
 
 ## Úpravy obsahu
 

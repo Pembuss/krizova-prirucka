@@ -1,4 +1,5 @@
 // Interaktivita webu a knihy: vzhľad, jazyk, menu, zoznamy, rozcestník, filter krajín, offline.
+import { initBook } from './book.js';
 const root = document.body.dataset.root || './';
 const lang = document.body.dataset.lang || 'sk';
 const $ = (s, el = document) => el.querySelector(s);
@@ -106,6 +107,8 @@ if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   }).catch(() => {});
 }
 const status = $('[data-offline-status]');
+// Verzia otvorená z disku je celá v počítači – ukladanie cez service worker tam nie je potrebné ani možné.
+if (location.protocol === 'file:') $$('[data-save-offline]').forEach((b) => { b.disabled = true; if (status) status.textContent = '✓ ' + ({ sk: 'Táto kópia je uložená v tvojom počítači a funguje bez internetu.', cs: 'Tato kopie je uložená ve tvém počítači a funguje bez internetu.', en: 'This copy is stored on your computer and works offline.' }[lang] || ''); });
 $('[data-save-offline]')?.addEventListener('click', async () => {
   const reg = await navigator.serviceWorker?.ready;
   if (!reg?.active) { if (status) status.textContent = '—'; return; }
@@ -115,3 +118,5 @@ $('[data-save-offline]')?.addEventListener('click', async () => {
   reg.active.postMessage({ type: 'cache-docs', urls }, [ch.port2]);
   ['sk', 'cs', 'en'].forEach((l) => reg.active.postMessage({ type: 'cache-lang', lang: l }));
 });
+
+initBook();

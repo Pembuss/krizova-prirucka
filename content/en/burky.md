@@ -4,6 +4,17 @@ Summer thunderstorms bring lightning, cloudbursts, hail and gusts that break tre
 
 {{now:storm}}
 
+::: choices
+**Where did the storm catch you?**
+
+- [A storm is coming and I still have time](#burky-pred)
+- [I am at home, outdoors or in the car and the storm is here](#burky-pocas)
+- [Someone has been struck by lightning](#prva-pomoc-resuscitacia)
+- [The storm has passed – fallen trees, damaged roof](#burky-po)
+- [The power is out after the storm](#vypadok-elektriny)
+- [I live in a house – the roof and trees nearby](#burky-pred){.if-house}
+:::
+
 ## What you need to know {#burky-vediet}
 
 - **Weather warnings** in Europe use three levels: yellow (be aware), orange (be prepared) and red (take action, great danger). The same colours are used by the Europe-wide Meteoalarm system.

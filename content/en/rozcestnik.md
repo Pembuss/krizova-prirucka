@@ -10,6 +10,16 @@ This handbook is not a novel to read from cover to cover. It is a **tool**: in c
 **About national details.** The handbook was written in Slovakia, so where a chapter needs a concrete example – siren signals, phone numbers, authorities, laws – it usually gives the Slovak one, often alongside Czech and other European examples. The general advice applies anywhere in Europe. For your own country, check the [country overview](#kryty-europa-krajiny) and the official websites listed there.
 :::
 
+::: choices
+**Where will you start?**
+
+- [A crisis is happening right now](#rozcestnik-krizy)
+- [I want to start preparing](#rozcestnik-zacat)
+- [I care for someone vulnerable](#zranitelni)
+- [I want to try it as a story](#scenare)
+- [I am looking for shelters and refuges](#kryty-europa)
+:::
+
 ## How the book is organised {#rozcestnik-struktura}
 
 - **Part I – Basics of preparedness** explains what applies to every crisis: how to assess your risks, how you will learn about danger, how to put together a family plan, supplies and a grab bag, how to shelter and how to evacuate.

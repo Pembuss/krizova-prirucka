@@ -4,6 +4,18 @@ Dangerous substances are produced, stored and transported everywhere – in chem
 
 {{now:chemical}}
 
+::: choices
+**Where are you?**
+
+- [I am outdoors and can smell something](#chemicka-vonku)
+- [I am in a building](#chemicka-budova)
+- [The substance got on me](#chemicka-zasiahnuty)
+- [The children are at school](#chemicka-budova){.if-kids}
+- [I live near a chemical plant](#chemicka-pred)
+- [The danger is over](#chemicka-po)
+- [I want to try it as a story](#scenar-chemical)
+:::
+
 ## What you need to know {#chemicka-vediet}
 
 - **Warning:** a siren (for example the 2-minute wailing "General threat" signal in Slovakia or "General warning" in Czechia) followed by a spoken message saying which substance is involved and what to do. Around industrial plants there are also local sirens and announcements; in many EU countries you will also get a mobile alert.

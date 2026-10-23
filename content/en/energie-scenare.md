@@ -2,6 +2,19 @@
 
 Different crises make different demands. In a summer power cut the problem is the fridge and water; in winter it is heat; in a shelter it is air and the toilet; during an evacuation it is the weight of your bags. For **seven typical scenarios**, this chapter shows what you need to arrange and how much of it you need.
 
+::: choices
+**What are you preparing for?**
+
+- [A summer power cut](#energie-scenare-1)
+- [A winter power cut](#energie-scenare-2)
+- [A water outage](#energie-scenare-3)
+- [Sheltering for several days](#energie-scenare-4)
+- [Evacuation](#energie-scenare-5)
+- [Quarantine](#energie-scenare-6)
+- [A heatwave](#energie-scenare-7)
+- [Someone needs a powered medical device](#energie-scenare-vypocet){.if-device}
+:::
+
 ## How we calculate energy {#energie-scenare-vypocet}
 
 - **Phone:** an ordinary smartphone battery holds 15–20 Wh. In power-saving mode one charge lasts 1–2 days. We assume **9 Wh per phone per day**.

@@ -4,6 +4,19 @@ Floods are the most common natural disaster in Central Europe. They threaten not
 
 {{now:flood}}
 
+::: choices
+**What is happening right now? Choose what applies to you:**
+
+- [It is raining and a flood is coming – I still have time to prepare](#povodne-pred)
+- [The water is rising and I am still at home](#povodne-stupa)
+- [The municipality has ordered an evacuation](#evakuacia)
+- [The water caught me – at home or in the car](#povodne-zastihne)
+- [The water has gone down – I am going home](#povodne-po)
+- [We have small children – what to think of](#zranitelni-deti){.if-kids}
+- [We have a dog or another pet](#evakuacia-zvierata){.if-pets}
+- [We have no car – how to get out](#evakuacia-pesi){.if-nocar}
+:::
+
 ## What you need to know {#povodne-vediet}
 
 - **A river flood** follows prolonged rain or snowmelt. It is usually forecast days in advance – there is time to prepare.

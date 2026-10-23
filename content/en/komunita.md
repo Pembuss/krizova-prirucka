@@ -11,6 +11,16 @@ In every major crisis, first aid comes from **the people around you** – neighb
 - **Agree** on a common meeting place and time in your building or street.
 :::
 
+::: choices
+**Which stage are you at?**
+
+- [We want to prepare with our neighbours](#komunita-priprava)
+- [The crisis is happening now](#komunita-pocas)
+- [We are returning home](#komunita-navrat)
+- [Damage and insurance](#komunita-poistenie)
+- [I live alone](#plan-sam){.if-alone}
+:::
+
 ## Neighbourhood preparedness {#komunita-priprava}
 
 - **Get to know your neighbours** – names, phone numbers, who has which skills and equipment, who needs help.

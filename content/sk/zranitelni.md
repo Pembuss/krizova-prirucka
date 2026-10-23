@@ -12,6 +12,17 @@ Niektorí ľudia potrebujú v kríze viac pomoci, času a špeciálne vybavenie:
 - **Nezabudni na zvieratá** – vôdzka, prepravka, krmivo, doklady.
 :::
 
+::: choices
+**O koho sa staráš?**
+
+- [O dojča alebo malé dieťa](#zranitelni-deti){.if-kids}
+- [O tehotnú ženu](#zranitelni-tehotne)
+- [O seniora](#zranitelni-seniori){.if-seniors}
+- [O človeka so zdravotným postihnutím](#zranitelni-postihnutie){.if-care}
+- [O zvieratá](#zranitelni-zvierata){.if-pets}
+- [O suseda, ktorý žije sám](#zranitelni-susedia)
+:::
+
 ## Dojčatá a malé deti {#zranitelni-deti}
 
 - **Dojčenie** je v kríze najbezpečnejšie – nevyžaduje vodu ani elektrinu a chráni pred infekciami. Dojčiaca matka potrebuje viac vody a jedla.

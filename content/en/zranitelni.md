@@ -12,6 +12,17 @@ Some people need more help, more time and special equipment in a crisis: babies 
 - **Do not forget the animals** – lead, carrier, food, documents.
 :::
 
+::: choices
+**Who are you caring for?**
+
+- [A baby or small child](#zranitelni-deti){.if-kids}
+- [A pregnant woman](#zranitelni-tehotne)
+- [An older person](#zranitelni-seniori){.if-seniors}
+- [Someone with a disability](#zranitelni-postihnutie){.if-care}
+- [Pets](#zranitelni-zvierata){.if-pets}
+- [A neighbour who lives alone](#zranitelni-susedia)
+:::
+
 ## Babies and small children {#zranitelni-deti}
 
 - **Breastfeeding** is the safest option in a crisis – it needs no water or electricity and protects against infection. A breastfeeding mother needs more water and food.

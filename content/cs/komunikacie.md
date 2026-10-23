@@ -4,6 +4,17 @@ Mobilní síť, internet, platební systémy a digitální služby státu se sta
 
 {{now:comms}}
 
+::: choices
+**Co nefunguje?**
+
+- [Mobil ani internet](#komunikacie-pocas)
+- [Nemůžu se spojit s rodinou](#varovanie-spojenie)
+- [Někdo napadl můj počítač nebo účet](#komunikacie-utok)
+- [Nefungují karty ani bankomaty](#batozina-peniaze)
+- [Chci se připravit](#komunikacie-pred)
+- [Bydlím sám](#plan-sam){.if-alone}
+:::
+
 ## Co potřebuješ vědět {#komunikacie-vediet}
 
 - **Přetížení sítě** je běžné hned po velké události – všichni volají najednou. SMS a krátké zprávy často projdou, hovory ne.

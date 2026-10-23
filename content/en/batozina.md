@@ -13,6 +13,17 @@ If you have to leave quickly – during a flood, a fire, a chemical leak or an o
 6. **Home** – turn off gas, water and electricity, close the windows, lock up.
 :::
 
+::: choices
+**Who are you packing for?**
+
+- [For myself – what goes in the bag](#batozina-obsah)
+- [For a child](#zranitelni-deti){.if-kids}
+- [For an older person](#zranitelni-seniori){.if-seniors}
+- [For a pet](#zranitelni-zvierata){.if-pets}
+- [Which documents to take](#batozina-dokumenty)
+- [How much cash to have](#batozina-peniaze)
+:::
+
 ## Principles {#batozina-zasady}
 
 - **Every household member has their own bag** – an adult's rucksack up to **25 kg**, a child's according to age (as a guide up to 10 kg). A rucksack is better than a suitcase – your hands stay free.

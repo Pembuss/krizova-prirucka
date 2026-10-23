@@ -12,6 +12,17 @@ Vo veľkej kríze sa záchranné zložky, nemocnice a úrady musia sústrediť n
 - Maj pri dverách pripravenú evakuačnú batožinu ([Batožina](#batozina)).
 :::
 
+::: choices
+**Ako si na tom s prípravou?**
+
+- [Nemám nič pripravené](#rozcestnik-zacat)
+- [Neviem, aké riziká mi hrozia](#principy-rizika)
+- [Neviem, či zostať, ukryť sa, alebo odísť](#principy-rozhodnutia)
+- [Mám základ a chcem viac](#principy-urovne)
+- [Bývam pri rieke](#povodne){.if-river}
+- [Bývam pri jadrovej elektrárni](#jadrova){.if-npp}
+:::
+
 ## Prečo sa pripravovať {#principy-preco}
 
 Krízy prichádzajú častejšie, ako si myslíme. Slovensko a jeho susedov v posledných rokoch zasiahli povodne (napríklad v septembri 2024), extrémne horúčavy, víchrice, pandémia covidu-19, energetická kríza, rozsiahly výpadok elektriny v Česku v júli 2025 a vojna na Ukrajine v blízkosti našich hraníc. Väčšina kríz nie je katastrofou celého štátu, ale *lokálnou* udalosťou, ktorá však zasiahne práve tvoju domácnosť: zatopená ulica, týždeň bez elektriny po víchrici, uzavretá obec pre únik chemikálie.

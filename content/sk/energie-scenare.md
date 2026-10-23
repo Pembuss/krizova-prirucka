@@ -2,6 +2,19 @@
 
 Rôzne krízy kladú rôzne nároky. Pri letnom výpadku elektriny je problémom chladnička a voda, pri zimnom teplo, v úkryte vzduch a záchod, pri evakuácii hmotnosť batožiny. Táto kapitola ukazuje pre **sedem typických scenárov**, čo potrebuješ zabezpečiť a koľko toho potrebuješ.
 
+::: choices
+**Na čo sa pripravuješ?**
+
+- [Letný výpadok elektriny](#energie-scenare-1)
+- [Zimný výpadok elektriny](#energie-scenare-2)
+- [Výpadok vody](#energie-scenare-3)
+- [Ukrytie na niekoľko dní](#energie-scenare-4)
+- [Evakuácia](#energie-scenare-5)
+- [Karanténa](#energie-scenare-6)
+- [Horúčavy](#energie-scenare-7)
+- [Niekto potrebuje prístroj na elektrinu](#energie-scenare-vypocet){.if-device}
+:::
+
 ## Ako počítame energiu {#energie-scenare-vypocet}
 
 - **Mobil:** batéria bežného smartfónu má 15 – 20 Wh. V úspornom režime vystačí jedno nabitie na 1 – 2 dni. Počítame **9 Wh na mobil a deň**.

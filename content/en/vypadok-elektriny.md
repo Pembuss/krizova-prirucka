@@ -4,6 +4,19 @@ Without electricity almost everything stops: lights, the fridge, the cooker, hea
 
 {{now:blackout}}
 
+::: choices
+**How long has the power been off?**
+
+- [The lights just went out](#vypadok-elektriny-hodina)
+- [Since yesterday – it is the first day](#vypadok-elektriny-den)
+- [Several days](#vypadok-elektriny-dlhsi)
+- [It is cold and the heating is off](#mrazy-vypadok)
+- [Someone needs a powered medical device](#vypadok-elektriny-pristroje){.if-device}
+- [I live high up in a tower block – lift and water](#vypadok-vody){.if-flat}
+- [I want to prepare in advance](#vypadok-elektriny-pred)
+- [I want to try it as a story](#scenar-blackout)
+:::
+
 ## What you need to know {#vypadok-elektriny-vediet}
 
 **What happens over time (indicative):**

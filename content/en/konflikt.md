@@ -4,6 +4,18 @@ The war in Ukraine has shown that armed conflict in Europe is not a thing of the
 
 {{now:war}}
 
+::: choices
+**What is happening?**
+
+- [The air-raid alarm is sounding](#konflikt-utok)
+- [The shelter is too far away](#ukrytie-dve-steny)
+- [I have found a suspicious object](#konflikt-municia)
+- [The conflict is dragging on](#konflikt-zivot)
+- [We have to leave the area](#evakuacia)
+- [I want to prepare](#konflikt-pred)
+- [I want to try it as a story](#scenar-war)
+:::
+
 ## What you need to know {#konflikt-vediet}
 
 - **Hybrid threats** precede or accompany conflict: cyber attacks, sabotage of infrastructure, disinformation, intimidation. Their aim is to undermine trust and create chaos ([Communications](#komunikacie), [Warning – disinformation](#varovanie-dezinformacie)).

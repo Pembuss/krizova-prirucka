@@ -4,6 +4,18 @@ Nebezpečné látky se vyrábějí, skladují a přepravují v celé zemi – v 
 
 {{now:chemical}}
 
+::: choices
+**Kde jsi?**
+
+- [Jsem venku a cítím zápach](#chemicka-vonku)
+- [Jsem v budově](#chemicka-budova)
+- [Látka mě zasáhla](#chemicka-zasiahnuty)
+- [Děti jsou ve škole](#chemicka-budova){.if-kids}
+- [Bydlím u chemického podniku](#chemicka-pred)
+- [Ohrožení skončilo](#chemicka-po)
+- [Chci si to vyzkoušet jako příběh](#scenar-chemical)
+:::
+
 ## Co potřebuješ vědět {#chemicka-vediet}
 
 - **Varování:** siréna **Všeobecná výstraha** (na Slovensku Všeobecné ohrozenie) a mluvená informace, která řekne, o jakou látku jde a co dělat. V okolí podniků i místní sirény a hlášení.

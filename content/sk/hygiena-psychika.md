@@ -12,6 +12,17 @@ Pri dlhšej kríze ohrozujú zdravie viac ako samotná udalosť **choroby zo šp
 - **Jedlo** po otvorení bez chladničky spotrebuj čo najskôr.
 :::
 
+::: choices
+**Čo práve riešiš?**
+
+- [Netečie voda – ako sa umyť](#hygiena-osobna)
+- [Nefunguje záchod](#hygiena-zachod)
+- [Mám strach a nemôžem spať](#hygiena-psychika-pomaha)
+- [Chcem pomôcť niekomu inému](#hygiena-psychika-ppp)
+- [Deti sú vystrašené](#hygiena-psychika-deti){.if-kids}
+- [Potrebujem odbornú pomoc](#hygiena-psychika-pomoc)
+:::
+
 ## Osobná hygiena s minimom vody {#hygiena-osobna}
 
 - **Umývanie rúk:** pripevni na kanister alebo fľašu s kohútikom mydlo na šnúrke a pod ňu nádobu. Na umytie rúk stačí asi 0,5 litra vody. Medzi umytiami používaj dezinfekciu s obsahom alkoholu aspoň 60 %.

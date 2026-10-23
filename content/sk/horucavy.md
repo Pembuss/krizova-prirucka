@@ -4,6 +4,18 @@ Horúčavy sú v Európe najsmrteľnejším prírodným javom – v lete 2022 si
 
 {{now:heat}}
 
+::: choices
+**Čo práve riešiš?**
+
+- [Blíži sa vlna horúčav](#horucavy-pred)
+- [Je horúco – ako to vydržať doma](#horucavy-pocas)
+- [Niekomu je od tepla zle](#horucavy-priznaky)
+- [Dochádza voda, je sucho](#horucavy-sucho)
+- [Starám sa o seniora](#zranitelni-seniori){.if-seniors}
+- [Mám malé dieťa](#zranitelni-deti){.if-kids}
+- [Chcem si to vyskúšať ako príbeh](#scenar-heat)
+:::
+
 ## Čo potrebuješ vedieť {#horucavy-vediet}
 
 - **Tropický deň** má maximálnu teplotu 30 °C a viac, **tropická noc** neklesne pod 20 °C. Práve horúce noci sú nebezpečné, lebo telo sa nestihne zotaviť.

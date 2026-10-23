@@ -12,6 +12,16 @@ Krize málokdy zastihne celou rodinu doma. Rodiče jsou v práci, děti ve škol
 - Ukažte všem dospělým, kde jsou **hlavní uzávěry** vody, plynu a elektřiny.
 :::
 
+::: choices
+**Co chceš vyřešit?**
+
+- [Kde se sejdeme](#plan-miesta)
+- [Kdo vyzvedne děti](#plan-ulohy){.if-kids}
+- [Bydlím sám](#plan-sam){.if-alone}
+- [Kde je náš úkryt a kam půjdeme](#plan-ukryt)
+- [Chci plán vyplnit a vytisknout](#sablony-plan)
+:::
+
 ## Co má plán obsahovat {#plan-obsah}
 
 ### 1. Kontakty {#plan-kontakty}

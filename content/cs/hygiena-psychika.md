@@ -12,6 +12,17 @@ Při delší krizi ohrožují zdraví víc než samotná událost **nemoci ze š
 - **Jídlo** po otevření bez lednice spotřebuj co nejdříve.
 :::
 
+::: choices
+**Co právě řešíš?**
+
+- [Neteče voda – jak se umýt](#hygiena-osobna)
+- [Nefunguje záchod](#hygiena-zachod)
+- [Mám strach a nemůžu spát](#hygiena-psychika-pomaha)
+- [Chci pomoct někomu jinému](#hygiena-psychika-ppp)
+- [Děti jsou vystrašené](#hygiena-psychika-deti){.if-kids}
+- [Potřebuji odbornou pomoc](#hygiena-psychika-pomoc)
+:::
+
 ## Osobní hygiena s minimem vody {#hygiena-osobna}
 
 - **Mytí rukou:** na kanystr nebo láhev s kohoutkem připevni mýdlo na provázku a pod ně dej nádobu. Na umytí rukou stačí asi 0,5 litru vody. Mezi mytím používej dezinfekci s obsahem alkoholu alespoň 60 %.

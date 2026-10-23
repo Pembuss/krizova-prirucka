@@ -8,6 +8,18 @@ Evakuace znamená opustit domov nebo oblast, protože zůstat je nebezpečnějš
 {{actionsteps:evacuate}}
 :::
 
+::: choices
+**Co právě řešíš?**
+
+- [Odcházíme teď](#evakuacia-pred-odchodom)
+- [Kam jít](#evakuacia-ciele)
+- [Jak naplánovat trasy](#evakuacia-trasy)
+- [Jedeme autem](#evakuacia-auto){.if-car}
+- [Nemáme auto](#evakuacia-pesi){.if-nocar}
+- [Někdo potřebuje pomoc při přesunu](#evakuacia-pomoc){.if-care}
+- [Máme zvířata](#evakuacia-zvierata){.if-pets}
+:::
+
 ## Druhy evakuace {#evakuacia-druhy}
 
 - **Krátkodobá** – na několik hodin až dní (únik plynu, nález munice, povodeň). Obvykle se jde do evakuačního střediska nebo k příbuzným.

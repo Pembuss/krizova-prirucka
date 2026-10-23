@@ -1,7 +1,9 @@
 // Mapa: domov, kryty a dôležité miesta z OpenStreetMap, vlastné miesta, oficiálne zdroje, offline mapa.
 import { store, uid } from '../store.js';
 import { t, T, esc, LANG, toast, $, $$, num } from '../core.js';
-import { LAYERS, layerQuery, overpass, classify, geocode, reverse, tileUrls } from '../../map/geo.js';
+import { LAYERS, layerQuery, overpass, classify, reverse, tileUrls } from '../../map/geo.js';
+import { addBasemap, LOCAL } from '../../map/tiles.js';
+import { searchBox, emojiIcon } from '../../map/picker.js';
 import { distanceKm } from '../../calc.js';
 import { NPP } from '../../../data/npp.js';
 import { countryByCode } from '../../../data/countries.js';
@@ -26,15 +28,14 @@ export function render(el, params, opts = {}) {
   el.innerHTML = `<div class="wrap map-view">
 <h1>${opts.standalone ? '' : esc(t('nav.map'))}</h1>
 <div class="map-toolbar">
-  <div class="inline"><input type="search" id="m-q" placeholder="${esc(t('loc.search'))}" aria-label="${esc(t('loc.search'))}"><button class="btn" data-search>${esc(t('loc.searchBtn'))}</button><button class="btn btn-ghost" data-gps title="${esc(t('loc.gps'))}">📍</button></div>
-  <ul class="results" id="m-results"></ul>
+  <div id="m-search"></div>
   <div class="inline"><label>${esc(t('map.radius'))} <select data-radius>${[1000, 3000, 5000, 10000].map((r) => `<option value="${r}"${r === radius ? ' selected' : ''}>${r / 1000} km</option>`).join('')}</select></label>
   <button class="btn" data-load>🔎 ${esc(t('map.load'))}</button></div>
 </div>
 <details class="layers" open><summary>${esc(t('map.layers'))}</summary><div class="chips">${Object.keys(LAYERS).concat('mine').map((id) => `<button type="button" class="chip" data-layer="${id}" aria-pressed="${id === 'mine' || layersOn.has(id)}">${id === 'mine' ? '⭐' : LAYERS[id].icon} ${esc(t('layer.' + id))}</button>`).join('')}</div></details>
 <p id="m-status" class="muted small" aria-live="polite"></p>
 <div class="mapwrap"><div id="map" class="bigmap" role="application" aria-label="${esc(t('nav.map'))}"></div></div>
-<div class="btn-row"><button class="btn btn-ghost" data-addplace>⭐ ${esc(t('map.addPlace'))}</button><button class="btn btn-ghost" data-tiles>💾 ${esc(t('map.tiles'))}</button><button class="btn btn-ghost" data-printmap>🖨️ ${esc(t('map.printMap'))}</button><a class="btn btn-ghost" href="${routesHref}">🧭 ${esc(t('nav.routes'))}</a></div>
+<div class="btn-row"><button class="btn btn-ghost" data-addplace>⭐ ${esc(t('map.addPlace'))}</button>${LOCAL || !('serviceWorker' in navigator) ? '' : `<button class="btn btn-ghost" data-tiles>💾 ${esc(t('map.tiles'))}</button>`}<button class="btn btn-ghost" data-printmap>🖨️ ${esc(t('map.printMap'))}</button><a class="btn btn-ghost" href="${routesHref}">🧭 ${esc(t('nav.routes'))}</a></div>
 <p class="muted small">⚠️ ${esc(t('map.osmNote'))}</p>
 <div class="grid two-col"><section class="nearest" id="m-nearest"></section><section id="m-official"></section></div>
 <dialog id="place-dlg"><form method="dialog" class="form-grid"><h2>${esc(t('map.addPlace'))}</h2>
@@ -49,16 +50,26 @@ export function render(el, params, opts = {}) {
 
   const h0 = home();
   map = L.map($('#map', el), { zoomControl: true }).setView(h0 ? [h0.lat, h0.lon] : [48.7, 19.5], h0 ? 14 : 7);
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(map);
+  const basemap = addBasemap(map);
   for (const id of [...Object.keys(LAYERS), 'mine', 'npp']) groups[id] = L.layerGroup().addTo(map);
 
   const icon = (emoji, color, cls = '') => L.divIcon({ className: 'mk ' + cls, html: `<span style="--c:${color}">${emoji}</span>`, iconSize: [30, 30], iconAnchor: [15, 15], popupAnchor: [0, -14] });
+  let hereMarker = null;
+  // Miesto z vyhľadávania alebo GPS: ukáž ho a ponúkni, čo s ním
+  function showFound(lat, lon, title, zoom = 16) {
+    map.setView([lat, lon], zoom);
+    if (hereMarker) hereMarker.remove();
+    hereMarker = L.marker([lat, lon], { icon: emojiIcon('📍', '#be185d') }).addTo(map);
+    hereMarker.bindPopup(`<strong>${esc(title)}</strong><div class="popup-actions"><button data-sethome="${lat},${lon}" data-label="${esc(title)}">🏠 ${esc(t('map.setHome'))}</button><button data-newplace="${lat},${lon}">⭐ ${esc(t('map.addPlace'))}</button><button data-odest="${lat},${lon}" data-name="${esc(title.split(',')[0])}">🧭 ${esc(t('map.routeHere'))}</button></div>`).openPopup();
+  }
 
   function drawHome() {
     if (homeMarker) homeMarker.remove();
     const h = home();
     if (!h) { status(t('map.noHome')); return; }
-    homeMarker = L.marker([h.lat, h.lon], { icon: icon('🏠', '#0b3d91', 'home'), zIndexOffset: 1000 }).addTo(map).bindPopup(`<strong>${esc(t('map.home'))}</strong><br>${esc(p.location.label || '')}`);
+    homeMarker = L.marker([h.lat, h.lon], { icon: icon('🏠', '#0b3d91', 'home'), zIndexOffset: 1000, draggable: true, title: t('loc.drag') }).addTo(map)
+      .bindPopup(`<strong>${esc(t('map.home'))}</strong><br>${esc(p.location.label || '')}<br><small class="muted">${esc(t('map.homeDrag'))}</small>`);
+    homeMarker.on('dragend', () => { const ll = homeMarker.getLatLng(); setHome(ll.lat, ll.lng, null, null, false); toast(t('map.homeMoved')); });
   }
   function drawNpp() {
     groups.npp.clearLayers();
@@ -138,14 +149,15 @@ export function render(el, params, opts = {}) {
       loadCached();
     }
   }
-  function setHome(lat, lon, label, country) {
+  function setHome(lat, lon, label, country, recenter = true) {
     p.location.lat = lat; p.location.lon = lon;
     p.location.label = label || '';
     if (country && countryByCode(country)) p.location.country = country;
     store.saveProfile();
+    if (hereMarker) { hereMarker.remove(); hereMarker = null; }
     drawHome(); drawNpp(); drawOfficial();
-    map.setView([lat, lon], 14);
-    if (!label) reverse(lat, lon, LANG).then((r) => { p.location.label = r.label; if (countryByCode(r.country)) p.location.country = r.country; store.saveProfile(); drawOfficial(); }).catch(() => {});
+    if (recenter) map.setView([lat, lon], 14);
+    if (!label) reverse(lat, lon, LANG).then((r) => { p.location.label = r.label; if (countryByCode(r.country)) p.location.country = r.country; store.saveProfile(); drawHome(); drawOfficial(); }).catch(() => {});
   }
   function addDestination(lat, lon, name) {
     p.mobility.destinations.push({ id: uid(), name, label: name, lat, lon });
@@ -174,7 +186,7 @@ export function render(el, params, opts = {}) {
   const onClick = async (e) => {
     const tg = e.target;
     const sh = tg.closest('[data-sethome]');
-    if (sh) { const [a, b] = sh.dataset.sethome.split(',').map(Number); map.closePopup(); setHome(a, b); }
+    if (sh) { const [a, b] = sh.dataset.sethome.split(',').map(Number); map.closePopup(); setHome(a, b, sh.dataset.label || null); }
     const np = tg.closest('[data-newplace]');
     if (np) { const [a, b] = np.dataset.newplace.split(',').map(Number); map.closePopup(); openPlaceDialog(a, b); }
     const od = tg.closest('[data-odest]');
@@ -197,35 +209,24 @@ export function render(el, params, opts = {}) {
       drawElements();
     }
     if (tg.closest('[data-load]')) load();
-    if (tg.closest('[data-search]')) doSearch();
-    if (tg.closest('[data-gps]')) navigator.geolocation?.getCurrentPosition((pos) => setHome(pos.coords.latitude, pos.coords.longitude), () => toast(t('loc.gpsErr')), { enableHighAccuracy: true, timeout: 15000 });
     if (tg.closest('[data-addplace]')) { addMode = true; toast(t('map.clickToAdd')); }
     if (tg.closest('[data-tiles]')) saveTiles();
     if (tg.closest('[data-printmap]')) printMap();
-    const pick = tg.closest('[data-pick]');
-    if (pick) { const r = el._results[Number(pick.dataset.pick)]; $('#m-results', el).innerHTML = ''; setHome(r.lat, r.lon, r.label, r.country); }
   };
   el.addEventListener('click', onClick);
   el.addEventListener('change', (e) => {
     if (e.target.matches('[data-radius]')) { radius = Number(e.target.value); prefs.mapRadius = radius; store.savePrefs(); loadCached(); }
   });
-  $('#m-q', el).addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); doSearch(); } });
-
-  async function doSearch() {
-    const q = $('#m-q', el).value.trim();
-    if (!q) return;
-    const out = $('#m-results', el);
-    out.innerHTML = `<li class="muted">${esc(t('c.loading'))}</li>`;
-    try {
-      el._results = await geocode(q, LANG);
-      out.innerHTML = el._results.length ? el._results.map((r, i) => `<li><button type="button" data-pick="${i}">${esc(r.label)}</button></li>`).join('') : `<li class="muted">${esc(t('loc.notFound'))}</li>`;
-    } catch { out.innerHTML = `<li class="muted">${esc(t('map.error'))}</li>`; }
-  }
+  searchBox($('#m-search', el), {
+    onPick: (r) => showFound(r.lat, r.lon, r.label),
+    onGps: (pos) => showFound(pos.lat, pos.lon, t('map.youAreHere')),
+    near: () => home() || { lat: map.getCenter().lat, lon: map.getCenter().lng },
+  });
   async function saveTiles() {
     const h = home() || { lat: map.getCenter().lat, lon: map.getCenter().lng };
-    const reg = await navigator.serviceWorker?.getRegistration?.(opts.standalone ? undefined : '../');
+    const reg = await navigator.serviceWorker?.getRegistration?.(opts.standalone ? undefined : '../').catch(() => null);
     if (!reg?.active) { toast(t('map.tilesNo'), 4000); return; }
-    const urls = tileUrls(h.lat, h.lon, radius / 1000 + 0.5, 12, 16);
+    const urls = tileUrls(h.lat, h.lon, radius / 1000 + 0.5, 12, Math.min(16, basemap().maxZoom), basemap().url);
     const ch = new MessageChannel();
     ch.port1.onmessage = (ev) => status(t('map.tilesProgress', { done: ev.data.done, total: ev.data.total }) + (ev.data.finished ? ' ✓' : ''));
     reg.active.postMessage({ type: 'cache-tiles', urls }, [ch.port2]);

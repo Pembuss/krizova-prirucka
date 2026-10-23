@@ -12,6 +12,17 @@ Někteří lidé potřebují v krizi více pomoci, času a speciální vybavení
 - **Nezapomeň na zvířata** – vodítko, přepravka, krmivo, doklady.
 :::
 
+::: choices
+**O koho se staráš?**
+
+- [O kojence nebo malé dítě](#zranitelni-deti){.if-kids}
+- [O těhotnou ženu](#zranitelni-tehotne)
+- [O seniora](#zranitelni-seniori){.if-seniors}
+- [O člověka se zdravotním postižením](#zranitelni-postihnutie){.if-care}
+- [O zvířata](#zranitelni-zvierata){.if-pets}
+- [O souseda, který žije sám](#zranitelni-susedia)
+:::
+
 ## Kojenci a malé děti {#zranitelni-deti}
 
 - **Kojení** je v krizi nejbezpečnější – nevyžaduje vodu ani elektřinu a chrání před infekcemi. Kojící matka potřebuje více vody a jídla.

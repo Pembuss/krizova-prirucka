@@ -4,6 +4,19 @@ Bez elektriny sa zastaví takmer všetko: svetlo, chladnička, sporák, kúrenie
 
 {{now:blackout}}
 
+::: choices
+**Ako dlho už nejde prúd?**
+
+- [Práve zhaslo svetlo](#vypadok-elektriny-hodina)
+- [Už prvý deň](#vypadok-elektriny-den)
+- [Viac dní](#vypadok-elektriny-dlhsi)
+- [Je zima a nekúri](#mrazy-vypadok)
+- [Niekto potrebuje prístroj na elektrinu](#vypadok-elektriny-pristroje){.if-device}
+- [Bývam vysoko v paneláku – výťah a voda](#vypadok-vody){.if-flat}
+- [Chcem sa pripraviť vopred](#vypadok-elektriny-pred)
+- [Chcem si to vyskúšať ako príbeh](#scenar-blackout)
+:::
+
 ## Čo potrebuješ vedieť {#vypadok-elektriny-vediet}
 
 **Čo sa deje v čase (orientačne):**

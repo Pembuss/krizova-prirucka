@@ -13,6 +13,16 @@ Early warning saves lives – but only if you understand it and know what to do.
 - Alert your neighbours, especially older and deaf people.
 :::
 
+::: choices
+**What are you dealing with?**
+
+- [A siren has sounded](#varovanie-sireny)
+- [No power and no signal](#varovanie-bez-signalu)
+- [I am not sure whether a message is true](#varovanie-dezinformacie)
+- [I need to call for help](#varovanie-112)
+- [I want to agree with my family how to stay in touch](#varovanie-spojenie)
+:::
+
 ## Siren signals – example: Slovakia {#varovanie-sireny}
 
 Every country has its own siren signals. As an example, Slovakia uses three warning signals. Each signal is followed by a **spoken message** – on the radio, TV, municipal loudspeakers or from an electronic siren – that says what the danger is and what to do.

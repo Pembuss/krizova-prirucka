@@ -175,3 +175,21 @@ dialog::backdrop { background: rgba(0, 0, 0, .45); }
 .app-header select.langsel { width: auto; min-height: 40px; padding: 0 .4rem; }
 .app-header .btn { white-space: nowrap; }
 .risklist .badge, .risk-table .badge { align-self: center; white-space: nowrap; }
+
+/* Výber miesta: vyhľadávanie s návrhmi a mapa so značkou */
+.sb-row { position: relative; display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
+.sb-row .sb-q { flex: 1 1 220px; min-width: 0; }
+.sb-list { position: absolute; z-index: 1200; left: 0; right: 0; top: calc(100% + 4px); list-style: none; margin: 0; padding: .3rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(0, 0, 0, .18); max-height: 320px; overflow: auto; }
+.sb-list li { padding: .5rem .65rem; border-radius: 8px; cursor: pointer; display: grid; gap: .1rem; }
+.sb-list li small { color: var(--muted); }
+.sb-list li:hover, .sb-list li[aria-selected="true"] { background: var(--surface-2); }
+.sb-msg { min-height: 1.4em; margin: .35rem 0 0; color: var(--muted); }
+.sb-msg.warn { color: var(--danger, #b91c1c); }
+.sb-msg.ok { color: var(--ok); }
+.lp { display: grid; gap: .5rem; }
+.lp-map { border-radius: var(--radius); border: 1px solid var(--border); }
+.lp-current { margin: 0; }
+.add-dest { margin: .6rem 0 1rem; border: 1px dashed var(--border); border-radius: var(--radius); padding: .5rem .8rem; }
+.add-dest summary { cursor: pointer; font-weight: 700; color: var(--blue, #0b3d91); }
+.add-dest[open] summary { margin-bottom: .6rem; }
+.leaflet-control-layers-base label { font-size: .9rem; }

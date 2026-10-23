@@ -4,6 +4,17 @@ V Česku pracují jaderné elektrárny **Dukovany** a **Temelín**, na Slovensku
 
 {{now:nuclear}}
 
+::: choices
+**Co se děje?**
+
+- [Siréna a hlášení o radiační havárii](#jadrova-pocas)
+- [Mám užít jodové tablety?](#jadrova-jod)
+- [Jsem venku – kam se ukrýt](#ukrytie-kedy)
+- [Mám děti – dávky jódu pro děti](#jadrova-jod){.if-kids}
+- [Bydlím u jaderné elektrárny](#jadrova-pred){.if-npp}
+- [Havárie skončila – potraviny a návrat](#jadrova-po)
+:::
+
 ## Co potřebuješ vědět {#jadrova-vediet}
 
 - Při havárii může uniknout **radioaktivní mrak**, který se šíří větrem a ze kterého padá **radioaktivní prach (spad)** na zem, střechy, rostliny a vodní plochy.

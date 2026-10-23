@@ -6,6 +6,17 @@ All the checklists in one place, ready to print and tick off. Print them, hang t
 **How to use them:** print a list, put a ✓ next to every item you have, and write next to the missing ones the date by which you will get them. At the twice-yearly review, use a fresh printout.
 :::
 
+::: choices
+**What are you going to check?**
+
+- [Home supplies](#kontrolne-zoznamy-zasoba)
+- [The grab bag](#kontrolne-zoznamy-batozina)
+- [The first-aid kit](#kontrolne-zoznamy-lekarnicka)
+- [The car kit](#kontrolne-zoznamy-auto){.if-car}
+- [Readiness for a specific crisis](#kontrolne-zoznamy-krizy)
+- [The twice-yearly review](#kontrolne-zoznamy-kontrola)
+:::
+
 ## Home supplies {#kontrolne-zoznamy-zasoba}
 
 {{checklist:homeStock}}

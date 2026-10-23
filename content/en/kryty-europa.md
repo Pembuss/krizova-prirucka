@@ -8,6 +8,15 @@ European countries protect their populations in very different ways. **Switzerla
 The information is current as of October 2026 and changes. **Before you travel, or in a crisis, check it on the official websites** listed for each country. Shelters from open data (OpenStreetMap) are incomplete, and their condition and accessibility have not been verified.
 :::
 
+::: choices
+**What are you looking for?**
+
+- [What kinds of refuge exist](#kryty-europa-druhy)
+- [How to find a refuge abroad](#kryty-europa-hladanie)
+- [Information about a specific country](#kryty-europa-krajiny)
+- [Shelters nearby on the map](#kryty-europa-mapa)
+:::
+
 ## Types of refuge {#kryty-europa-druhy}
 
 | Type | Description | Where it is found |

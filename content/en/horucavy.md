@@ -4,6 +4,18 @@ Heatwaves are the deadliest natural hazard in Europe – in summer 2022 they are
 
 {{now:heat}}
 
+::: choices
+**What are you dealing with?**
+
+- [A heatwave is on its way](#horucavy-pred)
+- [It is hot – how to cope at home](#horucavy-pocas)
+- [Someone feels ill from the heat](#horucavy-priznaky)
+- [Water is running short, it is a drought](#horucavy-sucho)
+- [I care for an older person](#zranitelni-seniori){.if-seniors}
+- [I have a small child](#zranitelni-deti){.if-kids}
+- [I want to try it as a story](#scenar-heat)
+:::
+
 ## What you need to know {#horucavy-vediet}
 
 - A **tropical day** has a maximum temperature of 30 °C or more; on a **tropical night** the temperature does not drop below 20 °C. Hot nights are especially dangerous because the body has no chance to recover.

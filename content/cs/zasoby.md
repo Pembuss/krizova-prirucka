@@ -13,6 +13,17 @@ Domácí zásoba ti umožní zůstat doma, když nefungují obchody, voda, elekt
 - Nekupuj nad rámec potřeby – ostatní potřebují také.
 :::
 
+::: choices
+**Co potřebuješ?**
+
+- [Nejdřív voda](#zasoby-voda)
+- [Kolik čeho koupit](#nakupne-zoznamy)
+- [Mám malý rozpočet](#zasoby-postupne)
+- [Mám kojence nebo batole](#nakupne-zoznamy-diety){.if-baby}
+- [Bydlím v bytě – kam se zásobami](#zasoby-sklad){.if-flat}
+- [Jak zásoby obměňovat](#zasoby-obmena)
+:::
+
 ## Voda – nejdůležitější zásoba {#zasoby-voda}
 
 Bez jídla člověk vydrží týdny, bez vody jen několik dní. Při výpadku elektřiny v bytových domech často přestanou fungovat čerpadla, při povodni se voda z vodovodu může stát nepitnou.

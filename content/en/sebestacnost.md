@@ -11,6 +11,17 @@ When the grids fail, you need your own solutions for five basic needs: **water, 
 - If several people in a room have a headache, dizziness or nausea, **ventilate immediately and leave** – it may be CO poisoning.
 :::
 
+::: choices
+**What are you missing?**
+
+- [Drinking water](#sebestacnost-voda)
+- [A way to cook](#sebestacnost-varenie)
+- [Heat](#sebestacnost-teplo)
+- [Light](#sebestacnost-svetlo)
+- [Charging phones and devices](#sebestacnost-energia)
+- [I have a house and garden – what else I can do myself](#sebestacnost-zrucnosti){.if-house}
+:::
+
 ## Water treatment {#sebestacnost-voda}
 
 When the bottled water runs out, water from a well, rain, a stream or a tanker must be treated. **Follow this order:**

@@ -4,6 +4,19 @@ Povodne sú na Slovensku najčastejšou živelnou pohromou. Ohrozujú nielen obc
 
 {{now:flood}}
 
+::: choices
+**Čo sa deje práve teraz? Vyber, čo platí pre teba:**
+
+- [Prší a hrozí povodeň – mám ešte čas sa pripraviť](#povodne-pred)
+- [Voda stúpa a som ešte doma](#povodne-stupa)
+- [Obec vyhlásila evakuáciu](#evakuacia)
+- [Voda ma zastihla – v dome alebo v aute](#povodne-zastihne)
+- [Voda opadla – vraciam sa domov](#povodne-po)
+- [Máme malé deti – na čo myslieť](#zranitelni-deti){.if-kids}
+- [Máme psa alebo iné zviera](#evakuacia-zvierata){.if-pets}
+- [Nemáme auto – ako odísť](#evakuacia-pesi){.if-nocar}
+:::
+
 ## Čo potrebuješ vedieť {#povodne-vediet}
 
 - **Regionálna povodeň** prichádza po dlhotrvajúcich dažďoch alebo topení snehu. Býva predpovedaná dni dopredu – je čas sa pripraviť.

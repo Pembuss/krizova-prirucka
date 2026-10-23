@@ -10,6 +10,16 @@ Tato příručka není román, který je třeba přečíst od začátku do konce
 **Česká verze:** příručka vznikla primárně pro Slovensko. Kde se postupy v Česku liší (varovné signály, systém ukrytí, telefonní linky), uvádíme české údaje přímo v textu. Přehled dalších zemí je v kapitole [Kryty a útočiště v Evropě](#kryty-europa).
 :::
 
+::: choices
+**Kde začneš?**
+
+- [Krize se děje právě teď](#rozcestnik-krizy)
+- [Chci se začít připravovat](#rozcestnik-zacat)
+- [Starám se o někoho zranitelného](#zranitelni)
+- [Chci si to vyzkoušet jako příběh](#scenare)
+- [Hledám kryty a útočiště](#kryty-europa)
+:::
+
 ## Jak je kniha uspořádána {#rozcestnik-struktura}
 
 - **Část I – Základy připravenosti** vysvětluje, co platí pro každou krizi: jak posoudit rizika, jak se dozvíš o nebezpečí, jak sestavit rodinný plán, zásoby a evakuační zavazadlo, jak se ukrýt a jak se evakuovat.

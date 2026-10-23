@@ -4,6 +4,16 @@ An economic crisis may arrive slowly (high inflation, rising energy prices, job 
 
 {{now:economic}}
 
+::: choices
+**What is worrying you?**
+
+- [Prices are rising and money is tight](#ekonomicka-pocas)
+- [Shops are running out of goods](#ekonomicka-vediet)
+- [I want to build a reserve](#ekonomicka-pred)
+- [I need to shop on a small budget](#nakupne-zoznamy-rozpocet)
+- [I want to help each other with neighbours](#komunita-priprava)
+:::
+
 ## What you need to know {#ekonomicka-vediet}
 
 - **Panic buying** empties shelves even when there are enough goods – it only takes everyone buying three times as much. If you have supplies in advance, you do not need to join in.
