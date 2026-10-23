@@ -7,7 +7,7 @@
   :root.pdf-color { --orange: #e8590c; --orange-strong: #c2410c; --blue: #0b3d91; --blue-strong: #082c6b; --urgent-bg: #fff4e6; --tip-bg: #ecfdf5; --warn-bg: #fef2f2; --note-bg: #eef4ff; --surface-2: #eceff3; }
   html { font-size: 10.5pt; }
   body { background: #fff; color: #000; line-height: 1.45; }
-  .site-header, .site-footer, .book-toc, .pager, .no-print, .btn-row, .emergency-strip, .toc-toggle, .menu-toggle, nav { display: none !important; }
+  .site-header, .site-footer, .book-toc, .pager, .no-print, .btn-row, .emergency-strip, .toc-toggle, .menu-toggle, nav:not(.choices) { display: none !important; }
   .print-only { display: block; }
   .book { display: block; padding: 0; }
   .book-main, .wrap, .narrow { max-width: none; padding: 0; margin: 0; }

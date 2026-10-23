@@ -20,6 +20,18 @@ Na úvodnej stránke vyber:
 
 Jazyk (SK / CS / EN) prepneš vpravo hore.
 
+NOVÉ: KNIHA-HRA
+- V kapitolách sú bloky „Rozhodni sa“ – vyber, čo sa ti deje, a kniha ťa
+  pošle na správnu kapitolu. Na úvodnej stránke knihy (alebo tlačidlom
+  „Upraviť“ nad textom kapitoly) označ, čo platí pre tvoju domácnosť –
+  voľby „pre teba“ sa zvýraznia a kniha odporučí ďalšie kapitoly.
+- 🎲 Príbehové scenáre: kniha → „Príbehové scenáre“ → ▶ Hrať príbeh.
+
+MAPA A POLOHA
+- Miesto nájdeš písaním adresy (ponúkne návrhy), kliknutím do mapy,
+  potiahnutím značky alebo tlačidlom „Moja poloha“.
+- Štýl mapy prepneš ikonou vrstiev vpravo hore v mape.
+
 DOBRÉ VEDIEŤ
 - Kniha, zoznamy a plánovač fungujú aj bez internetu.
 - Mapa, vyhľadanie adresy a únikové trasy potrebujú internet.

@@ -22,7 +22,7 @@ import { expandPlaceholders, chapterLabel, esc, scenarioNumbers } from './render
 
 const require = createRequire(import.meta.url);
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const DIST = path.join(ROOT, 'dist');
+const DIST = process.env.KP_DIST ? path.resolve(process.env.KP_DIST) : path.join(ROOT, 'dist'); // KP_DIST: iný výstupný priečinok
 const args = process.argv.slice(2);
 const NO_PDF = args.includes('--no-pdf');
 const NO_EPUB = args.includes('--no-epub');
@@ -564,6 +564,8 @@ async function buildPdf(browser, lang) {
   const pages = txt.split('\f');
   const pageOf = {};
   pages.forEach((p, i) => { for (const m of p.matchAll(/§§([a-z0-9-]+)§§/g)) if (!pageOf[m[1]]) pageOf[m[1]] = i + 1; });
+  const noPage = await page.evaluate((map) => [...new Set([...document.querySelectorAll('.ch-page')].map((e) => e.dataset.id).filter((id) => !map[id]))], pageOf);
+  if (noPage.length) warn(`PDF ${lang}: bez čísla strany ${noPage.length} cieľov (${noPage.slice(0, 5).join(', ')})`);
   await page.evaluate(([map, pg]) => {
     document.querySelectorAll('.toc-page').forEach((el) => { el.textContent = map[el.dataset.id] || ''; });
     // čísla strán pri voľbách a krížových odkazoch (ako v knihe-hre)

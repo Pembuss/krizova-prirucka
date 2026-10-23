@@ -301,6 +301,7 @@ export const S = {
   'rot.expiry': ['Spotrebovať do', 'Spotřebovat do', 'Use by'], 'rot.where': ['Kde je uložené', 'Kde je uloženo', 'Stored where'],
   'rot.empty': ['Zatiaľ žiadne záznamy. Pridaj, čo si kúpil – aplikácia ti postráži dátumy spotreby.', 'Zatím žádné záznamy. Přidej, co jsi koupil – aplikace ti pohlídá data spotřeby.', 'No entries yet. Add what you bought and the app will watch the use-by dates.'],
   'rot.soon': ['do 60 dní', 'do 60 dní', 'within 60 days'], 'rot.expired': ['po dátume', 'po datu', 'expired'],
+  'rot.needName': ['Vyber položku zo zoznamu alebo napíš jej názov.', 'Vyber položku ze seznamu nebo napiš její název.', 'Choose an item from the list or type its name.'],
   'rot.custom': ['iná položka…', 'jiná položka…', 'other item…'],
   'rot.ics': ['Pripomienky dátumov spotreby do kalendára (.ics)', 'Připomínky dat spotřeby do kalendáře (.ics)', 'Use-by reminders for your calendar (.ics)'],
 

@@ -1,6 +1,6 @@
 // Zásoby: nákupný zoznam s cenami a „mám“, postupný nákup, obmena zásob.
 import { store, uid, download } from '../store.js';
-import { t, tp, T, esc, money, num, fmtDate, $, $$ } from '../core.js';
+import { t, tp, T, esc, money, num, fmtDate, toast, $, $$ } from '../core.js';
 import { shoppingList, purchaseSchedule } from '../../calc.js';
 import { CATEGORIES, ITEMS, itemById } from '../../../data/items.js';
 import { icsReminders } from '../tasks.js';
@@ -86,7 +86,7 @@ ${inv.map((x) => { const st = x.expiry && x.expiry < today ? 'expired' : x.expir
       const id = $('#rot-item').value;
       const it = id ? itemById(id) : null;
       const name = it ? T(it.name) : $('#rot-custom').value.trim();
-      if (!name) return;
+      if (!name) { toast(t('rot.needName'), 3500); $('#rot-custom').focus(); return; }
       const bought = $('#rot-bought').value || new Date().toISOString().slice(0, 10);
       let expiry = $('#rot-exp').value;
       if (!expiry && it?.shelf) { const dt = new Date(bought); dt.setMonth(dt.getMonth() + it.shelf); expiry = dt.toISOString().slice(0, 10); }
@@ -107,5 +107,11 @@ ${inv.map((x) => { const st = x.expiry && x.expiry < today ? 'expired' : x.expir
     if (pr) { store.state.prices[pr.dataset.price] = Math.max(0, Number(String(pr.value).replace(',', '.')) || 0); store.saveState(); draw(); }
     const b = e.target.closest('[data-budget]');
     if (b) { p.supplies.budgetMonthly = Number(b.value) || 0; store.saveProfile(); draw(); }
+    // Obmena: po výbere položky netreba vlastný názov a dátum spotreby sa doplní podľa trvanlivosti
+    if (e.target.matches('#rot-item, #rot-bought')) {
+      const it = $('#rot-item').value ? itemById($('#rot-item').value) : null;
+      $('#rot-custom').hidden = !!it;
+      if (it?.shelf) { const dt = new Date($('#rot-bought').value || Date.now()); dt.setMonth(dt.getMonth() + it.shelf); $('#rot-exp').value = dt.toISOString().slice(0, 10); }
+    }
   });
 }

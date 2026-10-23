@@ -73,7 +73,7 @@ export function buildTasks(p) {
   // Zručnosti
   add('course', 'skills', t('task.course'), 'book:prva-pomoc', 2);
   add('drill', 'skills', t('task.drill'), 'book:principy#principy-trening', 3);
-  add('review', 'skills', t('task.review'), '#/plan', 3);
+  add('review', 'skills', t('task.review'), 'book:kontrolne-zoznamy#kontrolne-zoznamy-kontrola', 3);
 
   // Zvýšenie priority podľa obáv
   const concerns = new Set(p.concerns || []);

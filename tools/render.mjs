@@ -102,7 +102,11 @@ const R = {
         const tip = node.tip ? `<p class="gb-tip">💡 ${esc(t(node.tip.text, lang))} <a class="xref" href="#${node.tip.ref}"></a></p>` : '';
         const next = node.end
           ? `<p class="gb-end"><strong>${esc(t(UI.gbEnd, lang))}.</strong> ${esc(t(UI.gbScore, lang))}</p>`
-          : `<ul class="gb-choices">${node.choices.map((c) => `<li><a href="#gb-${s.id}-${c.to}">${esc(c.text ? t(c.text, lang) : t(UI.cont, lang))} → ${esc(t(UI.gbGo, lang))} §${sec(c.to)}</a></li>`).join('')}</ul>`;
+          : `<ul class="gb-choices">${node.choices.map((c) => {
+            const go = t(UI.gbGo, lang);
+            const label = c.text ? `${esc(t(c.text, lang))} → ${esc(go)}` : esc(go.charAt(0).toUpperCase() + go.slice(1));
+            return `<li><a href="#gb-${s.id}-${c.to}">${label} §${sec(c.to)}</a></li>`;
+          }).join('')}</ul>`;
         return `<div class="gb-node${node.verdict ? ' ' + node.verdict : ''}${node.end ? ' end' : ''}" id="gb-${s.id}-${node.id}"><p class="gb-num">§${sec(node.id)}</p><p>${mark}${esc(t(node.text, lang))}</p>${tip}${next}</div>`;
       }).join('\n');
       return `<section class="scenario" data-scenario="${s.id}">
