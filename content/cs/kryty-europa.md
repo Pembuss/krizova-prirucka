@@ -54,4 +54,4 @@ Mapa v aplikaci a na webu zobrazí pro zvolené místo kdekoli v Evropě:
 - **zdroje pitné vody** (fontány, studny) a **čerpací stanice**,
 - **tvá vlastní místa** – úkryt určený obcí, místo setkání, příbuzní.
 
-Údaje se načtou, když máš internet, a uloží se do zařízení, abys je měl k dispozici i bez připojení. Mapu okolí si můžeš i vytisknout.
+Pro Slovensko jsou mapa, tato místa i **úkryty CO ze zveřejněných seznamů měst** přímo v aplikaci a fungují **bez internetu**. Pro ostatní země se místa v okolí načtou, když máš internet, a uloží se do zařízení. Mapu okolí si můžeš i vytisknout.

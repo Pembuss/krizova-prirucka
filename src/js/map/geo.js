@@ -1,4 +1,6 @@
-// Prístup k verejným službám OpenStreetMap: geokódovanie (Nominatim, Photon), Overpass, smerovanie (OSRM).
+// Vyhľadanie miest, adries a trás. Najprv offline údaje priložené k aplikácii (offdata.js, router.js),
+// verejné služby OpenStreetMap (Photon, Nominatim, Overpass, OSRM) iba ako doplnok, keď je internet.
+import { searchOffline, reverseOffline } from './offdata.js';
 const NOMINATIM = 'https://nominatim.openstreetmap.org';
 const OVERPASS = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter', 'https://maps.mail.ru/osm/tools/overpass/api/interpreter', 'https://overpass.private.coffee/api/interpreter'];
 const ROUTERS = {
@@ -63,10 +65,20 @@ export function parseCoords(q) {
   return null;
 }
 
-// Vyhľadanie adresy: najprv vhodnejšia služba, pri chybe alebo prázdnom výsledku druhá.
+const online = () => typeof navigator === 'undefined' || navigator.onLine !== false;
+async function offlineFirst(q, lang, near, limit) {
+  try { return await searchOffline(q, { near, lang, limit }); } catch { return []; }
+}
+
+// Vyhľadanie adresy: offline zoznam obcí a ulíc; ak nič nenájde a je internet, verejné služby.
 export async function geocode(q, lang = 'sk', { near } = {}) {
   const c = parseCoords(q);
   if (c) return [{ ...c, label: `${c.lat.toFixed(5)}, ${c.lon.toFixed(5)}`, country: '', kind: 'coords' }];
+  const off = await offlineFirst(q, lang, near, 8);
+  if (off.length || !online()) return off;
+  return geocodeOnline(q, lang, { near });
+}
+export async function geocodeOnline(q, lang = 'sk', { near } = {}) {
   const order = LOCAL ? [() => photonSearch(q, lang, near), () => nominatimSearch(q, lang)] : [() => nominatimSearch(q, lang), () => photonSearch(q, lang, near)];
   let lastErr = null;
   for (const run of order) {
@@ -75,12 +87,23 @@ export async function geocode(q, lang = 'sk', { near } = {}) {
   if (lastErr) throw lastErr;
   return [];
 }
-// Návrhy počas písania – iba Photon (Nominatim automatické dopĺňanie nepovoľuje).
+// Návrhy počas písania – offline; Photon iba ak offline nič nenájde (Nominatim dopĺňanie nepovoľuje).
 export async function suggest(q, lang = 'sk', near) {
   if (parseCoords(q)) return geocode(q, lang);
+  const off = await offlineFirst(q, lang, near, 7);
+  if (off.length || !online()) return off;
   return photonSearch(q, lang, near, 6);
 }
+// Spätné určenie adresy: offline (ulica, obec, štát); online iba ak offline nevie nič.
 export async function reverse(lat, lon, lang = 'sk') {
+  try {
+    const r = await reverseOffline(lat, lon, lang);
+    if (r && r.label && !/^-?\d+\.\d+, /.test(r.label)) return r;
+    if (!online()) return r;
+  } catch { /* offline údaje nie sú – skús internet */ }
+  return reverseOnline(lat, lon, lang);
+}
+export async function reverseOnline(lat, lon, lang = 'sk') {
   const fallback = { label: `${lat.toFixed(5)}, ${lon.toFixed(5)}`, country: '' };
   const viaNominatim = async () => {
     const x = await fetchJson(`${NOMINATIM}/reverse?format=jsonv2&zoom=17&addressdetails=1&accept-language=${lang}&lat=${lat}&lon=${lon}`, {}, 12000);
@@ -123,7 +146,8 @@ export async function route(mode, points, { alternatives = true, steps = true } 
 
 // Vrstvy miest pre mapu (Overpass QL filtre)
 export const LAYERS = {
-  shelter: { color: '#c2410c', icon: '🛡️', q: ['nwr["shelter_type"="bomb_shelter"]', 'nwr["bunker_type"~"bomb_shelter|air_raid_shelter|civil_defence|civil_protection"]', 'nwr["building"="bunker"]["military"!~"."]', 'nwr["emergency"="shelter"]'] },
+  shelter: { color: '#c2410c', icon: '🛡️', q: ['nwr["shelter_type"="bomb_shelter"]', 'nwr["bunker_type"~"bomb_shelter|air_raid_shelter|civil_defence|civil_protection|personnel_shelter"]', 'nwr["emergency"="shelter"]'] },
+  bunker: { color: '#57534e', icon: '🪖', q: ['nwr["military"="bunker"]', 'nwr["building"="bunker"]'] },
   assembly: { color: '#15803d', icon: '🟩', q: ['nwr["emergency"="assembly_point"]'] },
   underground: { color: '#6b21a8', icon: 'Ⓜ️', q: ['nwr["amenity"="parking"]["parking"="underground"]', 'nwr["station"="subway"]', 'nwr["railway"="station"]["subway"="yes"]'] },
   hospital: { color: '#dc2626', icon: '🏥', q: ['nwr["amenity"="hospital"]'] },
@@ -132,6 +156,7 @@ export const LAYERS = {
   townhall: { color: '#0b3d91', icon: '🏛️', q: ['nwr["amenity"="townhall"]'] },
   water: { color: '#0284c7', icon: '🚰', q: ['nwr["amenity"="drinking_water"]', 'nwr["man_made"="water_well"]["drinking_water"="yes"]', 'nwr["natural"="spring"]["drinking_water"="yes"]', 'nwr["amenity"="water_point"]'] },
   fuel: { color: '#a16207', icon: '⛽', q: ['nwr["amenity"="fuel"]'] },
+  aed: { color: '#15803d', icon: '❤️', q: ['nwr["emergency"="defibrillator"]'] },
 };
 
 export function layerQuery(layers, lat, lon, radius) {
@@ -140,8 +165,12 @@ export function layerQuery(layers, lat, lon, radius) {
   return `[out:json][timeout:35];(${parts.join('')});out center tags 1500;`;
 }
 
+// Vrstva pre prvok podľa značiek (null = do žiadnej vrstvy nepatrí)
+const SHELTER_BUNKER = /bomb_shelter|air_raid_shelter|civil_defence|civil_protection|personnel_shelter/;
 export function classify(tags) {
-  if (tags.shelter_type === 'bomb_shelter' || tags.bunker_type || tags.building === 'bunker' || tags.emergency === 'shelter') return 'shelter';
+  if (tags.shelter_type === 'bomb_shelter' || SHELTER_BUNKER.test(tags.bunker_type || '') || tags.emergency === 'shelter') return 'shelter';
+  if (tags.military === 'bunker' || tags.building === 'bunker' || tags.bunker_type) return 'bunker';
+  if (tags.emergency === 'defibrillator') return 'aed';
   if (tags.emergency === 'assembly_point') return 'assembly';
   if (tags.parking === 'underground' || tags.station === 'subway' || tags.subway === 'yes') return 'underground';
   if (tags.amenity === 'hospital') return 'hospital';
@@ -149,24 +178,7 @@ export function classify(tags) {
   if (tags.amenity === 'fire_station' || tags.amenity === 'police') return 'emergency';
   if (tags.amenity === 'townhall') return 'townhall';
   if (tags.amenity === 'fuel') return 'fuel';
-  return 'water';
-}
-
-// Rozdelenie mapy na dlaždice v okruhu (na offline uloženie)
-export function tileUrls(lat, lon, km, zmin = 12, zmax = 16, tpl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png') {
-  const urls = [];
-  const toTile = (la, lo, z) => {
-    const n = 2 ** z;
-    const x = Math.floor(((lo + 180) / 360) * n);
-    const r = (la * Math.PI) / 180;
-    const y = Math.floor(((1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2) * n);
-    return [x, y];
-  };
-  const dLat = km / 111, dLon = km / (111 * Math.cos((lat * Math.PI) / 180));
-  for (let z = zmin; z <= zmax; z++) {
-    const [x1, y1] = toTile(lat + dLat, lon - dLon, z);
-    const [x2, y2] = toTile(lat - dLat, lon + dLon, z);
-    for (let x = x1; x <= x2; x++) for (let y = y1; y <= y2; y++) urls.push(tpl.replace('{s}', 'abc'[(x + y) % 3]).replace('{z}', z).replace('{x}', x).replace('{y}', y));
-  }
-  return urls;
+  if (tags.amenity === 'drinking_water' || tags.amenity === 'water_point' || tags.man_made === 'water_well' || tags.natural === 'spring') return 'water';
+  if (tags.emergency === 'ambulance_station' || tags.emergency === 'mountain_rescue') return 'emergency';
+  return null;
 }

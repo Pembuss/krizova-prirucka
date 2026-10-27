@@ -2,6 +2,7 @@
 import { store, uid } from '../store.js';
 import { t, esc, fmtDuration, toast, $, $$, num } from '../core.js';
 import { route as osrm, overpass } from '../../map/geo.js';
+import { routeOffline, OutOfNetwork } from '../../map/router.js';
 import { addBasemap } from '../../map/tiles.js';
 import { locationPicker } from '../../map/picker.js';
 import { distanceKm } from '../../calc.js';
@@ -61,7 +62,7 @@ function routeSummary(r, mode, kind, destName) {
   const via = Object.entries(byRoad).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([n]) => n).join(', ');
   const classes = new Set(steps.flatMap((s) => (s.intersections || []).flatMap((i) => i.classes || [])));
   const coords = r.geometry.coordinates.map(([lo, la]) => [la, lo]);
-  return { id: uid(), dest: destName, mode, kind, distance: r.distance, duration: r.duration, via, steps: text, geometry: simplifyTo(coords, 350), full: coords, osrmClasses: [...classes] };
+  return { id: uid(), dest: destName, mode, kind, distance: r.distance, duration: r.duration, via, steps: text, geometry: simplifyTo(coords, 350), full: coords, osrmClasses: [...classes], offlineRisks: r.offlineRisks, offline: !!r.offline };
 }
 // Prekrytie trás (podiel bodov A vzdialených < 60 m od B)
 function overlap(a, b) {
@@ -84,6 +85,8 @@ function detourPoint(a, b, side) {
 async function analyse(r, skipOverpass = false) {
   const risks = { bridges: 0, rivers: [], tunnels: 0, ferry: r.osrmClasses.includes('ferry'), npp: '' };
   for (const n of NPP) if (r.geometry.some(([la, lo]) => distanceKm({ lat: la, lon: lo }, n) < 30)) { risks.npp = n.name; break; }
+  // offline trasa: mosty, rieky a tunely sú známe z cestnej siete
+  if (r.offlineRisks) { Object.assign(risks, r.offlineRisks); r.risks = risks; return; }
   const pts = simplifyTo(r.full, 110).map(([la, lo]) => `${la.toFixed(5)},${lo.toFixed(5)}`).join(',');
   if (skipOverpass) { risks.error = true; risks.tunnels = r.osrmClasses.includes('tunnel') ? 1 : 0; r.risks = risks; return; }
   try {
@@ -175,20 +178,27 @@ ${r.via ? `<p class="small muted">${esc(t('rt.via', { roads: r.via }))}</p>` : '
     for (const [d, m] of jobs) {
       status(t('rt.computing', { done, total: jobs.length }));
       try {
-        const rs = await osrm(m, [h, d], { alternatives: true });
+        // 1. offline cestná sieť priložená k aplikácii; 2. ak cieľ leží mimo nej a je internet, OSRM
+        let rs, router = (pts, o) => routeOffline(m, pts, o);
+        try { rs = await routeOffline(m, [h, d], { alternatives: true }); } catch (err) {
+          if (!(err instanceof OutOfNetwork) || navigator.onLine === false) throw err;
+          rs = await osrm(m, [h, d], { alternatives: true });
+          router = (pts, o) => osrm(m, pts, o);
+          toast(t('rt.onlineUsed', { name: d.name || d.label }), 4000);
+        }
         const found = rs.slice(0, 3).map((r, i) => routeSummary(r, m, i === 0 ? 'fastest' : 'alt', d.name || d.label));
         // Doplnenie obchádzky, ak je málo rozdielnych alternatív
         for (const side of [1, -1]) {
           if (found.length >= 3) break;
           try {
             const via = detourPoint(h, d, side);
-            const [r2] = await osrm(m, [h, via, d], { alternatives: false });
+            const [r2] = await router([h, via, d], { alternatives: false });
             const cand = routeSummary(r2, m, 'detour', d.name || d.label);
             if (cand.distance < found[0].distance * 1.8 && found.every((f) => overlap(cand, f) < 0.8)) found.push(cand);
           } catch { /* obchádzka nie je dostupná */ }
         }
         out.push(...found);
-      } catch { toast(`${t('rt.error')} (${d.name} – ${t('mode.' + m)})`, 3500); }
+      } catch (err) { toast(`${t(err instanceof OutOfNetwork ? 'rt.outOfNetwork' : 'rt.error')} (${d.name} – ${t('mode.' + m)})`, 5000); }
       done++;
     }
     results = out;

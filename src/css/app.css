@@ -3,6 +3,7 @@ body.app { padding-bottom: 72px; }
 .app-header { position: sticky; top: 0; z-index: 60; display: flex; align-items: center; gap: .5rem; padding: .45rem .8rem; background: var(--bg); border-bottom: 1px solid var(--border); }
 .app-header .brand { margin-right: auto; }
 .app-header .brand span { font-size: 1rem; }
+.app-header .brand .ver-badge { margin-left: .45rem; padding: .05rem .45rem; border-radius: 999px; background: var(--orange-strong, #c2410c); color: #fff; font-size: .72rem; font-weight: 800; letter-spacing: .02em; white-space: nowrap; }
 .btn-sm { min-height: 40px; padding: .35rem .75rem; font-size: .9rem; border-radius: 10px; }
 .iconbtn.call { display: inline-flex; align-items: center; text-decoration: none; font-weight: 800; }
 .app-body { display: block; }
@@ -23,7 +24,7 @@ body.more-open .app-nav { display: block; position: fixed; z-index: 65; left: 0;
   .app-nav { display: block; position: sticky; top: 56px; align-self: start; height: calc(100vh - 56px); overflow: auto; padding: .8rem .6rem; border-right: 1px solid var(--border); }
   .app-tabs { display: none; }
 }
-@media (max-width: 520px) { .app-header .brand span { display: none; } }
+@media (max-width: 520px) { .app-header .brand span:not(.ver-badge) { display: none; } }
 #view { outline: none; min-height: 70vh; }
 #view .wrap { padding-top: 1rem; }
 .lead { font-size: 1.08rem; }
@@ -77,6 +78,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--orange); outline
 .chips { display: flex; flex-wrap: wrap; gap: .45rem; margin: .3rem 0 .6rem; }
 .chip { min-height: 44px; padding: .35rem .9rem; border-radius: 999px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); font: inherit; font-weight: 700; font-size: .92rem; cursor: pointer; }
 .chip[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+.chip { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.chip[data-multi="true"][aria-pressed="true"]::before { content: "✓ "; }
+@media (forced-colors: active) { .chip[aria-pressed="true"] { forced-color-adjust: none; background: Highlight; color: HighlightText; border-color: Highlight; } }
 :root[data-theme="dark"] .chip[aria-pressed="true"] { color: #0d1117; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .chip[aria-pressed="true"] { color: #0d1117; } }
 .two { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
@@ -193,3 +197,8 @@ dialog::backdrop { background: rgba(0, 0, 0, .45); }
 .add-dest summary { cursor: pointer; font-weight: 700; color: var(--blue, #0b3d91); }
 .add-dest[open] summary { margin-bottom: .6rem; }
 .leaflet-control-layers-base label { font-size: .9rem; }
+
+/* offline mapa */
+.leaflet-container:has(.kp-offline) { background: #f2efe9; }
+.kp-labels { pointer-events: none; }
+.mk.mk-sm span { width: 14px; height: 14px; border-width: 3px; background: var(--c); box-shadow: 0 0 0 1.5px #fff, 0 1px 3px rgba(0, 0, 0, .4); }

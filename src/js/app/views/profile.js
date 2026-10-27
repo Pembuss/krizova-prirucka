@@ -4,6 +4,7 @@ import { t, tp, T, esc, input, textarea, select, check, chips, bindForm, toast, 
 import { COUNTRIES } from '../../../data/countries.js';
 import { CRISES } from '../../../data/crises.js';
 import { overpass } from '../../map/geo.js';
+import { riversNear, inDetailArea } from '../../map/offdata.js';
 import { locationPicker } from '../../map/picker.js';
 import { nearestNpp } from '../../calc.js';
 
@@ -150,10 +151,17 @@ ${p.members.length > 1 ? `<button class="btn btn-ghost btn-sm" type="button" dat
       const out = $('#river-out');
       out.textContent = t('c.loading');
       try {
-        const r = await overpass(`[out:json][timeout:25];way["waterway"~"^(river|stream|canal)$"](around:500,${p.location.lat},${p.location.lon});out tags;`);
-        const names = [...new Set(r.elements.map((x) => x.tags?.name).filter(Boolean))];
-        if (r.elements.length) { p.risks.river = true; store.saveProfile(); $$('[data-bind="risks.river"]').forEach((c) => { c.checked = true; }); }
-        out.textContent = r.elements.length ? t('risk.riverFound', { names: names.join(', ') || '—' }) : t('risk.riverNone');
+        let found, names;
+        if (inDetailArea(p.location.lat, p.location.lon)) {
+          // offline: vodné toky Slovenska priložené k aplikácii
+          const r = await riversNear(p.location.lat, p.location.lon, 500);
+          found = r.found; names = r.names;
+        } else {
+          const r = await overpass(`[out:json][timeout:25];way["waterway"~"^(river|stream|canal)$"](around:500,${p.location.lat},${p.location.lon});out tags;`);
+          found = r.elements.length > 0; names = [...new Set(r.elements.map((x) => x.tags?.name).filter(Boolean))];
+        }
+        if (found) { p.risks.river = true; store.saveProfile(); $$('[data-bind="risks.river"]').forEach((c) => { c.checked = true; }); }
+        out.textContent = found ? t('risk.riverFound', { names: names.join(', ') || '—' }) : t('risk.riverNone');
       } catch { out.textContent = t('map.error'); }
     }
     if (tg.closest('[data-add-member]')) { p.members.push({ id: uid(), name: '', age: 30, sex: '', diet: {}, meds: [], mobility: 'full', powerDevice: '' }); store.saveProfile(); draw(); }

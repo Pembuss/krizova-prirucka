@@ -15,6 +15,7 @@ export const UI = {
   chShort: L('Kap.', 'Kap.', 'Ch.'),
   appShort: L('Príl.', 'Příl.', 'App.'),
   pageShort: L('str.', 'str.', 'p.'),
+  versionLabel: L('Verzia', 'Verze', 'Version'),
   forYou: L('pre teba', 'pro tebe', 'for you'),
   playStory: L('Zahraj si to ako príbeh', 'Zahraj si to jako příběh', 'Play it as a story'),
   good: L('Dobré rozhodnutie', 'Dobré rozhodnutí', 'Good decision'),

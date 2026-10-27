@@ -16,6 +16,8 @@ import { SITE } from '../src/data/site.js';
 import { READER_TAGS, REC } from '../src/data/reader.js';
 import { SCENARIOS } from '../src/data/scenarios.js';
 import { NPP } from '../src/data/npp.js';
+import { VERSION, VERSION_DATE } from '../src/data/version.js';
+import { SHELTER_REGIONS, SHELTER_TOTAL, SHELTER_CITIES, SHELTER_SOURCE } from '../src/data/shelters-sk.js';
 
 const L = (sk, cs, en) => ({ sk, cs, en });
 import { expandPlaceholders, chapterLabel, esc, scenarioNumbers } from './render.mjs';
@@ -62,7 +64,7 @@ function renderChapters(lang) {
   // Druhý krok: voľby a krížové odkazy potrebujú nadpisy zo všetkých kapitol.
   const refs = headingMap(chs);
   for (const c of chs) {
-    c.html = enhanceChoices(c.html, c.id, refs, lang);
+    c.html = inlineRefs(enhanceChoices(c.html, c.id, refs, lang), c.id, refs, lang);
     c.ids = [...c.html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
   }
   chs.refs = refs;
@@ -130,6 +132,36 @@ function enhanceChoices(html, chId, refs, lang) {
   });
   // Krížové odkazy bez textu (tipy v scenároch) dostanú názov cieľa
   return html.replace(/<a class="xref" href="#([^"]+)"><\/a>/g, (m, id) => `<a class="xref" href="#${id}">→ ${esc(refText(id, chId, refs, lang) || t(chapterById(refs.get(id)?.ch || chId)?.title, lang))}<span class="ch-page" data-id="${id}"></span></a>`);
+}
+// Odkazy v texte dostanú pre tlač a EPUB kapitolu a stranu: „(→ kap. 9, str. 45)“. Na obrazovke sú skryté.
+// Voľby (nav.choices) a krížové odkazy (a.xref) majú vlastný popis, preto sa vynechajú.
+function inlineRefs(html, chId, refs, lang) {
+  return html.split(/(<nav class="choices[\s\S]*?<\/nav>)/).map((part, i) => (i % 2 ? part
+    : part.replace(/<a href="#([^"]+)">([\s\S]*?)<\/a>/g, (m, id) => m + prefSpan(id, chId, refs, lang)))).join('');
+}
+function prefSpan(id, chId, refs, lang) {
+  const h = refs.get(id);
+  if (!h) return '';
+  if (h.ch === chId) return `<span class="pref same"> (→ <span class="pg" data-id="${id}"></span>)</span>`;
+  const lab = h.label ? shortLabel(h.label, lang).replace(/^\p{Lu}/u, (c) => c.toLowerCase()) : t(chapterById(h.ch)?.title, lang);
+  return `<span class="pref"> (→ ${esc(lab)}<span class="pg" data-id="${id}" data-sep=", "></span>)</span>`;
+}
+// Doplní čísla strán (tlačené vydanie) do volieb, krížových odkazov a odkazov v texte.
+const PAGE_FILL = (map, pg) => {
+  document.querySelectorAll('.ch-page').forEach((el) => { const n = map[el.dataset.id]; el.textContent = n ? ` · ${pg} ${n}` : ''; });
+  document.querySelectorAll('.pref .pg').forEach((el) => {
+    const n = map[el.dataset.id];
+    el.textContent = n ? `${el.dataset.sep || ''}${pg} ${n}` : '';
+    el.parentElement.classList.toggle('filled', !!n);
+  });
+};
+function fillPagesHtml(html, map, pg) {
+  return html
+    .replace(/<span class="ch-page" data-id="([^"]+)"><\/span>/g, (m, id) => (map[id] ? `<span class="ch-page"> · ${pg} ${map[id]}</span>` : ''))
+    .replace(/<span class="pref( same)?">([\s\S]*?)<span class="pg" data-id="([^"]+)"( data-sep="([^"]*)")?><\/span>\)<\/span>/g, (m, same, pre, id, x, sep = '') => {
+      if (!map[id]) return same ? '' : `<span class="pref">${pre})</span>`;
+      return `<span class="pref">${pre}${sep}${pg} ${map[id]})</span>`;
+    });
 }
 // Údaje pre interaktivitu knihy na webe (profil čitateľa, odporúčania, scenáre)
 function bookData(lang, chs, current) {
@@ -257,6 +289,7 @@ function layout({ lang, title, body, rel, active, page, description = '', bodyCl
 <nav class="footer-nav" aria-label="${esc(t(UI.about, lang))}">${FOOTER_ITEMS.map((k) => `<a href="${href(k)}">${esc(t(UI[k], lang))}</a>`).join('')}${navItems(lang).map(([k, label]) => `<a href="${href(k)}">${esc(label)}</a>`).join('')}</nav>
 <p>${esc(t(UI.disclaimer, lang))}</p>
 <p>${esc(t(UI.dataNote, lang))} · ${esc(t(SITE.license, lang))}</p>
+<p class="version">${esc(t(UI.versionLabel, lang))} <strong>${esc(VERSION)}</strong> · ${esc(VERSION_DATE)}</p>
 </div></footer>
 <script defer src="${rel}assets/js/site.js"></script>
 ${scripts.map((s) => `<script defer src="${rel}${s}"></script>`).join('\n')}
@@ -348,9 +381,12 @@ function fullBook(lang, chs, map, { pdf = false } = {}) {
     const items = chs.filter((c) => c.part === p.id).map((c) => `<li><a href="#${c.id}"><span>${c.label ? esc(c.label) + ' · ' : ''}${esc(c.title)}</span><span class="toc-page" data-id="${c.id}"></span></a></li>`).join('');
     return `<li class="toc-part">${esc(t(p.name, lang))}<ol>${items}</ol></li>`;
   }).join('');
-  const chapters = chs.map((c) => `<section class="chapter" id="sec-${c.id}"><span class="pdf-marker">§§${c.id}§§</span>${c.html.replace(/(<h[2-4][^>]*\sid="([a-z0-9-]+)"[^>]*>)/g, '$1<span class="pdf-marker">§§$2§§</span>').replace(/(<div class="gb-node[^"]*" id="([a-z0-9-]+)">)/g, '$1<span class="pdf-marker">§§$2§§</span>')}</section>`).join('\n');
+  // Neviditeľné značky §§id§§ určia stranu každého cieľa odkazu; prvok so značkou dostane position: relative (data-pm),
+  // aby značka ostala na strane, kde prvok začína (nie na začiatku kapitoly).
+  const mark = (html) => html.replace(/<(h[1-4]|div|section|p|li|figure|aside)(\s[^>]*?\sid="([a-z0-9-]+)"[^>]*|\s+id="([a-z0-9-]+)"[^>]*)>/g, (m, tag, attrs, id1, id2) => `<${tag}${attrs} data-pm><span class="pdf-marker">§§${id1 || id2}§§</span>`);
+  const chapters = chs.map((c) => `<section class="chapter" id="sec-${c.id}"><span class="pdf-marker">§§${c.id}§§</span>${mark(c.html)}</section>`).join('\n');
   return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${esc(t(BOOK_TITLE, lang))}</title>
+<title>${esc(t(BOOK_TITLE, lang))} (${esc(VERSION)})</title>
 <link rel="stylesheet" href="../../assets/css/site.css"><link rel="stylesheet" href="../../assets/css/print.css"><link rel="stylesheet" href="../../assets/css/book-print.css">
 </head><body class="fullbook">
 <section class="cover">
@@ -359,6 +395,7 @@ function fullBook(lang, chs, map, { pdf = false } = {}) {
 <h1 class="cover-title">${esc(t(BOOK_TITLE, lang))}</h1>
 <p class="cover-sub">${esc(t(BOOK_SUBTITLE, lang))}</p>
 <ul class="cover-list">${CRISES.map((c) => `<li>${c.icon} ${esc(t(c.name, lang))}</li>`).join('')}</ul>
+<p class="cover-version">${esc(t(UI.versionLabel, lang))} ${esc(VERSION)} · ${esc(VERSION_DATE)}</p>
 <p class="cover-foot">${esc(t(UI.dataNote, lang))} · ${esc(t(UI.disclaimer, lang))}<br><strong>112</strong> – ${esc(t(UI.emergency, lang))}</p>
 </section>
 <section class="toc-page-wrap"><h2 class="toc-heading">${esc(t(UI.contents, lang))}</h2><ol class="fulltoc">${toc}</ol></section>
@@ -396,7 +433,8 @@ function buildSite(lang, chs) {
 <section><h2>${esc(L2('startTitle'))}</h2><ol class="path">${SITE.start.map((s) => `<li>${esc(t(s, lang))}</li>`).join('')}</ol></section>
 <section><h2>${esc(L2('toolsTitle'))}</h2><div class="grid cards">${SITE.tools.map((x) => `<a class="card" href="${toolsHref[x.href]}"><div class="icon">${x.icon}</div><h3>${esc(t(x.name, lang))}</h3><p>${esc(t(x.text, lang))}</p></a>`).join('')}</div></section>
 <section><h2>${esc(L2('downloadsTitle'))}</h2><p>${esc(L2('downloadsLead'))}</p>${downloadButtons(lang, rel1)}</section>
-<section><h2>${esc(L2('installTitle'))}</h2><p>${esc(L2('install'))}</p></section>
+<section><h2>🛡️ ${esc(t(SHELTER_LINK, lang))}</h2><p>${esc(t(SHELTER_LEAD, lang))}</p><div class="btn-row"><a class="btn btn-ghost" href="../sk/kryty-slovensko.html">🌐 HTML</a><a class="btn btn-ghost" href="${rel1}downloads/prehlad-krytov-slovensko.pdf" download>PDF</a></div>
+<h2>${esc(L2('installTitle'))}</h2><p>${esc(L2('install'))}</p></section>
 </div>`;
   write(path.join(DIST, lang, 'index.html'), layout({ lang, title: `${L2('title')} – ${L2('tagline')}`, body: home, rel: rel1, active: 'home', page: 'index.html' }));
 
@@ -446,12 +484,13 @@ ${rewriteLinks(kr.html.replace(/<h1[\s\S]*?<\/h1>/, ''), map, '__none__', 'kniha
   const mapBody = `<div class="wrap"><h1>${esc(t(UI.map, lang))}</h1><p>${esc(L2('mapLead'))}</p>
 <link rel="stylesheet" href="../assets/vendor/leaflet/leaflet.css"><link rel="stylesheet" href="../assets/css/app.css">
 <script src="../assets/vendor/leaflet/leaflet.js"></script>
-<div id="map-tool" data-map-tool></div><p><a class="btn" href="../app/index.html?lang=${lang}#/profil">${esc(t(L('Profil domácnosti a ciele evakuácie', 'Profil domácnosti a cíle evakuace', 'Household profile and destinations'), lang))}</a></p></div>
+<div id="map-tool" data-map-tool></div><p class="btn-row"><a class="btn" href="../app/index.html?lang=${lang}#/profil">${esc(t(L('Profil domácnosti a ciele evakuácie', 'Profil domácnosti a cíle evakuace', 'Household profile and destinations'), lang))}</a><a class="btn btn-ghost" href="../sk/kryty-slovensko.html">🛡️ ${esc(t(SHELTER_LINK, lang))}</a></p></div>
 <div id="print-root" class="print-root"></div>`;
   write(path.join(DIST, lang, 'mapa.html'), layout({ lang, title: `${t(UI.map, lang)} – ${L2('title')}`, body: mapBody, rel: rel1, active: 'map', page: 'mapa.html', scripts: ['assets/js/maptool.js'] }));
 
   // Na stiahnutie
   const dl = `<div class="wrap narrow"><h1>${esc(t(UI.downloads, lang))}</h1><p>${esc(L2('downloadsLead'))}</p>${downloadButtons(lang, rel1)}
+<h2>🛡️ ${esc(t(SHELTER_LINK, lang))}</h2><p>${esc(t(SHELTER_LEAD, lang))}</p><div class="btn-row"><a class="btn btn-ghost" href="../sk/kryty-slovensko.html">🌐 HTML</a><a class="btn btn-ghost" href="${rel1}downloads/prehlad-krytov-slovensko.pdf" download>PDF</a></div>
 <h2>${esc(L2('installTitle'))}</h2><p>${esc(L2('install'))}</p>
 <div class="btn-row no-print"><button class="btn" data-save-offline>💾 ${esc(L2('saveOffline'))}</button></div><p data-offline-status class="muted" aria-live="polite"></p>
 <h2>${esc(t(UI.print, lang))}</h2><ul><li><a href="karty.html">${esc(t(UI.cards, lang))}</a></li><li><a href="zoznamy.html">${esc(t(UI.lists, lang))}</a></li><li><a href="kniha/sablony.html">${esc(t(chapterById('sablony').title, lang))}</a></li><li><a href="kniha/cela.html">${esc(t(L('Celá kniha na jednej stránke', 'Celá kniha na jedné stránce', 'Whole book on one page'), lang))}</a></li></ul>
@@ -466,6 +505,43 @@ ${rewriteLinks(kr.html.replace(/<h1[\s\S]*?<\/h1>/, ''), map, '__none__', 'kniha
 <h2>${esc(L2('licenseTitle'))}</h2><p>${esc(L2('license'))}</p>
 <div class="box urgent"><p class="box-title">⚠️</p><p>${esc(t(UI.disclaimer, lang))}</p></div></div>`;
   write(path.join(DIST, lang, 'o-projekte.html'), layout({ lang, title: `${L2('aboutTitle')} – ${L2('title')}`, body: about, rel: rel1, active: 'about', page: 'o-projekte.html' }));
+}
+// ---------- Samostatný prehľad: úkryty CO na Slovensku (iba slovensky) ----------
+const SHELTER_LINK = L('Úkryty CO na Slovensku – prehľad', 'Úkryty CO na Slovensku – přehled (slovensky)', 'Civil-defence shelters in Slovakia – overview (in Slovak)');
+const SHELTER_LEAD = L('Počty úkrytov podľa krajov, zverejnené zoznamy miest, ako zistiť svoj úkryt a čo robiť, keď úkryt nie je.', 'Počty úkrytů podle krajů, zveřejněné seznamy měst, jak zjistit svůj úkryt a co dělat, když úkryt není (slovensky).', 'Shelter numbers by region, published municipal lists, how to find your shelter and what to do when there is none (in Slovak).');
+const fmtN = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0');
+const fmtP = (n) => String(n).replace('.', ',');
+function shelterTables() {
+  const nb = (x) => esc(x).replace(/(\d) (\d{3})/g, '$1\u00a0$2');
+  const cell = (n, cap) => `<td class="num">${fmtN(n)}<br><small>${fmtN(cap)} miest</small></td>`;
+  const row = (r, tag = 'td') => `<tr><${tag}>${esc(r[0])}</${tag}>${cell(r[2], r[3])}${cell(r[4], r[5])}${cell(r[6], r[7])}<td class="num">${fmtP(r[8])} %</td>${cell(r[9], r[10])}<td class="num">${r[11]} %</td></tr>`;
+  const regions = `<div class="table-wrap"><table class="shelter-table"><thead><tr><th>Kraj</th><th>Odolné (OÚ)</th><th>Plynotesné (PÚ)</th><th>OÚ + PÚ spolu</th><th>% OÚ+PÚ</th><th>Jednoduché (JÚBS)</th><th>% JÚBS</th></tr></thead>
+<tbody>${SHELTER_REGIONS.map((r) => row(r)).join('')}</tbody><tfoot>${row(SHELTER_TOTAL, 'th')}</tfoot></table></div>
+<p class="small muted">Zdroj: <a href="${SHELTER_SOURCE.url}">${esc(SHELTER_SOURCE.label)}</a>. Počty zahŕňajú úkryty pre obyvateľstvo aj pre zamestnancov. Súčet krajov v stĺpci OÚ + PÚ je 1\u00a0476; súhrnný riadok MV SR uvádza 1\u00a0474 (rozdiel je v podklade za Prešovský kraj).</p>`;
+  const cities = `<div class="table-wrap"><table class="shelter-table cities"><thead><tr><th>Kraj</th><th>Mesto / okres</th><th>Zverejnené údaje</th><th>V mape aplikácie</th></tr></thead><tbody>${SHELTER_CITIES.map(([kr, city, text, src, inMap]) => `<tr><td>${esc(kr)}</td><td><strong>${esc(city)}</strong></td><td>${nb(text)}<br><small><a href="${esc(src.url)}">${esc(src.label)}</a></small></td><td>${inMap ? '✔ áno' : '–'}</td></tr>`).join('')}</tbody></table></div>`;
+  return { regions, cities };
+}
+function buildShelterOverview() {
+  const md = read(path.join(ROOT, 'content/extra/kryty-slovensko.md'));
+  const { regions, cities } = shelterTables();
+  let html = pandoc(md.replace('{{shelterRegions}}', '```{=html}\n' + regions + '\n```').replace('{{shelterCities}}', '```{=html}\n' + cities + '\n```'));
+  html = html.replace(/<table>/g, '<div class="table-wrap"><table>').replace(/<\/table>(?!<\/div>)/g, '</table></div>');
+  const body = `<div class="wrap narrow shelter-overview">${html}
+<p class="small muted">${esc(t(UI.versionLabel, 'sk'))} ${esc(VERSION)} · ${esc(VERSION_DATE)}</p>
+<div class="btn-row no-print"><button class="btn btn-ghost" data-print>🖨️ ${esc(t(UI.print, 'sk'))}</button><a class="btn btn-ghost" href="../downloads/prehlad-krytov-slovensko.pdf" download>PDF</a><a class="btn" href="../app/index.html?lang=sk#/mapa">🗺️ Mapa úkrytov v aplikácii</a></div></div>`;
+  write(path.join(DIST, 'sk', 'kryty-slovensko.html'), layout({ lang: 'sk', title: 'Úkryty CO na Slovensku – prehľad', body, rel: '../', active: 'map', page: 'kryty-slovensko.html', description: 'Počty úkrytov civilnej ochrany podľa krajov, zverejnené zoznamy miest a alternatívy ukrytia.' }));
+}
+async function buildShelterPdf(browser) {
+  const page = await browser.newPage();
+  await page.goto('file://' + path.join(DIST, 'sk', 'kryty-slovensko.html'), { waitUntil: 'load' });
+  await page.emulateMedia({ media: 'print' });
+  await page.evaluate(() => document.documentElement.classList.add('pdf-color'));
+  const footer = `<div style="font-family:Inter,Arial,sans-serif;font-size:8px;width:100%;padding:0 15mm;display:flex;justify-content:space-between;color:#444"><span>Úkryty CO na Slovensku – prehľad · Krízová príručka ${esc(VERSION)} · 112</span><span><span class="pageNumber"></span> / <span class="totalPages"></span></span></div>`;
+  const out = path.join(DIST, 'downloads', 'prehlad-krytov-slovensko.pdf');
+  fs.mkdirSync(path.dirname(out), { recursive: true });
+  await page.pdf({ path: out, format: 'A4', printBackground: true, displayHeaderFooter: true, headerTemplate: '<div></div>', footerTemplate: footer, margin: { top: '14mm', bottom: '16mm', left: '0', right: '0' }, outline: true, tagged: true });
+  await page.close();
+  return out;
 }
 function downloadButtons(lang, rel) {
   return `<div class="btn-row">${ALL_LANGS.map((l) => `<a class="btn${l === lang ? '' : ' btn-ghost'}" href="${rel}downloads/krizova-prirucka-${l}.pdf" download>PDF ${l.toUpperCase()}</a><a class="btn btn-ghost" href="${rel}downloads/krizova-prirucka-${l}.epub" download>EPUB ${l.toUpperCase()}</a>`).join('')}</div>`;
@@ -495,7 +571,7 @@ function buildRoot() {
     ],
   };
   write(path.join(DIST, 'manifest.webmanifest'), JSON.stringify(manifest, null, 2));
-  const appHtml = read(path.join(ROOT, 'src/app/index.html')).replace('{{LOGO}}', LOGO);
+  const appHtml = read(path.join(ROOT, 'src/app/index.html')).replace('{{LOGO}}', LOGO).replaceAll('{{VERSION}}', esc(VERSION));
   write(path.join(DIST, 'app/index.html'), appHtml);
 }
 
@@ -514,6 +590,10 @@ function copyAssets() {
   fs.mkdirSync(path.join(DIST, 'assets/img'), { recursive: true });
   fs.copyFileSync(path.join(ROOT, 'src/img/logo.svg'), path.join(DIST, 'assets/img/logo.svg'));
   copyDir(path.join(ROOT, 'node_modules/leaflet/dist'), path.join(DIST, 'assets/vendor/leaflet'));
+  // offline mapa (vektorové dlaždice, popisy, vyhľadávanie, cestná sieť) – vytvára tools/mapdata/*.py
+  const mapSrc = path.join(ROOT, 'src/mapdata');
+  if (fs.existsSync(path.join(mapSrc, 'index.js'))) copyDir(mapSrc, path.join(DIST, 'assets/map'));
+  else warn('Chýbajú offline mapové dáta (src/mapdata) – mapa bude len online.');
   for (const f of ['leaflet-src.js', 'leaflet-src.js.map', 'leaflet.js.map', 'leaflet-src.esm.js', 'leaflet-src.esm.js.map']) fs.rmSync(path.join(DIST, 'assets/vendor/leaflet', f), { force: true });
 }
 
@@ -555,42 +635,102 @@ async function buildPdf(browser, lang) {
   await page.goto('file://' + path.join(DIST, lang, 'kniha/cela.html'), { waitUntil: 'load' });
   await page.emulateMedia({ media: 'print' });
   await page.evaluate(() => document.documentElement.classList.add('pdf-color'));
-  const footer = `<div style="font-family:Inter,Arial,sans-serif;font-size:8px;width:100%;padding:0 15mm;display:flex;justify-content:space-between;color:#444"><span>${esc(t(BOOK_TITLE, lang))} · 112</span><span><span class="pageNumber"></span> / <span class="totalPages"></span></span></div>`;
+  const footer = `<div style="font-family:Inter,Arial,sans-serif;font-size:8px;width:100%;padding:0 15mm;display:flex;justify-content:space-between;color:#444"><span>${esc(t(BOOK_TITLE, lang))} · ${esc(VERSION)} · 112</span><span><span class="pageNumber"></span> / <span class="totalPages"></span></span></div>`;
   const opts = { format: 'A4', printBackground: true, displayHeaderFooter: true, headerTemplate: '<div></div>', footerTemplate: footer, margin: { top: '14mm', bottom: '16mm', left: '0', right: '0' }, outline: true, tagged: true };
-  // 1. priechod: zisti strany kapitol podľa neviditeľných značiek
-  const tmp = path.join(ROOT, 'tools/.tmp', `pass1-${lang}.pdf`);
-  await page.pdf({ ...opts, path: tmp });
-  const txt = spawnSync('pdftotext', ['-layout', tmp, '-'], { encoding: 'utf8', maxBuffer: 256 * 1024 * 1024 }).stdout;
-  const pages = txt.split('\f');
-  const pageOf = {};
-  pages.forEach((p, i) => { for (const m of p.matchAll(/§§([a-z0-9-]+)§§/g)) if (!pageOf[m[1]]) pageOf[m[1]] = i + 1; });
-  const noPage = await page.evaluate((map) => [...new Set([...document.querySelectorAll('.ch-page')].map((e) => e.dataset.id).filter((id) => !map[id]))], pageOf);
+  // Strany cieľov odkazov podľa neviditeľných značiek §§id§§. Doplnené čísla strán predĺžia text, preto sa
+  // prepočítava, kým sa rozloženie neustáli (1. priechod s náhradným číslom „000“ rovnakej šírky).
+  const tmp = path.join(ROOT, 'tools/.tmp', `pass-${lang}.pdf`);
+  const measure = async () => {
+    await page.pdf({ ...opts, path: tmp });
+    const txt = spawnSync('pdftotext', ['-layout', tmp, '-'], { encoding: 'utf8', maxBuffer: 256 * 1024 * 1024 }).stdout;
+    const pages = txt.split('\f');
+    const map = {};
+    pages.forEach((p, i) => { for (const m of p.matchAll(/§§([a-z0-9-]+)§§/g)) if (!map[m[1]]) map[m[1]] = i + 1; });
+    return { map, count: pages.length - 1 };
+  };
+  const fill = (map) => page.evaluate(([m, pg, f]) => {
+    document.querySelectorAll('.toc-page').forEach((el) => { el.textContent = m ? m[el.dataset.id] || '' : '000'; });
+    new Function('map', 'pg', `(${f})(map, pg)`)(m || new Proxy({}, { get: () => '000' }), pg);
+  }, [map, t(UI.pageShort, lang), PAGE_FILL.toString()]);
+  await fill(null);
+  let { map: pageOf, count } = await measure();
+  for (let pass = 2; pass <= 5; pass++) {
+    await fill(pageOf);
+    const r = await measure();
+    const same = Object.keys(r.map).length === Object.keys(pageOf).length && Object.entries(r.map).every(([k, v]) => pageOf[k] === v);
+    pageOf = r.map; count = r.count;
+    if (same) break;
+    if (pass === 5) warn(`PDF ${lang}: čísla strán sa neustálili ani po 5 priechodoch`);
+  }
+  const noPage = await page.evaluate((map) => [...new Set([...document.querySelectorAll('.ch-page, .pref .pg')].map((e) => e.dataset.id).filter((id) => !map[id]))], pageOf);
   if (noPage.length) warn(`PDF ${lang}: bez čísla strany ${noPage.length} cieľov (${noPage.slice(0, 5).join(', ')})`);
-  await page.evaluate(([map, pg]) => {
-    document.querySelectorAll('.toc-page').forEach((el) => { el.textContent = map[el.dataset.id] || ''; });
-    // čísla strán pri voľbách a krížových odkazoch (ako v knihe-hre)
-    document.querySelectorAll('.ch-page').forEach((el) => { const n = map[el.dataset.id]; el.textContent = n ? ` · ${pg} ${n}` : ''; });
-    document.querySelectorAll('.pdf-marker').forEach((el) => el.remove());
-  }, [pageOf, t(UI.pageShort, lang)]);
+  await page.evaluate(() => document.querySelectorAll('.pdf-marker').forEach((el) => el.remove()));
   const out = path.join(DIST, 'downloads', `krizova-prirucka-${lang}.pdf`);
   fs.mkdirSync(path.dirname(out), { recursive: true });
   await page.pdf({ ...opts, path: out });
   await page.close();
-  return { out, pages: pages.length - 1, found: CHAPTERS.filter((c) => pageOf[c.id]).length };
+  return { out, pages: count, found: CHAPTERS.filter((c) => pageOf[c.id]).length, pageOf };
 }
-function buildEpub(lang, chs, cover) {
+const EPUB_NOTE = L(
+  'Čísla strán v odkazoch (→ kap. 9, str. 45) zodpovedajú tlačenej verzii (PDF). Čítačky so zoznamom strán ich otvoria cez „Prejsť na stranu“.',
+  'Čísla stran v odkazech (→ kap. 9, str. 45) odpovídají tištěné verzi (PDF). Čtečky se seznamem stran je otevřou přes „Přejít na stranu“.',
+  'Page numbers in references (→ ch. 9, p. 45) match the printed edition (PDF). Readers with a page list can open them with “Go to page”.');
+function buildEpub(lang, chs, cover, pageOf = {}) {
   const strip = (s) => s.replace(/[\p{Extended_Pictographic}\u{1F1E6}-\u{1F1FF}\uFE0F\u200D]/gu, '').replace(/<span class="ch-label">([^<]*)<\/span>/g, '<span class="ch-label">$1</span> ');
-  const body = chs.map((c) => strip(c.html.replace(/<div class="table-wrap">|<\/table><\/div>/g, (m) => (m.startsWith('</') ? '</table>' : '')))).join('\n');
+  let body = chs.map((c) => strip(c.html.replace(/<div class="table-wrap">|<\/table><\/div>/g, (m) => (m.startsWith('</') ? '</table>' : '')))).join('\n');
+  const hasPages = Object.keys(pageOf).length > 0;
+  body = fillPagesHtml(body, pageOf, t(UI.pageShort, lang));
+  // voľby ako bežný blok – niektoré čítačky s <nav> vnútri textu nepracujú
+  body = body.replace(/<nav class="choices([^"]*)"([^>]*)>([\s\S]*?)<\/nav>/g, '<div class="choices$1"$2>$3</div>');
+  // značky strán tlačeného vydania pred nadpismi (EPUB page-list)
+  let last = 0;
+  if (hasPages) {
+    body = body.replace(/<(h[1-4]|div)(\s[^>]*?\bid="([a-z0-9-]+)"[^>]*)>/g, (m, tag, attrs, id) => {
+      const n = pageOf[id];
+      if (!n || n <= last) return m;
+      last = n;
+      return `<span class="pagebreak" id="pg${n}" title="${n}"></span>${m}`;
+    });
+  }
+  const note = hasPages ? `<p class="epub-note">${esc(t(EPUB_NOTE, lang))}</p>` : '';
   const src = path.join(ROOT, 'tools/.tmp', `epub-${lang}.html`);
-  write(src, `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><title>${esc(t(BOOK_TITLE, lang))}</title></head><body>${body}</body></html>`);
+  write(src, `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><title>${esc(t(BOOK_TITLE, lang))}</title></head><body>${note}${body}</body></html>`);
   const out = path.join(DIST, 'downloads', `krizova-prirucka-${lang}.epub`);
   const r = spawnSync('pandoc', ['-f', 'html', '-t', 'epub3', src, '-o', out, '--toc', '--toc-depth=2', '--split-level=1',
     '--css', path.join(ROOT, 'src/css/epub.css'), '--epub-cover-image', cover,
     '--metadata', `title=${t(BOOK_TITLE, lang)}`, '--metadata', `subtitle=${t(BOOK_SUBTITLE, lang)}`, '--metadata', `lang=${lang}`,
-    '--metadata', `date=${EDITION}`, '--metadata', 'author=Krízová príručka'], { encoding: 'utf8' });
+    '--metadata', `date=${EDITION}`, '--metadata', `author=Krízová príručka`, '--metadata', `version=${VERSION}`], { encoding: 'utf8' });
   if (r.status !== 0) throw new Error(r.stderr);
   if (r.stderr.trim()) warn('pandoc epub: ' + r.stderr.trim().split('\n').slice(0, 3).join(' | '));
+  if (hasPages) epubPageList(out, lang);
   return out;
+}
+// Doplní do EPUB zoznam strán tlačeného vydania (epub:type="pagebreak" + nav page-list).
+function epubPageList(file, lang) {
+  const dir = path.join(ROOT, 'tools/.tmp', `epub-${lang}`);
+  fs.rmSync(dir, { recursive: true, force: true });
+  fs.mkdirSync(dir, { recursive: true });
+  const unz = spawnSync('unzip', ['-q', file, '-d', dir], { encoding: 'utf8' });
+  if (unz.status !== 0) { warn(`EPUB ${lang}: zoznam strán sa nedoplnil (unzip)`); return; }
+  const textDir = path.join(dir, 'EPUB', 'text');
+  const entries = [];
+  for (const f of fs.readdirSync(textDir).sort()) {
+    const p = path.join(textDir, f);
+    const s = read(p).replace(/<span id="pg(\d+)"[^>]*class="pagebreak"[^>]*><\/span>/g, (m, n) => {
+      entries.push([Number(n), f]);
+      return `<span epub:type="pagebreak" role="doc-pagebreak" id="pg${n}" aria-label="${n}"></span>`;
+    });
+    write(p, s);
+  }
+  entries.sort((a, b) => a[0] - b[0]);
+  const navP = path.join(dir, 'EPUB', 'nav.xhtml');
+  write(navP, read(navP).replace('</body>', `<nav epub:type="page-list" id="page-list" hidden="hidden"><h1>${esc(t(L('Strany tlačenej verzie', 'Strany tištěné verze', 'Print page list'), lang))}</h1><ol>${entries.map(([n, f]) => `<li><a href="text/${f}#pg${n}">${n}</a></li>`).join('')}</ol></nav>\n</body>`));
+  const opfP = path.join(dir, 'EPUB', 'content.opf');
+  write(opfP, read(opfP).replace('</metadata>', '<meta property="schema:accessibilityFeature">printPageNumbers</meta>\n</metadata>'));
+  fs.rmSync(file);
+  const z1 = spawnSync('zip', ['-X0q', file, 'mimetype'], { cwd: dir });
+  const z2 = spawnSync('zip', ['-X9rq', file, 'META-INF', 'EPUB'], { cwd: dir });
+  if (z1.status !== 0 || z2.status !== 0) throw new Error(`EPUB ${lang}: zip zlyhal`);
 }
 
 // ---------- Service worker ----------
@@ -601,7 +741,9 @@ function listFiles(dir, base = dir) {
   });
 }
 function buildServiceWorker() {
-  const files = listFiles(DIST).filter((f) => !f.startsWith('downloads/') && f !== 'sw.js' && !f.endsWith('.map') && !f.endsWith('.txt') && !f.startsWith('.'));
+  // Z offline mapy sa vopred ukladá len prehľad Európy; podrobné balíky sa uložia, keď ich mapa načíta.
+  const mapPre = (f) => !f.startsWith('assets/map/') || /^assets\/map\/(index|labels|countries|base|6-[0-9-]+)\.js$/.test(f);
+  const files = listFiles(DIST).filter((f) => !f.startsWith('downloads/') && f !== 'sw.js' && !f.endsWith('.map') && !f.endsWith('.txt') && !f.startsWith('.') && !f.endsWith('.zip') && mapPre(f));
   const hash = crypto.createHash('sha1');
   for (const f of files) hash.update(fs.readFileSync(path.join(DIST, f)));
   const version = hash.digest('hex').slice(0, 10);
@@ -627,11 +769,14 @@ async function main() {
     buildSite(lang, chs);
     console.log(`✓ ${lang}: ${chs.length} kapitol, web`);
   }
+  if (BUILD_LANGS.includes('sk')) { buildShelterOverview(); console.log('✓ prehľad úkrytov CO (sk/kryty-slovensko.html)'); }
   await withBrowser(async (browser) => {
     await renderIcons(browser);
+    if (!NO_PDF && BUILD_LANGS.includes('sk')) { await buildShelterPdf(browser); console.log('✓ PDF prehľad úkrytov CO'); }
     for (const lang of BUILD_LANGS) {
-      if (!NO_PDF) { const r = await buildPdf(browser, lang); console.log(`✓ PDF ${lang}: ${r.pages} strán, kapitoly nájdené ${r.found}/${CHAPTERS.length}`); }
-      if (!NO_EPUB) { const cover = await renderCover(browser, lang); buildEpub(lang, books[lang], cover); console.log(`✓ EPUB ${lang}`); }
+      let pageOf = {};
+      if (!NO_PDF) { const r = await buildPdf(browser, lang); pageOf = r.pageOf; console.log(`✓ PDF ${lang}: ${r.pages} strán, kapitoly nájdené ${r.found}/${CHAPTERS.length}`); }
+      if (!NO_EPUB) { const cover = await renderCover(browser, lang); buildEpub(lang, books[lang], cover, pageOf); console.log(`✓ EPUB ${lang}${NO_PDF ? ' (bez čísel strán – PDF sa nezostavovalo)' : ''}`); }
     }
   });
   const sw = buildServiceWorker();

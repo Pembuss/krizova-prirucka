@@ -30,3 +30,8 @@ th, td { border: 1px solid #666; padding: .2em .35em; vertical-align: top; }
 .gb-num { font-weight: bold; margin: 0; }
 .gb-tip { font-size: .9em; }
 .sc-setting { font-style: italic; }
+
+.pref { font-size: .85em; color: #555; }
+.choices .ch-page { white-space: nowrap; }
+.pagebreak { display: block; height: 0; margin: 0; }
+p:has(> .pagebreak:only-child) { margin: 0; }

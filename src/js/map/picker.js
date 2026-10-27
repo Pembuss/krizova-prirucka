@@ -41,7 +41,8 @@ export function searchBox(host, { onPick, onGps, near = homeNear, placeholder, g
     if (!items.length) { close(); return; }
     list.innerHTML = items.map((r, i) => {
       const [head, ...rest] = r.label.split(', ');
-      return `<li role="option" id="${id}-o${i}" data-i="${i}" aria-selected="${i === active}"><strong>${esc(head)}</strong>${rest.length ? `<small>${esc(rest.join(', '))}</small>` : ''}</li>`;
+      const sub = [r.offline && r.kind ? r.kind : '', rest.join(', ')].filter(Boolean).join(' · ');
+      return `<li role="option" id="${id}-o${i}" data-i="${i}" aria-selected="${i === active}"><strong>${esc(head)}</strong>${sub ? `<small>${esc(sub)}</small>` : ''}</li>`;
     }).join('');
     list.hidden = false;
     q.setAttribute('aria-expanded', 'true');
@@ -137,7 +138,7 @@ export function locationPicker(host, { value, onChange, height = 300, markers = 
 
   map.on('click', (e) => place(e.latlng.lat, e.latlng.lng));
   const box = searchBox(host.querySelector('.lp-search'), {
-    onPick: (r) => place(r.lat, r.lon, r.kind === 'coords' ? null : r.label, r.country, { zoom: 16 }),
+    onPick: (r) => place(r.lat, r.lon, r.kind === 'coords' ? null : r.label, r.country, { zoom: r.zoom || 16 }),
     onGps: (pos) => place(pos.lat, pos.lon, null, null, { zoom: 16 }),
     near: () => cur || homeNear() || { lat: map.getCenter().lat, lon: map.getCenter().lng },
   });

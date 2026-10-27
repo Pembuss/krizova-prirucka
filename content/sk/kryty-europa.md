@@ -54,4 +54,4 @@ Mapa v aplikácii a na webe zobrazí pre zvolené miesto kdekoľvek v Európe:
 - **zdroje pitnej vody** (fontány, studne) a **čerpacie stanice**,
 - **tvoje vlastné miesta** – úkryt určený obcou, miesto stretnutia, príbuzní.
 
-Údaje sa načítajú, keď máš internet, a uložia sa do zariadenia, aby si ich mal k dispozícii aj bez spojenia. Mapu okolia si môžeš aj vytlačiť.
+Pre Slovensko sú mapa, tieto miesta aj **úkryty CO zo zverejnených zoznamov miest** priamo v aplikácii a fungujú **bez internetu**. Pre ostatné krajiny sa miesta v okolí načítajú, keď máš internet, a uložia sa do zariadenia. Mapu okolia si môžeš aj vytlačiť. Prehľad úkrytov podľa krajov a miest je v samostatnom dokumente **Úkryty CO na Slovensku – prehľad**.

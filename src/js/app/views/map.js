@@ -1,14 +1,15 @@
 // Mapa: domov, kryty a dôležité miesta z OpenStreetMap, vlastné miesta, oficiálne zdroje, offline mapa.
 import { store, uid } from '../store.js';
 import { t, T, esc, LANG, toast, $, $$, num } from '../core.js';
-import { LAYERS, layerQuery, overpass, classify, reverse, tileUrls } from '../../map/geo.js';
-import { addBasemap, LOCAL } from '../../map/tiles.js';
+import { LAYERS, layerQuery, overpass, classify, reverse } from '../../map/geo.js';
+import { addBasemap } from '../../map/tiles.js';
+import { poisNear, inDetailArea, poiData } from '../../map/offdata.js';
 import { searchBox, emojiIcon } from '../../map/picker.js';
 import { distanceKm } from '../../calc.js';
 import { NPP } from '../../../data/npp.js';
 import { countryByCode } from '../../../data/countries.js';
 
-const DEFAULT_LAYERS = ['shelter', 'assembly', 'hospital', 'pharmacy', 'water', 'emergency', 'townhall'];
+const DEFAULT_LAYERS = ['shelter', 'assembly', 'hospital', 'pharmacy', 'water', 'emergency', 'townhall', 'aed'];
 const PLACE_TYPES = ['shelter', 'meet', 'family', 'water', 'help', 'other'];
 const PLACE_ICON = { shelter: '🛡️', meet: '📍', family: '🏡', water: '💧', help: 'ℹ️', other: '⭐' };
 
@@ -35,7 +36,7 @@ export function render(el, params, opts = {}) {
 <details class="layers" open><summary>${esc(t('map.layers'))}</summary><div class="chips">${Object.keys(LAYERS).concat('mine').map((id) => `<button type="button" class="chip" data-layer="${id}" aria-pressed="${id === 'mine' || layersOn.has(id)}">${id === 'mine' ? '⭐' : LAYERS[id].icon} ${esc(t('layer.' + id))}</button>`).join('')}</div></details>
 <p id="m-status" class="muted small" aria-live="polite"></p>
 <div class="mapwrap"><div id="map" class="bigmap" role="application" aria-label="${esc(t('nav.map'))}"></div></div>
-<div class="btn-row"><button class="btn btn-ghost" data-addplace>⭐ ${esc(t('map.addPlace'))}</button>${LOCAL || !('serviceWorker' in navigator) ? '' : `<button class="btn btn-ghost" data-tiles>💾 ${esc(t('map.tiles'))}</button>`}<button class="btn btn-ghost" data-printmap>🖨️ ${esc(t('map.printMap'))}</button><a class="btn btn-ghost" href="${routesHref}">🧭 ${esc(t('nav.routes'))}</a></div>
+<div class="btn-row"><button class="btn btn-ghost" data-addplace>⭐ ${esc(t('map.addPlace'))}</button><button class="btn btn-ghost" data-printmap>🖨️ ${esc(t('map.printMap'))}</button><a class="btn btn-ghost" href="${routesHref}">🧭 ${esc(t('nav.routes'))}</a></div>
 <p class="muted small">⚠️ ${esc(t('map.osmNote'))}</p>
 <div class="grid two-col"><section class="nearest" id="m-nearest"></section><section id="m-official"></section></div>
 <dialog id="place-dlg"><form method="dialog" class="form-grid"><h2>${esc(t('map.addPlace'))}</h2>
@@ -50,7 +51,8 @@ export function render(el, params, opts = {}) {
 
   const h0 = home();
   map = L.map($('#map', el), { zoomControl: true }).setView(h0 ? [h0.lat, h0.lon] : [48.7, 19.5], h0 ? 14 : 7);
-  const basemap = addBasemap(map);
+  addBasemap(map);
+  window.__kpMap = map; // pre automatické testy
   for (const id of [...Object.keys(LAYERS), 'mine', 'npp']) groups[id] = L.layerGroup().addTo(map);
 
   const icon = (emoji, color, cls = '') => L.divIcon({ className: 'mk ' + cls, html: `<span style="--c:${color}">${emoji}</span>`, iconSize: [30, 30], iconAnchor: [15, 15], popupAnchor: [0, -14] });
@@ -95,32 +97,44 @@ export function render(el, params, opts = {}) {
     const tg = e.tags || {};
     const h = home();
     const dist = h ? `${num(distanceKm(h, e), 1)} km` : '';
+    if (tg.kp_official) {
+      // úkryt zo zverejneného zoznamu mesta alebo okresného úradu
+      const cls = tg.shelter_class;
+      return `<strong>🛡️ ${esc(tg.name || t('layer.shelter'))}</strong>${dist ? ` · ${dist}` : ''}
+<div>${esc(t('sh.type.' + cls) || cls)}</div><div><small>${esc(tg.city || '')}</small></div>
+${tg.capacity ? `<div><small>${esc(t('sh.capacity'))}:</small> ${esc(tg.capacity)}</div>` : ''}${tg.operator ? `<div><small>operator:</small> ${esc(tg.operator)}</div>` : ''}${tg.description ? `<div><small>${esc(tg.description)}</small></div>` : ''}
+${tg.approx ? `<div><small>⚠️ ${esc(t('sh.approx'))}</small></div>` : ''}<div><small>${esc(t('sh.source'))}: <a href="${esc(tg.url)}" target="_blank" rel="noopener">${esc(tg.source)}</a></small></div>
+<p class="small">${esc(t('sh.check'))}</p>
+<div class="popup-actions"><button data-odest="${e.lat},${e.lon}" data-name="${esc(tg.name || t('layer.shelter'))}">🧭 ${esc(t('map.routeHere'))}</button><button data-osave="${e.lat},${e.lon}" data-name="${esc(tg.name || t('layer.shelter'))}" data-type="shelter">⭐ ${esc(t('map.saveMine'))}</button></div>`;
+    }
     const rows = [['addr:street', tg['addr:street'] ? `${tg['addr:street']} ${tg['addr:housenumber'] || ''}` : ''], ['opening_hours', tg.opening_hours], ['capacity', tg.capacity], ['access', tg.access], ['operator', tg.operator], ['phone', tg.phone || tg['contact:phone']], ['wheelchair', tg.wheelchair], ['description', tg.description]]
       .filter(([, v]) => v).map(([k, v]) => `<div><small>${esc(k)}:</small> ${esc(v)}</div>`).join('');
-    return `<strong>${LAYERS[layer].icon} ${esc(tg.name || t('layer.' + layer))}</strong>${dist ? ` · ${dist}` : ''}${rows}
+    return `<strong>${LAYERS[layer].icon} ${esc(tg.name || t('layer.' + layer))}</strong>${dist ? ` · ${dist}` : ''}${rows}${layer === 'bunker' ? `<p class="small">⚠️ ${esc(t('sh.bunker'))}</p>` : ''}
 <div class="popup-actions"><button data-odest="${e.lat},${e.lon}" data-name="${esc(tg.name || t('layer.' + layer))}">🧭 ${esc(t('map.routeHere'))}</button><button data-osave="${e.lat},${e.lon}" data-name="${esc(tg.name || t('layer.' + layer))}" data-type="${layer === 'shelter' || layer === 'underground' ? 'shelter' : layer === 'water' ? 'water' : 'help'}">⭐ ${esc(t('map.saveMine'))}</button></div>
-<div><small><a href="https://www.openstreetmap.org/${e.type}/${e.id}" target="_blank" rel="noopener">OSM</a></small></div>`;
+${['node', 'way', 'relation'].includes(e.type) ? `<div><small><a href="https://www.openstreetmap.org/${e.type}/${e.id}" target="_blank" rel="noopener">OSM</a></small></div>` : ''}`;
   }
   function drawElements() {
     for (const id of Object.keys(LAYERS)) groups[id].clearLayers();
     for (const e of elements) {
       const layer = classify(e.tags || {});
-      if (!layersOn.has(layer)) continue;
-      L.marker([e.lat, e.lon], { icon: icon(LAYERS[layer].icon, LAYERS[layer].color) }).addTo(groups[layer]).bindPopup(() => popupFor(e, layer));
+      if (!layer || !layersOn.has(layer)) continue;
+      // jednoduché úkryty (JÚBS) menšou značkou – v mestách ich sú stovky
+      const small = e.tags?.shelter_class === 'JUBS';
+      L.marker([e.lat, e.lon], { icon: small ? L.divIcon({ className: 'mk mk-sm', html: `<span style="--c:${LAYERS[layer].color}"></span>`, iconSize: [14, 14], iconAnchor: [7, 7], popupAnchor: [0, -6] }) : icon(LAYERS[layer].icon, LAYERS[layer].color), zIndexOffset: small ? -100 : 0 }).addTo(groups[layer]).bindPopup(() => popupFor(e, layer));
     }
     drawNearest();
   }
   function drawNearest() {
     const h = home() || { lat: map.getCenter().lat, lon: map.getCenter().lng };
     const by = {};
-    for (const e of elements) { const l = classify(e.tags || {}); (by[l] ||= []).push({ e, d: distanceKm(h, e) }); }
+    for (const e of elements) { const l = classify(e.tags || {}); if (l && l !== 'bunker') (by[l] ||= []).push({ e, d: distanceKm(h, e) }); }
     const parts = Object.keys(LAYERS).filter((l) => by[l]?.length).map((l) => `<h3>${LAYERS[l].icon} ${esc(t('layer.' + l))}</h3><ol>${by[l].sort((a, b) => a.d - b.d).slice(0, 3).map(({ e, d }) => `<li><a href="#" data-goto="${e.lat},${e.lon}">${esc(e.tags?.name || t('layer.' + l))}</a> – ${num(d, 1)} km</li>`).join('')}</ol>`);
     $('#m-nearest', el).innerHTML = parts.length ? `<h2>${esc(t('map.nearest'))}</h2>${parts.join('')}` : '';
   }
   function drawOfficial() {
     const c = countryByCode(p.location.country || 'SK');
     if (!c) { $('#m-official', el).innerHTML = ''; return; }
-    const links = [...(c.maps || []).filter((m) => m.url), c.guide ? { label: c.guide.title, url: c.guide.url } : null, { label: c.authority.name, url: c.authority.url }].filter(Boolean);
+    const links = [...(c.cc === 'SK' ? [{ label: t('map.skOverview'), url: '../sk/kryty-slovensko.html' }] : []), ...(c.maps || []).filter((m) => m.url), c.guide ? { label: c.guide.title, url: c.guide.url } : null, { label: c.authority.name, url: c.authority.url }].filter(Boolean);
     $('#m-official', el).innerHTML = `<h2>${esc(t('map.official', { country: `${c.flag} ${T(c.name)}` }))}</h2><p class="small">${esc(T(c.shelters))}</p><ul>${links.map((m) => `<li><a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(T(m.label))}</a></li>`).join('')}</ul><p class="small"><strong>112</strong>${c.numbers.police ? ` · ${esc(c.numbers.police)}` : ''}${c.numbers.fire ? ` · ${esc(c.numbers.fire)}` : ''}${c.numbers.ambulance ? ` · ${esc(c.numbers.ambulance)}` : ''}</p>`;
   }
 
@@ -130,9 +144,21 @@ export function render(el, params, opts = {}) {
     const c = store.state.overpass[k];
     if (c) { elements = c.elements; loadedAt = c.ts; drawElements(); status(t('map.loaded', { n: elements.length, date: new Date(c.ts).toLocaleDateString(LANG) })); }
   }
-  async function load() {
+  async function load(force = false) {
     const h = home() || { lat: map.getCenter().lat, lon: map.getCenter().lng };
     status(t('c.loading'));
+    // Slovensko: offline údaje priložené k aplikácii (okamžite, bez internetu)
+    if (inDetailArea(h.lat, h.lon) && !force) {
+      try {
+        elements = await poisNear(h.lat, h.lon, radius);
+        const d = await poiData();
+        loadedAt = Date.parse(d.date) || Date.now();
+        drawElements();
+        status(t('map.loadedOffline', { n: elements.length, date: new Date(loadedAt).toLocaleDateString(LANG) }));
+        return;
+      } catch { /* offline údaje chýbajú – skús internet */ }
+    }
+    if (navigator.onLine === false) { status(t('map.offlineOutside')); loadCached(); return; }
     try {
       const all = Object.keys(LAYERS);
       const r = await overpass(layerQuery(all, h.lat, h.lon, radius));
@@ -157,6 +183,7 @@ export function render(el, params, opts = {}) {
     if (hereMarker) { hereMarker.remove(); hereMarker = null; }
     drawHome(); drawNpp(); drawOfficial();
     if (recenter) map.setView([lat, lon], 14);
+    if (inDetailArea(lat, lon)) load();
     if (!label) reverse(lat, lon, LANG).then((r) => { p.location.label = r.label; if (countryByCode(r.country)) p.location.country = r.country; store.saveProfile(); drawHome(); drawOfficial(); }).catch(() => {});
   }
   function addDestination(lat, lon, name) {
@@ -210,27 +237,21 @@ export function render(el, params, opts = {}) {
     }
     if (tg.closest('[data-load]')) load();
     if (tg.closest('[data-addplace]')) { addMode = true; toast(t('map.clickToAdd')); }
-    if (tg.closest('[data-tiles]')) saveTiles();
     if (tg.closest('[data-printmap]')) printMap();
   };
   el.addEventListener('click', onClick);
   el.addEventListener('change', (e) => {
-    if (e.target.matches('[data-radius]')) { radius = Number(e.target.value); prefs.mapRadius = radius; store.savePrefs(); loadCached(); }
+    if (e.target.matches('[data-radius]')) {
+      radius = Number(e.target.value); prefs.mapRadius = radius; store.savePrefs();
+      const h = home() || { lat: map.getCenter().lat, lon: map.getCenter().lng };
+      if (inDetailArea(h.lat, h.lon)) load(); else loadCached();
+    }
   });
   searchBox($('#m-search', el), {
-    onPick: (r) => showFound(r.lat, r.lon, r.label),
+    onPick: (r) => showFound(r.lat, r.lon, r.label, r.zoom || 16),
     onGps: (pos) => showFound(pos.lat, pos.lon, t('map.youAreHere')),
     near: () => home() || { lat: map.getCenter().lat, lon: map.getCenter().lng },
   });
-  async function saveTiles() {
-    const h = home() || { lat: map.getCenter().lat, lon: map.getCenter().lng };
-    const reg = await navigator.serviceWorker?.getRegistration?.(opts.standalone ? undefined : '../').catch(() => null);
-    if (!reg?.active) { toast(t('map.tilesNo'), 4000); return; }
-    const urls = tileUrls(h.lat, h.lon, radius / 1000 + 0.5, 12, Math.min(16, basemap().maxZoom), basemap().url);
-    const ch = new MessageChannel();
-    ch.port1.onmessage = (ev) => status(t('map.tilesProgress', { done: ev.data.done, total: ev.data.total }) + (ev.data.finished ? ' ✓' : ''));
-    reg.active.postMessage({ type: 'cache-tiles', urls }, [ch.port2]);
-  }
   function printMap() {
     document.body.classList.add('print-map');
     map.invalidateSize();
@@ -242,7 +263,7 @@ export function render(el, params, opts = {}) {
   }
 
   drawHome(); drawNpp(); drawMine(); drawOfficial(); loadCached();
-  if (!elements.length && home() && navigator.onLine !== false) load();
+  { const h = home(); if (h && (inDetailArea(h.lat, h.lon) || (!elements.length && navigator.onLine !== false))) load(); }
   setTimeout(() => map.invalidateSize(), 200);
   return () => { el.removeEventListener('click', onClick); map.remove(); };
 }

@@ -76,7 +76,11 @@ export function chips(path, options, { multi = false } = {}) {
 }
 
 let saveTimer;
+const boundRoots = new WeakSet();
 export function bindForm(root, onChange) {
+  // Ten istý kontajner sa viaže iba raz – dvojitá obsluha by výber vo viacnásobných voľbách hneď vrátila späť.
+  if (boundRoots.has(root)) return;
+  boundRoots.add(root);
   const save = () => { clearTimeout(saveTimer); saveTimer = setTimeout(() => store.saveProfile(), 250); };
   root.addEventListener('input', (e) => {
     const el = e.target.closest('[data-bind]');
@@ -90,15 +94,19 @@ export function bindForm(root, onChange) {
   });
   root.addEventListener('click', (e) => {
     const b = e.target.closest('[data-chip]');
-    if (!b) return;
+    if (!b || e.kpChip) return;
+    e.kpChip = true;
     const path = b.dataset.chip;
     const raw = b.dataset.val;
     const val = /^-?\d+(\.\d+)?$/.test(raw) ? Number(raw) : raw;
     if (b.dataset.multi === 'true') {
-      const arr = new Set(getPath(store.profile, path) || []);
-      arr.has(val) ? arr.delete(val) : arr.add(val);
+      // Nový stav podľa tlačidla, ktoré používateľ vidí (nie podľa uloženého poľa).
+      const want = b.getAttribute('aria-pressed') !== 'true';
+      const cur = getPath(store.profile, path);
+      const arr = new Set(Array.isArray(cur) ? cur : []);
+      want ? arr.add(val) : arr.delete(val);
       setPath(store.profile, path, [...arr]);
-      b.setAttribute('aria-pressed', String(arr.has(val)));
+      b.setAttribute('aria-pressed', String(want));
     } else {
       setPath(store.profile, path, val);
       $$(`[data-chip="${path}"]`, root).forEach((x) => x.setAttribute('aria-pressed', String(x === b)));

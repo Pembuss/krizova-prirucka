@@ -4,6 +4,7 @@ const PRECACHE = __PRECACHE__;
 const CORE = 'kp-core-' + VERSION;
 const TILES = 'kp-tiles';
 const DOCS = 'kp-docs';
+const MAPS = 'kp-map-2026-10-27'; // offline mapové dáta (nemenia sa s verziou aplikácie)
 const TILE_LIMIT = 4000;
 const LANG_DIRS = ['sk/', 'cs/', 'en/'];
 const isLangFile = (f) => LANG_DIRS.some((d) => f.startsWith(d));
@@ -17,7 +18,7 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil((async () => {
     const keys = await caches.keys();
-    await Promise.all(keys.filter((k) => k.startsWith('kp-core-') && k !== CORE).map((k) => caches.delete(k)));
+    await Promise.all(keys.filter((k) => (k.startsWith('kp-core-') && k !== CORE) || (k.startsWith('kp-map-') && k !== MAPS)).map((k) => caches.delete(k)));
     await self.clients.claim();
   })());
 });
@@ -55,7 +56,7 @@ self.addEventListener('fetch', (event) => {
       const res = await fetch(req);
       if (res.ok) {
         const rel = url.pathname.replace(new URL(self.registration.scope).pathname, '');
-        const target = rel.startsWith('downloads/') ? DOCS : CORE;
+        const target = rel.startsWith('downloads/') ? DOCS : rel.startsWith('assets/map/') ? MAPS : CORE;
         caches.open(target).then((c) => c.put(req, res.clone()));
       }
       return res;

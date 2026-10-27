@@ -54,4 +54,4 @@ For any chosen location in Europe, the map in the app and on the website shows:
 - **drinking-water sources** (fountains, wells) and **petrol stations**,
 - **your own places** – the shelter assigned by your municipality, a meeting place, relatives.
 
-The data is loaded when you are online and saved on your device so that it is available offline as well. You can also print a map of your surroundings.
+For Slovakia the map, these places and the **civil-defence shelters from published municipal lists** are built into the app and work **without internet**. For other countries nearby places are loaded when you are online and saved on your device. You can also print a map of your surroundings.

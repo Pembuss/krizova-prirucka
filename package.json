@@ -1,11 +1,12 @@
 {
   "name": "krizova-prirucka",
-  "version": "1.0.0",
+  "version": "2.0.0-beta",
   "description": "Krízová príručka – interaktívna kniha, aplikácia a web (SK, CS, EN)",
   "scripts": {
     "build": "node tools/build.mjs",
     "build:web": "node tools/build.mjs --no-pdf --no-epub",
-    "serve": "npx http-server dist -p 8080 -c-1"
+    "serve": "npx http-server dist -p 8080 -c-1",
+    "package": "node tools/package.mjs"
   },
   "keywords": [],
   "author": "",

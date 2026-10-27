@@ -1,4 +1,5 @@
 // Nastavenia: jazyk, vzhľad, záloha a obnova, offline režim, vymazanie údajov.
+import { VERSION, VERSION_DATE } from '../../../data/version.js';
 import { store, exportData, importData, download } from '../store.js';
 import { t, esc, LANG, setLang, toast, $ } from '../core.js';
 
@@ -24,7 +25,9 @@ export function render(el) {
 <div class="btn-row">${LOCAL ? '' : `<button class="btn btn-ghost" data-docs>💾 ${esc(t('set.saveDocs'))}</button>`}<button class="btn btn-ghost" data-install hidden>📲 ${esc(t('set.install'))}</button></div><p id="docs-status" class="muted" aria-live="polite"></p></section>
 <section class="card"><h2 class="card-h">${esc(t('set.about'))}</h2><p>${esc(t('c.disclaimer'))}</p>
 <p><a href="../${LANG}/o-projekte.html">${esc(t('nav.web'))}</a> · <a href="../${LANG}/kniha/index.html">${esc(t('nav.book'))}</a></p>
-<p class="muted small">© OpenStreetMap contributors (ODbL) · Leaflet (BSD-2) · OSRM / FOSSGIS</p></section>
+<p><strong>${esc(t('set.version'))}:</strong> ${esc(VERSION)} (${esc(VERSION_DATE)})</p>
+<p class="muted small">${esc(t('set.mapData'))}</p>
+<p class="muted small">© OpenStreetMap contributors (ODbL) · Natural Earth (public domain) · Leaflet (BSD-2) · OSRM / FOSSGIS</p></section>
 </div>`;
     swStatus();
     if (window._installPrompt) $('[data-install]', el).hidden = false;

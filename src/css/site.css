@@ -224,6 +224,7 @@ table.signpost th[scope="row"] { white-space: nowrap; }
 /* Pätička */
 .site-footer { border-top: 1px solid var(--border); background: var(--surface); color: var(--muted); font-size: .88rem; }
 .site-footer .wrap { padding: 1.5rem 1rem; }
+.site-footer .version strong { color: var(--orange-strong); }
 
 /* Pomocné */
 .badge { display: inline-block; font-size: .75rem; font-weight: 800; padding: .1rem .5rem; border-radius: 999px; background: var(--surface-2); color: var(--muted); }
@@ -233,6 +234,7 @@ table.signpost th[scope="row"] { white-space: nowrap; }
 input, select, textarea { font: inherit; }
 
 /* ---------- Kniha-hra: voľby, profil čitateľa, odporúčania, scenáre ---------- */
+.pref { display: none; }
 .choices { margin: 1.6rem 0; padding: 1rem 1.1rem 1.1rem; border: 2px solid var(--blue); border-radius: var(--radius); background: var(--blue-soft); }
 .choices-label { margin: 0 0 .4rem; font-size: .78rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--blue); }
 .choices > p, .choices p:not(.choices-label) { margin: 0 0 .6rem; }
@@ -311,3 +313,13 @@ input, select, textarea { font: inherit; }
   .reader-bar, .recommend, .back-pill, .sc-player, .gb-toggle { display: none !important; }
 }
 .reader-panel h2 { margin-top: 0; padding-top: 0; border-top: 0; }
+
+/* Prehľad úkrytov CO na Slovensku */
+.shelter-table td.num, .shelter-table tfoot th, .shelter-table thead th:not(:first-child) { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.shelter-table tfoot th:first-child { text-align: left; }
+.shelter-table.cities thead th { text-align: left !important; }
+.shelter-table.cities td:last-child { white-space: nowrap; }
+.shelter-table small a { color: var(--muted); }
+@media print { .shelter-table { font-size: 8.5pt; } .shelter-overview h2 { break-after: avoid; } .shelter-table tr { break-inside: avoid; } }
+.shelter-table tfoot td { font-weight: 700; }
+.shelter-table td.num small { color: var(--muted); font-weight: 400; }

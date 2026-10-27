@@ -9,6 +9,10 @@
   body { background: #fff; color: #000; line-height: 1.45; }
   .site-header, .site-footer, .book-toc, .pager, .no-print, .btn-row, .emergency-strip, .toc-toggle, .menu-toggle, nav:not(.choices) { display: none !important; }
   .print-only { display: block; }
+  /* odkazy v texte: „(→ kap. 9, str. 45)“ – strany dopĺňa PDF, pri tlači z prehliadača ostane kapitola */
+  .pref { display: inline !important; font-size: .86em; color: var(--muted); }
+  .pref .pg, .ch-page, .toc-page { font-variant-numeric: tabular-nums; }
+  .pref.same:not(.filled) { display: none !important; }
   .book { display: block; padding: 0; }
   .book-main, .wrap, .narrow { max-width: none; padding: 0; margin: 0; }
   a { color: #000; text-decoration: none; }
