@@ -23,7 +23,8 @@ Jazyk (SK / CS / EN) prepneš vpravo hore.
 ČO JE NOVÉ VO VERZII BETA 2.0
 - OFFLINE MAPA bez internetu a bez služieb tretích strán:
   Európa (prehľad), Slovensko podrobne (ulice, cesty, lesy, vody)
-  a hlavné cesty susedných krajín. Je priamo v balíku.
+  a hlavné cesty Česka, Rakúska, južného Poľska a západnej Ukrajiny
+  (Maďarsko zatiaľ len prehľadne). Je priamo v balíku.
 - Vyhľadanie obce a ulice, určenie adresy po kliknutí do mapy
   a výpočet únikových trás (autom, pešo, na bicykli) fungujú offline.
 - Na mape sú offline aj úkryty CO zo zverejnených zoznamov miest

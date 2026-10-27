@@ -102,7 +102,7 @@ Mapa sa kreslí v prehliadači z vektorových dlaždíc v `assets/map/`. Súbory
 |---|---|---|
 | dz 3 | 0–5 | Európa (Natural Earth): štáty, hranice, moria, jazerá, rieky, veľké cesty |
 | dz 6 | 6–8 | Európa (NE) a hlavné cesty a rieky strednej Európy (OSM) |
-| dz 9 | 9–11 | Stredná Európa: SK, CZ, AT, PL (juh), UA (západ) a podľa dostupnosti HU – cesty po II. triedu, železnice, rieky; Slovensko podrobnejšie |
+| dz 9 | 9–11 | Stredná Európa: SK, CZ, AT, PL (juh), UA (západ) – cesty po II. triedu, železnice, rieky; Slovensko podrobnejšie. Maďarsko je vo verzii beta 2.0 len z Natural Earth (server Overpass bol pri tvorbe dát nedostupný); `hu_overpass.py` ho doplní. |
 | dz 12 | 12–18 | Slovensko podrobne: všetky cesty a ulice, spevnené poľné cesty, vody, lesy, zástavba, parky |
 
 Offline fungujú aj tieto časti mapy:
