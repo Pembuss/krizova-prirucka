@@ -280,6 +280,8 @@ const UNVERIFIED = {
   pl: 'Tłumaczenie nie zostało jeszcze sprawdzone przez rodzimego użytkownika języka. Ważne informacje sprawdzaj w oficjalnych źródłach.',
   hu: 'A fordítást anyanyelvi beszélő még nem ellenőrizte. A fontos adatokat hivatalos forrásban is ellenőrizd.',
 };
+// Upozornenie sa zobrazí, kým má jazyk v src/data/ui.js príznak unverified (jediný vypínač)
+const unverifiedNote = (lang) => (LANGS.find((l) => l.id === lang)?.unverified ? UNVERIFIED[lang] || '' : '');
 // Celá kniha na jednej stránke – podklad pre PDF a obálku EPUB (print/<jazyk>.html)
 function fullBook(lang, chs) {
   const toc = PARTS.map((p) => {
@@ -301,7 +303,7 @@ function fullBook(lang, chs) {
 <p class="cover-sub">${esc(t(BOOK_SUBTITLE, lang))}</p>
 <ul class="cover-list">${CRISES.map((c) => `<li>${c.icon} ${esc(t(c.name, lang))}</li>`).join('')}</ul>
 <p class="cover-version">${esc(t(UI.versionLabel, lang))} ${esc(VERSION)} · ${esc(VERSION_DATE)}</p>
-${UNVERIFIED[lang] ? `<p class="cover-unverified">${esc(UNVERIFIED[lang])}</p>` : ''}
+${unverifiedNote(lang) ? `<p class="cover-unverified">${esc(unverifiedNote(lang))}</p>` : ''}
 <p class="cover-foot">${esc(t(UI.dataNote, lang))} · ${esc(t(UI.disclaimer, lang))}<br><strong>112</strong> – ${esc(t(UI.emergency, lang))}</p>
 </section>
 <section class="toc-page-wrap"><h2 class="toc-heading">${esc(t(UI.contents, lang))}</h2><ol class="fulltoc">${toc}</ol></section>
@@ -410,7 +412,7 @@ async function buildManual(browser, lang) {
   for (const e of errors) warn(`Návod ${lang}: chyba v aplikácii pri snímkach: ${e}`);
   const html = manualHtml({
     md: read(src), lang, shotsRel: 'shots', title: MANUAL_TITLE[lang], subtitle: t(BOOK_TITLE, lang),
-    version: `${t(UI.versionLabel, lang)} ${VERSION}`, date: VERSION_DATE, logo: LOGO, unverified: UNVERIFIED[lang] || '',
+    version: `${t(UI.versionLabel, lang)} ${VERSION}`, date: VERSION_DATE, logo: LOGO, unverified: unverifiedNote(lang),
     cssHref: 'file://' + path.join(DIST, 'assets/css/manual.css'),
   });
   write(path.join(work, 'index.html'), html);
@@ -586,7 +588,7 @@ function buildEpub(lang, chs, cover, pageOf = {}) {
       return `<span class="pagebreak" id="pg${n}" title="${n}"></span>${m}`;
     });
   }
-  const note = (UNVERIFIED[lang] ? `<p class="epub-note">${esc(UNVERIFIED[lang])}</p>` : '') + (hasPages ? `<p class="epub-note">${esc(t(EPUB_NOTE, lang))}</p>` : '');
+  const note = (unverifiedNote(lang) ? `<p class="epub-note">${esc(unverifiedNote(lang))}</p>` : '') + (hasPages ? `<p class="epub-note">${esc(t(EPUB_NOTE, lang))}</p>` : '');
   const src = path.join(ROOT, 'tools/.tmp', `epub-${lang}.html`);
   write(src, `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><title>${esc(t(BOOK_TITLE, lang))}</title></head><body>${note}${body}</body></html>`);
   const out = path.join(DIST, 'downloads', `krizova-prirucka-${lang}.epub`);

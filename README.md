@@ -39,7 +39,7 @@ Build potrebuje Node.js 20+, `pandoc` 3.x, `poppler-utils` (pdfinfo, pdftotext),
 
 ## Nasadenie
 
-Každý push do vetvy `main` spustí GitHub Actions: build, offline balík, testy. Ak všetko prejde, hotový web sa uloží do vetvy `netlify`, ktorú Netlify zverejní. Netlify sám nič nezostavuje. Postup nastavenia je v [docs/NASADENIE.md](docs/NASADENIE.md).
+Každý push do vetvy `main` spustí v GitHub Actions rýchly build a testy. Nasadenie spustí značka verzie (`v3.0.1`) alebo tlačidlo **Run workflow**. Vtedy prebehne úplný build, offline balík a testy. Ak všetko prejde, hotový web sa uloží do vetvy `netlify`, ktorú Netlify zverejní. Netlify sám nič nezostavuje. Postup nastavenia je v [docs/NASADENIE.md](docs/NASADENIE.md).
 
 Hotový web (`dist/`) funguje na akomkoľvek statickom hostingu cez HTTPS a aj priamo z disku: stačí otvoriť `OTVOR-PRIRUCKU.html`.
 

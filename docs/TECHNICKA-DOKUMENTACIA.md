@@ -47,8 +47,8 @@ Zostavenie robí `tools/build.mjs`: Markdown → HTML (pandoc), kniha v aplikác
 | `tools/test.mjs` | automatické testy |
 | `tools/i18n*.mjs` | kontrola a zlučovanie prekladov |
 | `tools/mapdata/` | skripty na vygenerovanie offline mapy (Python) |
-| `deploy/netlify.toml` | nastavenia Netlify (kopíruje sa do vetvy `netlify`) |
-| `.github/workflows/netlify.yml` | GitHub Actions: build, testy, nasadenie |
+| `deploy/netlify.toml` | nastavenia Netlify (kopíruje sa do vetvy `netlify`); hlavičky sú v `dist/_headers`, ktorý vytvára build |
+| `.github/workflows/netlify.yml` | GitHub Actions: pri pushi build a testy, pri značke `v*` alebo ručnom spustení aj nasadenie |
 | `dist/` | výstup buildu (nie je v gite) |
 
 ## 3. Build
@@ -137,14 +137,14 @@ Záloha (`exportData` v `store.js`) obsahuje `kp.profile` a `kp.state`, voliteľ
 
 ### Service worker (`src/sw.js`)
 
-- **Inštalácia:** uloží všetky súbory aplikácie (zoznam `PRECACHE` doplní build). Mapové dáta sa ukladajú len čiastočne (index, popisy, prehľadové dlaždice).
+- **Inštalácia:** uloží všetky súbory aplikácie. Zoznam `PRECACHE` doplní build ako dvojice `[súbor, kontrolný súčet]` a v cache je súbor pod adresou `súbor?v=súčet`. Pri novej verzii sa nezmenené súbory prekopírujú zo starej cache, takže sa stiahne len to, čo sa naozaj zmenilo. Šetrí to dáta používateľov aj kredity hostingu. Mapové dáta sa ukladajú len čiastočne (index, popisy, prehľadové dlaždice).
 - **Načítanie:** súbory z vlastného webu sa berú najprv z cache. Čo v cache nie je, stiahne sa a uloží: `downloads/` do `kp-docs`, `assets/map/` do `kp-map-<dátum>`, ostatné do `kp-core-<verzia>`.
 - **Nová verzia:** build vypočíta verziu z obsahu súborov. Pri zmene sa stiahne nový service worker a staré `kp-core-*` sa zmažú.
 - **Mapové dáta** majú cache podľa dátumu dát (`MAPS` v `sw.js`). Po novom vygenerovaní mapy treba dátum zmeniť.
 - **Dlaždice z internetu** (OSM a ďalšie) sa ukladajú do `kp-tiles`, najviac 4 000 kusov.
 - **Správy z aplikácie:** `version` (verzia v Nastaveniach) a `cache-docs` (uloženie PDF a EPUB všetkých jazykov na offline).
 
-Service worker sa na Netlify posiela s `Cache-Control: no-cache` (`deploy/netlify.toml`), aby sa nové verzie dostali k ľuďom hneď.
+Service worker sa posiela s `Cache-Control: no-cache`, aby sa nové verzie dostali k ľuďom hneď. Hlavičky zapisuje build do `dist/_headers` (funkcia `buildHeaders`) a tento súbor čítajú Netlify aj Cloudflare Pages.
 
 ### Kniha v aplikácii
 
@@ -284,10 +284,10 @@ Adresy sú v `src/js/map/geo.js`. Pri veľkej návštevnosti ich treba nahradiť
 2. Všetky súbory v `assets/downloads.js` existujú a sedí im veľkosť. Kniha (PDF, EPUB) a návod sú vo všetkých jazykoch a kniha v aplikácii má 36 kapitol.
 3. V každom z 5 jazykov sa zobrazí 25 obrazoviek bez chýb v konzole a bez chýbajúcich súborov. Externé služby sú v testoch blokované.
 4. Offline trasa Bratislava → Žilina vyjde v rozumnej dĺžke, čím sa overí aj načítanie rozdelenej cestnej siete.
-5. Service worker sa aktivuje a domovská obrazovka, kapitola knihy aj Kríza teraz fungujú bez internetu.
+5. Service worker sa aktivuje a uloží všetky súbory. Nová verzia service workera znova nestiahne žiadny nezmenený súbor. Domovská obrazovka, kapitola knihy aj Kríza teraz fungujú bez internetu.
 6. Offline balík sa stiahne cez tlačidlo v Nastaveniach a kontrolný súčet spojeného ZIP sedí.
 
-GitHub Actions spúšťa testy pred každým nasadením. Ak niektorý zlyhá, nová verzia sa nezverejní.
+GitHub Actions spúšťa rýchle testy (`--quick`) pri každom pushi a úplné testy pred každým nasadením. Ak niektorý zlyhá, nová verzia sa nezverejní. Premenná `KP_DIST` nasmeruje build aj testy do iného priečinka.
 
 ## 9. Vydanie novej verzie
 
@@ -299,7 +299,7 @@ GitHub Actions spúšťa testy pred každým nasadením. Ak niektorý zlyhá, no
    - náhľad tlače (A4) kariet, zoznamov, kapitoly a dokumentov z časti Tlač,
    - PDF knihy a návodu v aspoň dvoch jazykoch,
    - telefón: inštaláciu na plochu a režim lietadlo.
-6. `git push` do `main`. GitHub Actions zostaví a nasadí web (pozri [NASADENIE.md](NASADENIE.md)).
+6. `git push` do `main`, potom nasadenie: značka verzie (`git tag v3.0.1 && git push origin v3.0.1`) alebo na GitHube **Actions → Build a nasadenie (Netlify) → Run workflow**. Pozri [NASADENIE.md](NASADENIE.md).
 7. Balík na odovzdanie: `npm run package` → `vystupy/`.
 
 ## 10. Známe obmedzenia
