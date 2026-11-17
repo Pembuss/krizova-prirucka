@@ -1,0 +1,63 @@
+# Zostavenie aplikácie, knihy (PDF, EPUB), návodov a offline balíka, testy a nasadenie na Netlify.
+# Hotový web sa uloží do vetvy „netlify“ (vždy nanovo, bez histórie). Netlify sleduje túto vetvu
+# a pri každej zmene ju zverejní – sám nič nezostavuje. Návod: docs/NASADENIE.md
+name: Build a nasadenie (Netlify)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write   # zápis do vetvy netlify
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Nástroje – pandoc, poppler (pdfinfo), zip a písma
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends pandoc poppler-utils zip fonts-inter fonts-noto-color-emoji
+
+      - name: Závislosti
+        run: npm ci
+
+      - name: Chromium (PDF, snímky obrazoviek, testy)
+        run: npx playwright install --with-deps chromium
+
+      - name: Build – aplikácia, kniha PDF a EPUB v 5 jazykoch, návody k aplikácii
+        run: npm run build
+
+      - name: Offline balík (ZIP rozdelený na časti do 9 MB)
+        run: npm run package:web
+
+      - name: Testy
+        run: npm test
+
+      - name: Nasadenie do vetvy netlify
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cp deploy/netlify.toml dist/
+          cd dist
+          git init -q -b netlify
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Web z ${GITHUB_SHA::7} ($(date -u +%Y-%m-%d))"
+          git push -q --force "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" netlify
+          echo "### Nasadené do vetvy netlify" >> "$GITHUB_STEP_SUMMARY"
+          echo "Netlify zverejní novú verziu o 1–3 minúty." >> "$GITHUB_STEP_SUMMARY"

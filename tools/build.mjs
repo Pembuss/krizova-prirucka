@@ -1,5 +1,5 @@
 // Build: aplikácia (PWA) s knihou vo všetkých jazykoch, kniha v PDF a EPUB, prehľad úkrytov CO.
-// Použitie: node tools/build.mjs [--no-pdf] [--no-epub] [--no-manual] [--manual-only] [--lang=sk]
+// Použitie: node tools/build.mjs [--no-pdf] [--no-epub] [--no-manual] [--manual-only] [--refresh] [--lang=sk]
 import { I18N } from './i18n-setup.mjs'; // preklady PL a HU – musí byť načítané pred dátami
 import fs from 'node:fs';
 import path from 'node:path';
@@ -32,6 +32,7 @@ const NO_PDF = args.includes('--no-pdf');
 const NO_EPUB = args.includes('--no-epub');
 const NO_MANUAL = args.includes('--no-manual');
 const MANUAL_ONLY = args.includes('--manual-only'); // len návod k aplikácii nad hotovým dist (po úprave content/navod)
+const REFRESH = args.includes('--refresh'); // len zoznam na stiahnutie a service worker (po tools/package.mjs --web)
 const ONLY = (args.find((a) => a.startsWith('--lang=')) || '').split('=')[1];
 const ALL_LANGS = LANGS.map((l) => l.id);
 const BUILD_LANGS = ALL_LANGS.filter((l) => fs.existsSync(path.join(ROOT, 'content', l, 'rozcestnik.md')) && (!ONLY || l === ONLY));
@@ -451,9 +452,43 @@ function copyAssets() {
   }
   // offline mapa (vektorové dlaždice, popisy, vyhľadávanie, cestná sieť) – vytvára tools/mapdata/*.py
   const mapSrc = path.join(ROOT, 'src/mapdata');
-  if (fs.existsSync(path.join(mapSrc, 'index.js'))) copyDir(mapSrc, path.join(DIST, 'assets/map'));
+  if (fs.existsSync(path.join(mapSrc, 'index.js'))) { copyDir(mapSrc, path.join(DIST, 'assets/map')); splitRoute(); }
   else warn('Chýbajú offline mapové dáta (src/mapdata) – mapa bude len online.');
   for (const f of ['leaflet-src.js', 'leaflet-src.js.map', 'leaflet.js.map', 'leaflet-src.esm.js', 'leaflet-src.esm.js.map']) fs.rmSync(path.join(DIST, 'assets/vendor/leaflet', f), { force: true });
+}
+
+// Netlify neprijme súbor väčší ako 10 MB: cestná sieť (route.js) sa rozdelí na hlavičku a časti
+// route-1.js, route-2.js… Dlhé reťazce (nodes, edges, geom) sa delia na kúsky, router ich spojí.
+const PART_MAX = 8.5e6;
+function splitRoute() {
+  const file = path.join(DIST, 'assets/map/route.js');
+  if (!fs.existsSync(file) || fs.statSync(file).size <= PART_MAX) return;
+  const txt = read(file);
+  const d = JSON.parse(txt.slice(txt.indexOf('(') + 1, txt.lastIndexOf(')')));
+  const head = {}, chunks = [];
+  for (const [k, v] of Object.entries(d)) {
+    if (typeof v === 'string' && v.length > 1e5) for (let i = 0; i < v.length; i += PART_MAX) chunks.push([k, v.slice(i, i + PART_MAX)]);
+    else head[k] = v;
+  }
+  const parts = [];
+  for (const [k, c] of chunks) {
+    let p = parts[parts.length - 1];
+    if (!p || p.size + c.length > PART_MAX) parts.push((p = { add: [], size: 0 }));
+    p.add.push([k, c]); p.size += c.length;
+  }
+  head.parts = parts.length;
+  write(file, `KPMAP_ROUTE(${JSON.stringify(head)});\n`);
+  parts.forEach((p, i) => write(path.join(DIST, 'assets/map', `route-${i + 1}.js`), `KPMAP_ROUTE(${JSON.stringify({ part: i + 1, add: p.add })});\n`));
+}
+// Kontrola veľkosti súborov pre Netlify (najviac 10 MB na súbor)
+function bigFiles(dir = DIST, max = 10 * 1024 * 1024) {
+  const out = [];
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    const f = path.join(dir, e.name);
+    if (e.isDirectory()) out.push(...bigFiles(f, max));
+    else if (fs.statSync(f).size > max) out.push(path.relative(DIST, f));
+  }
+  return out;
 }
 
 // ---------- Ikony, obálka, PDF, EPUB (Chromium) ----------
@@ -614,14 +649,17 @@ function buildServiceWorker() {
 // ---------- Hlavný beh ----------
 async function main() {
   const t0 = Date.now();
-  if (MANUAL_ONLY) {
+  if (MANUAL_ONLY || REFRESH) {
     if (!fs.existsSync(path.join(DIST, 'index.html'))) throw new Error('Najprv zostav aplikáciu: node tools/build.mjs');
-    fs.cpSync(path.join(ROOT, 'src/css/manual.css'), path.join(DIST, 'assets/css/manual.css'));
-    buildDownloads();
-    await withBrowser(async (browser) => {
-      for (const lang of BUILD_LANGS) { const n = await buildManual(browser, lang); if (n) console.log(`✓ návod k aplikácii ${lang}: ${n} strán`); }
-    });
-    buildDownloads();
+    if (MANUAL_ONLY) {
+      fs.cpSync(path.join(ROOT, 'src/css/manual.css'), path.join(DIST, 'assets/css/manual.css'));
+      buildDownloads();
+      await withBrowser(async (browser) => {
+        for (const lang of BUILD_LANGS) { const n = await buildManual(browser, lang); if (n) console.log(`✓ návod k aplikácii ${lang}: ${n} strán`); }
+      });
+    }
+    const dl = buildDownloads();
+    console.log(`✓ na stiahnutie: kniha ${Object.keys(dl.book).join(', ') || '–'}${dl.offline ? `, offline balík (${dl.offline.parts.length} častí)` : ''}`);
     const sw = buildServiceWorker();
     console.log(`✓ service worker ${sw.version}`);
     if (warnings.size) console.log('Upozornenia:\n - ' + [...warnings].join('\n - '));
@@ -665,6 +703,7 @@ async function main() {
   const miss = {};
   for (const k of globalThis.KP_I18N_MISS) { const [l] = k.split('\u0001'); miss[l] = (miss[l] || 0) + 1; }
   for (const [l, n] of Object.entries(miss)) if (BUILD_LANGS.includes(l)) warn(`${l}: ${n} textov bez prekladu (node tools/i18n.mjs)`);
+  for (const f of bigFiles()) warn(`Súbor ${f} má viac ako 10 MB – Netlify ho neprijme`);
   if (warnings.size) console.log('Upozornenia:\n - ' + [...warnings].join('\n - '));
   console.log(`Hotovo za ${((Date.now() - t0) / 1000).toFixed(1)} s`);
 }

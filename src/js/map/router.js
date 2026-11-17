@@ -6,7 +6,11 @@ import { distM } from './offdata.js';
 
 const W = typeof window !== 'undefined' ? window : globalThis;
 let RAW = null, G = null, loading = null;
-W.KPMAP_ROUTE = (d) => { RAW = d; };
+// route.js je hlavička; ak má „parts“, zvyšok dát je v route-1.js, route-2.js… (súbory do 10 MB)
+W.KPMAP_ROUTE = (d) => {
+  if (!d.part) { RAW = d; return; }
+  for (const [k, c] of d.add) RAW[k] = (RAW[k] || '') + c;
+};
 
 function b64(s) {
   const bin = atob(s);
@@ -69,7 +73,12 @@ function decode(d) {
 
 export async function loadGraph() {
   if (G) return G;
-  if (!loading) loading = loadScript('route.js').then(() => { G = decode(RAW); RAW = null; return G; }).catch((e) => { loading = null; throw e; });
+  if (!loading) {
+    loading = loadScript('route.js')
+      .then(async () => { for (let i = 1; i <= (RAW.parts || 0); i++) await loadScript(`route-${i}.js`); })
+      .then(() => { G = decode(RAW); RAW = null; return G; })
+      .catch((e) => { loading = null; throw e; });
+  }
   return loading;
 }
 
@@ -104,7 +113,7 @@ function edgePoints(g, e) {
 }
 
 // najbližší bod na povolenej ceste (do maxM metrov)
-function snap(g, p, mode, maxM = 3000) {
+function snap(g, p, mode, maxM = 3000, skip = null) {
   const kx = 111320 * Math.cos((p.lat * Math.PI) / 180), ky = 110540;
   let best = null, foundAt = 99;
   const cx = Math.floor(p.lon * 50), cy = Math.floor(p.lat * 50);
@@ -113,7 +122,7 @@ function snap(g, p, mode, maxM = 3000) {
       if (Math.max(Math.abs(i - cx), Math.abs(j - cy)) !== ring) continue;
       const c = g.cells.get(`${i}:${j}`); if (!c) continue;
       for (const e of c) {
-        if (!(g.fl[e] & MODE_BIT[mode])) continue;
+        if (!(g.fl[e] & MODE_BIT[mode]) || skip?.has(e)) continue;
         const pts = edgePoints(g, e);
         let along = 0;
         for (let k = 1; k < pts.length; k++) {
@@ -353,12 +362,20 @@ export async function routeOffline(mode, points, { alternatives = true } = {}) {
     return [r];
   }
   const [from, to] = points;
-  const s = snap(g, from, mode), t = snap(g, to, mode);
+  let s = snap(g, from, mode), t = snap(g, to, mode);
   if (!s || !t) throw new OutOfNetwork(!s ? 'from' : 'to');
   const out = [];
   const penalty = new Map();
+  // Najbližší úsek môže byť odrezaný od siete (pešia zóna, dvor, súkromná cesta) – vtedy skús
+  // striedavo ďalší najbližší úsek pri štarte a v cieli
+  let first = astar(g, mode, s, t, penalty);
+  const skipS = new Set(), skipT = new Set();
+  for (let i = 0; !first && i < 6; i++) {
+    if (i % 2 === 0) { skipS.add(s.e); s = snap(g, from, mode, 3000, skipS) || s; } else { skipT.add(t.e); t = snap(g, to, mode, 3000, skipT) || t; }
+    first = astar(g, mode, s, t, penalty);
+  }
   for (let k = 0; k < (alternatives ? 3 : 1); k++) {
-    const res = astar(g, mode, s, t, penalty);
+    const res = k === 0 ? first : astar(g, mode, s, t, penalty);
     if (!res) break;
     const r = toRoute(g, mode, pathEdges(g, s, t, res), from, to, s, t);
     if (out.every((o) => overlapShare(r, o) < 0.8 && r.duration < out[0].duration * 1.6)) out.push(r);

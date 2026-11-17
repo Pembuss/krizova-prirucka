@@ -1,12 +1,17 @@
 {
   "name": "krizova-prirucka",
   "version": "3.0.0-beta",
-  "description": "Krízová príručka – interaktívna kniha, aplikácia a web (SK, CS, EN)",
+  "description": "Krízová príručka – aplikácia s knihou, plánovačom a mapou (SK, CS, EN, PL, HU)",
   "scripts": {
     "build": "node tools/build.mjs",
     "build:web": "node tools/build.mjs --no-pdf --no-epub",
+    "build:manual": "node tools/build.mjs --manual-only",
+    "package": "node tools/package.mjs",
+    "package:web": "node tools/package.mjs --web",
+    "test": "node tools/test.mjs",
+    "test:quick": "node tools/test.mjs --quick",
     "serve": "npx http-server dist -p 8080 -c-1",
-    "package": "node tools/package.mjs"
+    "i18n": "node tools/i18n.mjs"
   },
   "keywords": [],
   "author": "",
