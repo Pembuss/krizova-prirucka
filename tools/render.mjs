@@ -36,10 +36,12 @@ export function chapterLabel(id, lang) {
   if (!ch || ch.part === 'p0') return '';
   if (ch.part === 'p5') {
     const idx = CHAPTERS.filter((c) => c.part === 'p5').findIndex((c) => c.id === id);
-    return `${t(UI.appendix, lang)} ${String.fromCharCode(65 + idx)}`;
+    const letter = String.fromCharCode(65 + idx);
+    return lang === 'hu' ? `${letter} ${t(UI.appendix, lang).toLowerCase()}` : `${t(UI.appendix, lang)} ${letter}`;
   }
   const n = CHAPTERS.filter((c) => !['p0', 'p5'].includes(c.part)).findIndex((c) => c.id === id) + 1;
-  return `${t(UI.chapter, lang)} ${n}`;
+  // maďarčina: radová číslovka pred podstatným menom („2. fejezet“)
+  return lang === 'hu' ? `${n}. ${t(UI.chapter, lang).toLowerCase()}` : `${t(UI.chapter, lang)} ${n}`;
 }
 const chLink = (id, lang) => `<a href="#${id}">${esc(t(chapterById(id).title, lang))}</a>`;
 

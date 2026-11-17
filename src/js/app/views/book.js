@@ -34,7 +34,8 @@ export function update(el, [ch, anchor]) {
   return true;
 }
 
-const langNote = () => (bookLang(LANG) !== LANG ? `<p class="box note small">${esc(t('book.notTranslated'))}</p>` : '');
+const langNote = () => (bookLang(LANG) !== LANG ? `<p class="box note small">${esc(t('book.notTranslated'))}</p>`
+  : LANG_INFO.find((l) => l.id === LANG)?.unverified ? `<p class="unverified">${esc(t('c.unverifiedLong'))}</p>` : '');
 const chName = (c) => `${c.short ? c.short + ' · ' : ''}${c.title}`;
 
 // ---------- Na stiahnutie ----------

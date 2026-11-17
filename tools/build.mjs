@@ -82,6 +82,7 @@ function headingMap(chs) {
 }
 function shortLabel(label, lang) {
   if (!label) return '';
+  if (lang === 'hu') return label.replace(t(UI.chapter, lang).toLowerCase(), t(UI.chShort, lang).toLowerCase()).replace(t(UI.appendix, lang).toLowerCase(), t(UI.appShort, lang).toLowerCase());
   return label.replace(t(UI.chapter, lang), t(UI.chShort, lang)).replace(t(UI.appendix, lang), t(UI.appShort, lang));
 }
 // Text odkazu: „Kap. 8 › Keď voda stúpa“, v tej istej kapitole len „› Keď voda stúpa“
@@ -262,7 +263,7 @@ function buildAppBook(lang, chs) {
   const idx = {
     title: t(BOOK_TITLE, lang), subtitle: t(BOOK_SUBTITLE, lang),
     parts: PARTS.map((p) => ({ id: p.id, name: t(p.name, lang) })),
-    chapters: chs.map((c) => ({ id: c.id, part: c.part, label: c.label, short: shortLabel(c.label, lang), num: c.label ? c.label.split(/\s+/).pop() : '', title: c.title })),
+    chapters: chs.map((c) => ({ id: c.id, part: c.part, label: c.label, short: shortLabel(c.label, lang), num: (c.label.match(/(?:^|\s)(\d+|[A-Z])(?:\.|$|\s)/) || [])[1] || '', title: c.title })),
     situations: SITUATIONS.map((x) => ({ id: x.id, icon: x.icon, name: t(x.name, lang), chapters: x.chapters })),
     D: bookData(lang, chs),
     scenarios: scenarioData(lang, chs, map),
@@ -270,6 +271,11 @@ function buildAppBook(lang, chs) {
   write(path.join(dir, 'index.js'), `KP_BOOK_INDEX(${JSON.stringify(lang)},${jsStr(idx)});\n`);
 }
 
+// Preklady, ktoré ešte neskontroloval rodený hovoriaci (obálka PDF, EPUB)
+const UNVERIFIED = {
+  pl: 'Tłumaczenie nie zostało jeszcze sprawdzone przez rodzimego użytkownika języka. Ważne informacje sprawdzaj w oficjalnych źródłach.',
+  hu: 'A fordítást anyanyelvi beszélő még nem ellenőrizte. A fontos adatokat hivatalos forrásban is ellenőrizd.',
+};
 // Celá kniha na jednej stránke – podklad pre PDF a obálku EPUB (print/<jazyk>.html)
 function fullBook(lang, chs) {
   const toc = PARTS.map((p) => {
@@ -291,6 +297,7 @@ function fullBook(lang, chs) {
 <p class="cover-sub">${esc(t(BOOK_SUBTITLE, lang))}</p>
 <ul class="cover-list">${CRISES.map((c) => `<li>${c.icon} ${esc(t(c.name, lang))}</li>`).join('')}</ul>
 <p class="cover-version">${esc(t(UI.versionLabel, lang))} ${esc(VERSION)} · ${esc(VERSION_DATE)}</p>
+${UNVERIFIED[lang] ? `<p class="cover-unverified">${esc(UNVERIFIED[lang])}</p>` : ''}
 <p class="cover-foot">${esc(t(UI.dataNote, lang))} · ${esc(t(UI.disclaimer, lang))}<br><strong>112</strong> – ${esc(t(UI.emergency, lang))}</p>
 </section>
 <section class="toc-page-wrap"><h2 class="toc-heading">${esc(t(UI.contents, lang))}</h2><ol class="fulltoc">${toc}</ol></section>
@@ -515,7 +522,7 @@ function buildEpub(lang, chs, cover, pageOf = {}) {
       return `<span class="pagebreak" id="pg${n}" title="${n}"></span>${m}`;
     });
   }
-  const note = hasPages ? `<p class="epub-note">${esc(t(EPUB_NOTE, lang))}</p>` : '';
+  const note = (UNVERIFIED[lang] ? `<p class="epub-note">${esc(UNVERIFIED[lang])}</p>` : '') + (hasPages ? `<p class="epub-note">${esc(t(EPUB_NOTE, lang))}</p>` : '');
   const src = path.join(ROOT, 'tools/.tmp', `epub-${lang}.html`);
   write(src, `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><title>${esc(t(BOOK_TITLE, lang))}</title></head><body>${note}${body}</body></html>`);
   const out = path.join(DIST, 'downloads', `krizova-prirucka-${lang}.epub`);

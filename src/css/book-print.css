@@ -28,3 +28,4 @@
   .fulltoc { font-size: 10pt; }
   .toc-part { margin-top: 5mm; }
 }
+.cover-unverified { margin: .6rem 0 0; padding: .45rem .7rem; border: 2px dashed var(--orange-strong); border-radius: 8px; font-size: .85rem; font-weight: 600; }

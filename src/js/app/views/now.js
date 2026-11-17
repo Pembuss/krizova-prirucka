@@ -1,7 +1,7 @@
 // Kríza teraz: výber situácie, postup po krokoch (jeden krok na obrazovku) alebo všetky kroky naraz.
 // Adresy: #/teraz · #/teraz/<kríza> (1. krok) · #/teraz/<kríza>/<n> · #/teraz/<kríza>/vsetko · #/teraz/<kríza>/hotovo
 import { store } from '../store.js';
-import { t, tp, T, esc } from '../core.js';
+import { t, tp, T, esc, LANG } from '../core.js';
 import { icon } from '../icons.js';
 import { CRISES, ACTIONS, CRISIS_GROUPS, crisisById } from '../../../data/crises.js';
 import { chapterById, chapterNumber } from '../../../data/book.js';
@@ -40,7 +40,8 @@ function personal(id) {
 }
 const chLabel = (c) => {
   const ch = chapterById(c.chapter);
-  return ch ? `${t('now.inBook')}: ${T(ch.title)} (${t('book.chShort')} ${chapterNumber(c.chapter)})` : t('now.details');
+  const no = LANG === 'hu' ? `${chapterNumber(c.chapter)}. ${t('book.chShort')}` : `${t('book.chShort')} ${chapterNumber(c.chapter)}`;
+  return ch ? `${t('now.inBook')}: ${T(ch.title)} (${no})` : t('now.details');
 };
 function topBar(c) {
   return `<div class="step-top">
