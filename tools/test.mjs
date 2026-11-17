@@ -14,7 +14,7 @@ import { CHAPTERS } from '../src/data/book.js';
 
 const require = createRequire(import.meta.url);
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const DIST = path.join(ROOT, 'dist');
+const DIST = process.env.KP_DIST ? path.resolve(process.env.KP_DIST) : path.join(ROOT, 'dist'); // KP_DIST: iný priečinok
 const QUICK = process.argv.includes('--quick');
 const ROUTES = ['', 'teraz', 'teraz/blackout/1', 'teraz/flood/vsetko', 'kniha', 'kniha/vypadok-elektriny', 'kniha/hladat/voda', 'mapa', 'trasy', 'plan', 'profil', 'zasoby', 'energia', 'batohy', 'rodina', 'karty', 'zoznamy', 'krajiny', 'kryty', 'tlac', 'pomoc', 'nastavenia', 'o-aplikacii', 'viac', 'uvod/0'];
 
@@ -30,13 +30,18 @@ function loadPlaywright() {
   throw new Error('Chýba Playwright (npm install).');
 }
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.woff2': 'font/woff2', '.pdf': 'application/pdf', '.epub': 'application/epub+zip' };
+const HITS = [];
+let SW_EXTRA = '';
 function serve() {
   const srv = http.createServer((req, res) => {
     let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
     if (p.endsWith('/')) p += 'index.html';
     const f = path.join(DIST, p);
     if (!f.startsWith(DIST) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); res.end('not found'); return; }
+    HITS.push(p);
     res.writeHead(200, { 'Content-Type': TYPES[path.extname(f)] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
+    // SW_EXTRA: simulácia novej verzie service workera (test aktualizácie)
+    if (p === '/sw.js' && SW_EXTRA) { res.end(fs.readFileSync(f, 'utf8') + SW_EXTRA); return; }
     fs.createReadStream(f).pipe(res);
   });
   return new Promise((resolve) => srv.listen(0, '127.0.0.1', () => resolve(srv)));
@@ -128,6 +133,20 @@ async function main() {
       ]));
       check(ready, 'service worker je aktívny');
       await page.waitForTimeout(3000); // dokončenie ukladania súborov
+      // aktualizácia: nová verzia service workera nesmie znova sťahovať nezmenené súbory
+      const before = HITS.length;
+      const swText = fs.readFileSync(path.join(DIST, 'sw.js'), 'utf8');
+      const preN = JSON.parse(swText.match(/const PRECACHE = (\[.*?\]);/s)[1]).length;
+      check(new Set(HITS).size >= preN, `prvá inštalácia uložila ${preN} súborov`);
+      SW_EXTRA = '\n// test aktualizácie\n';
+      const changed = await page.evaluate(() => new Promise((resolve) => {
+        navigator.serviceWorker.addEventListener('controllerchange', () => resolve(true));
+        navigator.serviceWorker.getRegistration().then((r) => r.update());
+        setTimeout(() => resolve(false), 30000);
+      }));
+      const refetched = HITS.slice(before).filter((p) => p !== '/sw.js');
+      check(changed && refetched.length === 0, changed ? `aktualizácia service workera: znova stiahnutých súborov ${refetched.length}${refetched.length ? ' (' + refetched.slice(0, 3).join(', ') + '…)' : ''}` : 'nová verzia service workera sa neaktivovala');
+      SW_EXTRA = '';
       await ctx.setOffline(true);
       await page.reload();
       await page.waitForSelector('#view *', { timeout: 10000 }).catch(() => {});

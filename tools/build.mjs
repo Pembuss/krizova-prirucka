@@ -634,14 +634,35 @@ function listFiles(dir, base = dir) {
     return d.isDirectory() ? listFiles(p, base) : [path.relative(base, p).split(path.sep).join('/')];
   });
 }
+// Hlavičky pre hosting (Netlify aj Cloudflare Pages čítajú súbor _headers)
+function buildHeaders() {
+  const epubs = fs.existsSync(path.join(DIST, 'downloads')) ? fs.readdirSync(path.join(DIST, 'downloads')).filter((f) => f.endsWith('.epub')) : [];
+  write(path.join(DIST, '_headers'), [
+    '# Hlavičky pre Netlify a Cloudflare Pages (vytvára tools/build.mjs)',
+    '/*', '  X-Content-Type-Options: nosniff', '  Referrer-Policy: strict-origin-when-cross-origin',
+    '  Permissions-Policy: camera=(), microphone=(), geolocation=(self)', '  X-Frame-Options: SAMEORIGIN',
+    '# service worker sa musí vždy overiť na serveri, inak by sa nové verzie oneskorovali',
+    '/sw.js', '  Cache-Control: no-cache',
+    '/manifest.webmanifest', '  Content-Type: application/manifest+json',
+    ...epubs.flatMap((f) => [`/downloads/${f}`, '  Content-Type: application/epub+zip']),
+    '/downloads/offline/*', '  Content-Type: application/octet-stream',
+    '',
+  ].join('\n'));
+}
 function buildServiceWorker() {
+  buildHeaders();
   // Z offline mapy sa vopred ukladá len prehľad Európy; podrobné balíky sa uložia, keď ich mapa načíta.
   const mapPre = (f) => !f.startsWith('assets/map/') || /^assets\/map\/(index|labels|countries|base|6-[0-9-]+)\.js$/.test(f);
-  const files = listFiles(DIST).filter((f) => !f.startsWith('downloads/') && !f.startsWith('print/') && !f.startsWith('app/') && f !== 'sw.js' && f !== 'OTVOR-PRIRUCKU.html' && !f.endsWith('.map') && !f.endsWith('.txt') && !f.startsWith('.') && !f.endsWith('.zip') && mapPre(f));
+  const files = listFiles(DIST).filter((f) => !f.startsWith('downloads/') && !f.startsWith('print/') && !f.startsWith('app/') && f !== 'sw.js' && f !== 'OTVOR-PRIRUCKU.html' && !f.endsWith('.map') && !f.endsWith('.txt') && !f.startsWith('.') && !f.startsWith('_') && !f.endsWith('.toml') && !f.endsWith('.zip') && mapPre(f));
+  // každý súbor s kontrolným súčtom – service worker pri aktualizácii stiahne len zmenené súbory
   const hash = crypto.createHash('sha1');
-  for (const f of files) hash.update(fs.readFileSync(path.join(DIST, f)));
+  const pre = files.map((f) => {
+    const h = crypto.createHash('sha1').update(fs.readFileSync(path.join(DIST, f))).digest('hex').slice(0, 10);
+    hash.update(f + h);
+    return [f, h];
+  });
   const version = hash.digest('hex').slice(0, 10);
-  const sw = read(path.join(ROOT, 'src/sw.js')).replace('__VERSION__', version).replace('__PRECACHE__', JSON.stringify(files));
+  const sw = read(path.join(ROOT, 'src/sw.js')).replace('__VERSION__', version).replace('__PRECACHE__', JSON.stringify(pre));
   write(path.join(DIST, 'sw.js'), sw);
   return { version, count: files.length };
 }

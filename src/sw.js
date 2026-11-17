@@ -7,8 +7,30 @@ const DOCS = 'kp-docs';
 const MAPS = 'kp-map-2026-10-27'; // offline mapové dáta (nemenia sa s verziou aplikácie)
 const TILE_LIMIT = 4000;
 
+// PRECACHE: [[súbor, kontrolný súčet], …]. V cache je súbor pod adresou „súbor?v=súčet“. Pri novej verzii
+// sa nezmenené súbory prekopírujú zo starej cache – stiahne sa len to, čo sa zmenilo (šetrí dáta aj hosting).
+const keyOf = ([f, h]) => new URL(`${f}?v=${h}`, self.registration.scope).href;
 self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(CORE).then((c) => c.addAll(PRECACHE)).then(() => self.skipWaiting()));
+  event.waitUntil((async () => {
+    const cache = await caches.open(CORE);
+    const old = await Promise.all((await caches.keys()).filter((k) => k.startsWith('kp-core-') && k !== CORE).map((k) => caches.open(k)));
+    const queue = PRECACHE.slice();
+    const worker = async () => {
+      for (let item = queue.shift(); item; item = queue.shift()) {
+        const key = keyOf(item);
+        if (await cache.match(key)) continue;
+        let res = null;
+        for (const c of old) { res = await c.match(key); if (res) break; }
+        if (!res) {
+          res = await fetch(new URL(item[0], self.registration.scope).href, { cache: 'no-cache' });
+          if (!res.ok) throw new Error(`${item[0]}: ${res.status}`);
+        }
+        await cache.put(key, res);
+      }
+    };
+    await Promise.all(Array.from({ length: 6 }, worker));
+    await self.skipWaiting();
+  })());
 });
 
 self.addEventListener('activate', (event) => {
@@ -58,7 +80,7 @@ self.addEventListener('fetch', (event) => {
       return res;
     } catch (e) {
       if (req.mode === 'navigate') {
-        const fallback = await caches.match(new URL('index.html', self.registration.scope).href);
+        const fallback = await caches.match(new URL('index.html', self.registration.scope).href, { ignoreSearch: true });
         if (fallback) return fallback;
       }
       return new Response('Offline', { status: 503, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });

@@ -1,24 +1,38 @@
-# Zostavenie aplikácie, knihy (PDF, EPUB), návodov a offline balíka, testy a nasadenie na Netlify.
-# Hotový web sa uloží do vetvy „netlify“ (vždy nanovo, bez histórie). Netlify sleduje túto vetvu
-# a pri každej zmene ju zverejní – sám nič nezostavuje. Návod: docs/NASADENIE.md
+# Build, testy a nasadenie na Netlify. Návod: docs/NASADENIE.md
+#
+# - push do main:       rýchly build (bez PDF) a testy – kontrola, nič sa nezverejní
+# - značka v* (v3.0.1) alebo ručné spustenie (Actions → Run workflow): úplný build (kniha PDF a EPUB
+#   v 5 jazykoch, návody, offline balík), testy a nasadenie
+#
+# Nasadenie = hotový web sa uloží do vetvy „netlify“ (vždy nanovo, bez histórie). Netlify sleduje
+# túto vetvu a zverejní ju – sám nič nezostavuje. Každé nasadenie stojí na Netlify 15 kreditov,
+# preto sa nenasadzuje pri každom pushi.
 name: Build a nasadenie (Netlify)
 
 on:
   push:
     branches: [main]
+    tags: ['v*']
   workflow_dispatch:
+    inputs:
+      deploy:
+        description: 'Nasadiť na Netlify (úplný build, asi 15 minút)'
+        type: boolean
+        default: true
 
 permissions:
   contents: write   # zápis do vetvy netlify
 
 concurrency:
-  group: deploy
+  group: deploy-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
+    env:
+      DEPLOY: ${{ startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.deploy) }}
     steps:
       - uses: actions/checkout@v4
 
@@ -38,16 +52,26 @@ jobs:
       - name: Chromium (PDF, snímky obrazoviek, testy)
         run: npx playwright install --with-deps chromium
 
+      - name: Rýchly build a testy (bez nasadenia)
+        if: env.DEPLOY != 'true'
+        run: |
+          npm run build:web
+          npm run test:quick
+
       - name: Build – aplikácia, kniha PDF a EPUB v 5 jazykoch, návody k aplikácii
+        if: env.DEPLOY == 'true'
         run: npm run build
 
       - name: Offline balík (ZIP rozdelený na časti do 9 MB)
+        if: env.DEPLOY == 'true'
         run: npm run package:web
 
       - name: Testy
+        if: env.DEPLOY == 'true'
         run: npm test
 
       - name: Nasadenie do vetvy netlify
+        if: env.DEPLOY == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
