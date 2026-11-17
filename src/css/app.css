@@ -81,8 +81,6 @@ input:focus, select:focus, textarea:focus { border-color: var(--orange); outline
 .chip { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 .chip[data-multi="true"][aria-pressed="true"]::before { content: "✓ "; }
 @media (forced-colors: active) { .chip[aria-pressed="true"] { forced-color-adjust: none; background: Highlight; color: HighlightText; border-color: Highlight; } }
-:root[data-theme="dark"] .chip[aria-pressed="true"] { color: #0d1117; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .chip[aria-pressed="true"] { color: #0d1117; } }
 .two { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
 .three { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: .5rem; align-items: end; margin-bottom: .5rem; }
 @media (max-width: 600px) { .two, .three { grid-template-columns: 1fr; } }

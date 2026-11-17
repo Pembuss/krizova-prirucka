@@ -6,13 +6,9 @@ const TILES = 'kp-tiles';
 const DOCS = 'kp-docs';
 const MAPS = 'kp-map-2026-10-27'; // offline mapové dáta (nemenia sa s verziou aplikácie)
 const TILE_LIMIT = 4000;
-const LANG_DIRS = ['sk/', 'cs/', 'en/'];
-const isLangFile = (f) => LANG_DIRS.some((d) => f.startsWith(d));
-const coreFiles = PRECACHE.filter((f) => !isLangFile(f));
-const langFiles = (lang) => PRECACHE.filter((f) => f.startsWith(lang + '/'));
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(CORE).then((c) => c.addAll(coreFiles)).then(() => self.skipWaiting()));
+  event.waitUntil(caches.open(CORE).then((c) => c.addAll(PRECACHE)).then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', (event) => {
@@ -62,7 +58,7 @@ self.addEventListener('fetch', (event) => {
       return res;
     } catch (e) {
       if (req.mode === 'navigate') {
-        const fallback = (await caches.match('sk/index.html')) || (await caches.match('app/index.html'));
+        const fallback = await caches.match(new URL('index.html', self.registration.scope).href);
         if (fallback) return fallback;
       }
       return new Response('Offline', { status: 503, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
@@ -90,9 +86,7 @@ async function cacheList(cacheName, urls, port, label) {
 self.addEventListener('message', (event) => {
   const msg = event.data || {};
   const port = event.ports && event.ports[0];
-  if (msg.type === 'cache-lang' && LANG_DIRS.includes(msg.lang + '/')) {
-    event.waitUntil(cacheList(CORE, langFiles(msg.lang), port, 'lang'));
-  } else if (msg.type === 'cache-docs') {
+  if (msg.type === 'cache-docs') {
     event.waitUntil(cacheList(DOCS, msg.urls || [], port, 'docs'));
   } else if (msg.type === 'cache-tiles') {
     event.waitUntil(cacheList(TILES, (msg.urls || []).slice(0, 1500), port, 'tiles'));

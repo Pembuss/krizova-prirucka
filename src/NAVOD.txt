@@ -1,4 +1,4 @@
-KRÍZOVÁ PRÍRUČKA – AKO JU SPUSTIŤ                       verzia beta 2.0
+KRÍZOVÁ PRÍRUČKA – AKO JU SPUSTIŤ                       verzia beta 3.0
 ==================================
 
 Nič netreba inštalovať. Stačí počítač (Windows, Mac alebo Linux)
@@ -8,62 +8,36 @@ a webový prehliadač (Chrome, Edge, Safari alebo Firefox).
    Windows: pravé tlačidlo na súbor → „Extrahovať všetko…“
    Mac: dvojklik na ZIP súbor.
 
-2. Otvor priečinok „Krizova-prirucka-beta-2.0“.
+2. Otvor rozbalený priečinok.
 
 3. Dvojklikom otvor súbor  OTVOR-PRIRUCKU.html
-   Príručka sa otvorí v prehliadači.
+   Aplikácia sa otvorí v prehliadači.
 
-Na úvodnej stránke vyber:
-  ⚡ Kríza práve teraz – postupy krok za krokom
-  🧮 Pripraviť sa – aplikácia (plánovač pre tvoju domácnosť)
-  📖 Čítať knihu
+Pri prvom spustení ťa privíta krátka inštruktáž: jazyk → vzhľad →
+domácnosť. Na konci si môžeš pozrieť prehliadku so šípkami.
 
-Jazyk (SK / CS / EN) prepneš vpravo hore.
+SPODNÉ MENU
+  Domov     – prehľad, pripravenosť, ďalší krok
+  Kríza     – čo robiť TERAZ, krok za krokom (alebo celý zoznam)
+  Príručka  – celá kniha, vyhľadávanie, rozcestník, príbehy, PDF a EPUB
+  Mapa      – úkryty, dôležité miesta, únikové trasy (aj offline)
+  Viac      – plán, zásoby, batohy, rodina, karty, zoznamy, tlač,
+              pomoc, nastavenia
 
-ČO JE NOVÉ VO VERZII BETA 2.0
-- OFFLINE MAPA bez internetu a bez služieb tretích strán:
-  Európa (prehľad), Slovensko podrobne (ulice, cesty, lesy, vody)
-  a hlavné cesty Česka, Rakúska, južného Poľska a západnej Ukrajiny
-  (Maďarsko zatiaľ len prehľadne). Je priamo v balíku.
-- Vyhľadanie obce a ulice, určenie adresy po kliknutí do mapy
-  a výpočet únikových trás (autom, pešo, na bicykli) fungujú offline.
-- Na mape sú offline aj úkryty CO zo zverejnených zoznamov miest
-  (Nitra, Banská Bystrica, Trenčín, Žilina, Petržalka, okres Michalovce),
-  nemocnice, lekárne, hasiči, polícia, pitná voda, podzemné garáže,
-  defibrilátory a ďalšie miesta z OpenStreetMap.
-- Nový samostatný prehľad: „Úkryty CO na Slovensku“
-  (súbor downloads/prehlad-krytov-slovensko.pdf alebo na webe
-  sk/kryty-slovensko.html).
-- V PDF a EPUB majú odkazy číslo kapitoly a strany: (→ kap. 9, str. 45).
-- Opravený výber záložnej energie v profile domácnosti.
-
-KNIHA-HRA
-- V kapitolách sú bloky „Rozhodni sa“ – vyber, čo sa ti deje, a kniha ťa
-  pošle na správnu kapitolu. Na úvodnej stránke knihy (alebo tlačidlom
-  „Upraviť“ nad textom kapitoly) označ, čo platí pre tvoju domácnosť –
-  voľby „pre teba“ sa zvýraznia a kniha odporučí ďalšie kapitoly.
-- 🎲 Príbehové scenáre: kniha → „Príbehové scenáre“ → ▶ Hrať príbeh.
-- V tlačenej knihe (PDF) a v EPUB je pri každom odkaze číslo strany.
-  Čítačky EPUB so „zoznamom strán“ vedia na stranu skočiť.
-
-MAPA A POLOHA
-- Miesto nájdeš písaním obce alebo ulice (ponúkne návrhy), kliknutím
-  do mapy, potiahnutím značky alebo tlačidlom „Moja poloha“.
-- Predvolená je „Offline mapa“. Online mapy (OpenStreetMap a iné)
-  si môžeš zapnúť ikonou vrstiev vpravo hore v mape – potrebujú internet.
-- Mimo Slovenska je offline len prehľadná mapa a hlavné cesty;
-  podrobnosti a miesta v okolí vtedy načíta internet, ak je k dispozícii.
+VZHĽAD A JAZYK (vpravo hore)
+  A – Pokojný sprievodca, B – Núdzový signál (tmavý, veľké písmo),
+  C – Príručka do vrecka. Jazyky SK, CZ, EN, PL, HU.
 
 DOBRÉ VEDIEŤ
-- Kniha, zoznamy, plánovač, mapa, vyhľadanie a trasy fungujú bez internetu.
+- Kniha, postupy, zoznamy, plánovač, mapa, vyhľadanie a trasy fungujú
+  bez internetu.
 - Tvoje údaje sa ukladajú iba v tomto prehliadači na tomto počítači.
-  Zálohu si urobíš v aplikácii: Nastavenia → Stiahnuť zálohu.
-- Tlač: v aplikácii otvor „Tlač“, zaškrtni dokumenty a stlač „Tlačiť vybrané“.
-- Knihu na tlač alebo do čítačky nájdeš v priečinku „downloads“
-  (PDF a EPUB v troch jazykoch) spolu s prehľadom úkrytov.
+  Zálohu si urobíš v aplikácii: Viac → Nastavenia → Stiahnuť zálohu.
+- Knihu na tlač alebo do čítačky (PDF, EPUB) stiahneš v časti Príručka;
+  súbory sú aj v priečinku „downloads“.
 - Priečinok môžeš skopírovať aj na USB kľúč – funguje rovnako.
 
 Mapové údaje: © prispievatelia OpenStreetMap (ODbL), Natural Earth.
-Stav údajov: 27. 10. 2026.
+Stav mapových údajov: 27. 10. 2026.
 
 Príručka nenahrádza pokyny úradov. V ohrození života volaj 112.

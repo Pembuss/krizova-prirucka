@@ -1,6 +1,6 @@
 // Tlačové dokumenty aplikácie (A4, čiernobielo, políčka na odškrtnutie).
 import { store } from './store.js';
-import { t, tp, T, esc, money, fmtDate, fmtDuration, $, LANG } from './core.js';
+import { t, tp, T, esc, money, fmtDate, fmtDuration, $, LANG, LOCALE } from './core.js';
 import { riskProfile, purchaseSchedule } from '../calc.js';
 import { crisisById, ACTIONS } from '../../data/crises.js';
 import { itemById, CATEGORIES } from '../../data/items.js';
@@ -148,19 +148,27 @@ ${c.before ? `<h3>${esc(t('now.prepare'))}</h3><ul class="checklist">${c.before.
 <p><strong>112</strong> · 150 · 155 · 158</p></section>`;
 }
 
-export function printDocs(ids, opts = {}) {
+function printRoot(html) {
   let root = $('#print-root');
   if (!root) { root = document.createElement('div'); root.id = 'print-root'; root.className = 'print-root'; }
   if (root.parentElement !== document.body) document.body.appendChild(root);
   document.body.classList.add('printing-docs');
   const done = () => { document.body.classList.remove('printing-docs'); root.innerHTML = ''; window.removeEventListener('afterprint', done); };
   window.addEventListener('afterprint', done);
-  const date = new Date().toLocaleDateString(LANG === 'en' ? 'en-GB' : LANG);
-  root.innerHTML = ids.map((id, i) => {
+  root.innerHTML = html;
+  setTimeout(() => window.print(), 50);
+}
+const printDate = () => new Date().toLocaleDateString(LOCALE[LANG] || LANG);
+export function printDocs(ids, opts = {}) {
+  const date = printDate();
+  printRoot(ids.map((id, i) => {
     const [name, arg] = id.split(':');
     const html = name === 'card' ? cardHtml(arg) : DOCS[name](opts);
     return `<section class="print-doc${i ? ' page-break' : ''}">${html}<p class="print-foot">${esc(t('pr.generated', { date }))}</p></section>`;
-  }).join('');
-  setTimeout(() => window.print(), 50);
+  }).join(''));
+}
+// Ľubovoľný obsah (kapitola knihy, prehľad) na tlač
+export function printHtml(html) {
+  printRoot(`<section class="print-doc">${html}<p class="print-foot">${esc(t('pr.generated', { date: printDate() }))}</p></section>`);
 }
 export const PRINTABLE = ['plan', 'family', 'wallet', 'help', 'cards', 'shopping', 'purchase', 'rotation', 'bags', 'energy', 'routes'];

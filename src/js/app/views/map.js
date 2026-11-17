@@ -134,8 +134,8 @@ ${['node', 'way', 'relation'].includes(e.type) ? `<div><small><a href="https://w
   function drawOfficial() {
     const c = countryByCode(p.location.country || 'SK');
     if (!c) { $('#m-official', el).innerHTML = ''; return; }
-    const links = [...(c.cc === 'SK' ? [{ label: t('map.skOverview'), url: '../sk/kryty-slovensko.html' }] : []), ...(c.maps || []).filter((m) => m.url), c.guide ? { label: c.guide.title, url: c.guide.url } : null, { label: c.authority.name, url: c.authority.url }].filter(Boolean);
-    $('#m-official', el).innerHTML = `<h2>${esc(t('map.official', { country: `${c.flag} ${T(c.name)}` }))}</h2><p class="small">${esc(T(c.shelters))}</p><ul>${links.map((m) => `<li><a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(T(m.label))}</a></li>`).join('')}</ul><p class="small"><strong>112</strong>${c.numbers.police ? ` · ${esc(c.numbers.police)}` : ''}${c.numbers.fire ? ` · ${esc(c.numbers.fire)}` : ''}${c.numbers.ambulance ? ` · ${esc(c.numbers.ambulance)}` : ''}</p>`;
+    const links = [...(c.cc === 'SK' ? [{ label: t('map.skOverview'), url: '#/kryty', local: true }] : []), ...(c.maps || []).filter((m) => m.url), c.guide ? { label: c.guide.title, url: c.guide.url } : null, { label: c.authority.name, url: c.authority.url }].filter(Boolean);
+    $('#m-official', el).innerHTML = `<h2>${esc(t('map.official', { country: `${c.flag} ${T(c.name)}` }))}</h2><p class="small">${esc(T(c.shelters))}</p><ul>${links.map((m) => `<li><a href="${esc(m.url)}"${m.local ? '' : ' target="_blank" rel="noopener"'}>${esc(T(m.label))}</a></li>`).join('')}</ul><p class="small"><strong>112</strong>${c.numbers.police ? ` · ${esc(c.numbers.police)}` : ''}${c.numbers.fire ? ` · ${esc(c.numbers.fire)}` : ''}${c.numbers.ambulance ? ` · ${esc(c.numbers.ambulance)}` : ''}</p>`;
   }
 
   function loadCached() {

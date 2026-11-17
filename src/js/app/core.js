@@ -1,42 +1,59 @@
 // Jazyk, preklady a pomocné funkcie rozhrania aplikácie.
 import { S } from './strings.js';
 import { store } from './store.js';
+import { CURRENCY } from '../../data/currency.js';
 
-const LANGS = ['sk', 'cs', 'en'];
+// Poradie stĺpcov v textoch (strings.js): sk, cs, en, pl, hu. Chýbajúci preklad sa nahradí angličtinou.
+export const LANGS = ['sk', 'cs', 'en', 'pl', 'hu'];
 const urlLang = new URLSearchParams(location.search).get('lang');
-export let LANG = LANGS.includes(urlLang) ? urlLang : LANGS.includes(store.prefs.lang) ? store.prefs.lang : (navigator.language || 'sk').startsWith('cs') ? 'cs' : (navigator.language || 'sk').startsWith('en') ? 'en' : 'sk';
+const navLang = () => { const n = (navigator.language || 'sk').slice(0, 2); return LANGS.includes(n) ? n : n === 'cz' ? 'cs' : 'en'; };
+export let LANG = LANGS.includes(urlLang) ? urlLang : LANGS.includes(store.prefs.lang) ? store.prefs.lang : navLang();
 export function setLang(l) {
   if (!LANGS.includes(l)) return;
   LANG = l;
   store.prefs.lang = l;
   store.savePrefs();
   document.documentElement.lang = l;
+  // ?lang= v adrese by po obnovení stránky prebil zvolený jazyk
+  try { const u = new URL(location.href); if (u.searchParams.has('lang')) { u.searchParams.delete('lang'); history.replaceState(null, '', u); } } catch { /* */ }
 }
 const idx = () => LANGS.indexOf(LANG);
 const fill = (s, vars = {}) => s.replace(/\{(\w+)\}/g, (m, k) => (vars[k] ?? m));
 
+const pick = (v) => v?.[idx()] ?? v?.[2] ?? v?.[0];
 export function t(key, vars) {
   const v = S[key];
   if (!v) return key;
-  const s = v[idx()];
+  const s = pick(v);
   return fill(Array.isArray(s) ? s[0] : s, vars);
 }
-// Množné číslo: sk/cs 1 | 2–4 | 5+, en 1 | ostatné
+// Množné číslo: sk/cs 1 | 2–4 | 5+; pl 1 | 2–4 (okrem 12–14) | ostatné; en 1 | ostatné; hu jeden tvar
+export function pluralIndex(n, lang = LANG) {
+  if (lang === 'en') return n === 1 ? 0 : 1;
+  if (lang === 'hu') return 0;
+  if (lang === 'pl') return n === 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && !(n % 100 >= 12 && n % 100 <= 14) ? 1 : 2;
+  return n === 1 ? 0 : n >= 2 && n <= 4 ? 1 : 2;
+}
 export function tp(key, n, vars = {}) {
-  const forms = S[key]?.[idx()];
+  const forms = S[key]?.[idx()] ?? S[key]?.[2];
   if (!Array.isArray(forms)) return t(key, { n, ...vars });
-  const i = LANG === 'en' ? (n === 1 ? 0 : 1) : n === 1 ? 0 : n >= 2 && n <= 4 ? 1 : 2;
+  const i = (S[key]?.[idx()] ? pluralIndex(n) : pluralIndex(n, 'en'));
   return fill(forms[i] ?? forms[forms.length - 1], { n, ...vars });
 }
-// Texty z dátových súborov { sk, cs, en }
-export const T = (obj) => (obj && typeof obj === 'object' ? obj[LANG] ?? obj.sk : obj ?? '');
+// Texty z dátových súborov { sk, cs, en, pl, hu }
+export const T = (obj) => (obj && typeof obj === 'object' ? obj[LANG] ?? obj.en ?? obj.sk : obj ?? '');
 
 export const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 export const $ = (s, el = document) => el.querySelector(s);
 export const $$ = (s, el = document) => [...el.querySelectorAll(s)];
-export const money = (x) => new Intl.NumberFormat(LANG === 'en' ? 'en-IE' : LANG === 'cs' ? 'cs-CZ' : 'sk-SK', { style: 'currency', currency: 'EUR' }).format(x || 0);
-export const num = (x, d = 0) => new Intl.NumberFormat(LANG === 'en' ? 'en-GB' : LANG, { maximumFractionDigits: d }).format(x || 0);
-export const fmtDate = (d) => (d ? new Date(d).toLocaleDateString(LANG === 'en' ? 'en-GB' : LANG) : '');
+export const LOCALE = { sk: 'sk-SK', cs: 'cs-CZ', en: 'en-GB', pl: 'pl-PL', hu: 'hu-HU' };
+// Ceny sú v dátach v eurách; poľská a maďarská verzia ich zobrazuje v miestnej mene (orientačný kurz).
+export const money = (x) => {
+  const c = CURRENCY[LANG] || CURRENCY.sk;
+  return new Intl.NumberFormat(LOCALE[LANG], { style: 'currency', currency: c.code, maximumFractionDigits: c.code === 'HUF' ? 0 : 2 }).format((x || 0) * c.rate);
+};
+export const num = (x, d = 0) => new Intl.NumberFormat(LOCALE[LANG], { maximumFractionDigits: d }).format(x || 0);
+export const fmtDate = (d) => (d ? new Date(d).toLocaleDateString(LOCALE[LANG]) : '');
 export const fmtDuration = (sec) => {
   const m = Math.round(sec / 60);
   if (m < 60) return `${m} min`;
@@ -126,5 +143,4 @@ export function toast(msg, ms = 2500) {
 }
 
 // Odkaz do knihy/webu v aktuálnom jazyku (z aplikácie /app/)
-export const bookHref = (chapter, anchor = '') => `../${LANG}/kniha/${chapter}.html${anchor ? '#' + anchor : ''}`;
-export const webHref = (page = 'index.html') => `../${LANG}/${page}`;
+export const bookHref = (chapter, anchor = '') => `#/kniha/${chapter}${anchor && anchor !== chapter ? '/' + anchor : ''}`;

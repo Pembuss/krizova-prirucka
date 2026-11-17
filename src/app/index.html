@@ -1,35 +1,41 @@
 <!doctype html>
-<html lang="sk">
+<html lang="sk" data-look="a">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Krízová príručka – aplikácia</title>
-<meta name="description" content="Plánovač krízovej pripravenosti: zásoby, rodinný plán, mapa krytov, únikové trasy a tlač.">
-<meta name="theme-color" content="#c2410c">
-<link rel="manifest" href="../manifest.webmanifest">
-<link rel="icon" href="../assets/img/logo.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="../assets/img/icon-180.png">
-<link rel="stylesheet" href="../assets/vendor/leaflet/leaflet.css">
-<link rel="stylesheet" href="../assets/css/site.css">
-<link rel="stylesheet" href="../assets/css/app.css">
-<link rel="stylesheet" href="../assets/css/print.css">
-<script>try{var s=JSON.parse(localStorage.getItem('kp.prefs')||'{}');var d=document.documentElement;if(s.theme)d.dataset.theme=s.theme;if(s.size)d.dataset.size=s.size;if(s.contrast)d.dataset.contrast=s.contrast;}catch(e){}</script>
-<script src="../assets/vendor/leaflet/leaflet.js" defer></script>
+<title>Krízová príručka</title>
+<meta name="description" content="Krízová príručka pre domácnosti: postupy krok za krokom, plán a zásoby, offline mapa úkrytov a únikových trás, celá príručka na čítanie aj v PDF. EN · CZ · SK · PL · HU.">
+<meta name="theme-color" content="#0B5C7A">
+<link rel="manifest" href="{{ROOT}}manifest.webmanifest">
+<link rel="icon" href="{{ROOT}}assets/img/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="{{ROOT}}assets/img/icon-180.png">
+<link rel="stylesheet" href="{{ROOT}}assets/vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="{{ROOT}}assets/css/site.css">
+<link rel="stylesheet" href="{{ROOT}}assets/css/app.css">
+<link rel="stylesheet" href="{{ROOT}}assets/css/theme.css">
+<link rel="stylesheet" href="{{ROOT}}assets/css/print.css">
+<script>try{var s=JSON.parse(localStorage.getItem('kp.prefs')||'{}'),d=document.documentElement,l=['a','b','c'].indexOf(s.look)>=0?s.look:'a';if(s.autoDark!==false&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)l='b';d.dataset.look=l;if(s.size)d.dataset.size=s.size;if(s.lang)d.lang=s.lang;}catch(e){}</script>
+<script src="{{ROOT}}assets/vendor/leaflet/leaflet.js" defer></script>
 </head>
 <body class="app">
-<a class="skip" href="#view">↓</a>
+<a class="skip" href="#view" data-t="c.skip">Preskočiť na obsah</a>
 <header class="app-header no-print">
-  <a class="brand" href="#/" aria-label="Krízová príručka">{{LOGO}}<span data-i="appTitle">Krízová príručka</span><span class="ver-badge" title="{{VERSION}}">{{VERSION}}</span></a>
-  <a class="btn btn-urgent btn-sm" href="#/teraz" data-nav="now">⚡ <span data-t="nav.now"></span></a>
-  <a class="iconbtn call" href="tel:112" aria-label="112">📞 112</a>
-  <select class="langsel" id="app-lang" aria-label="Language"><option value="sk">SK</option><option value="cs">CS</option><option value="en">EN</option></select>
+  <a class="brand" href="#/" data-tour="brand"><span class="brand-logo">{{LOGO}}</span><span class="brand-name" data-t="app.title">Krízová príručka</span><span class="ver-badge">{{VERSION}}</span></a>
+  <div class="hdr-tools">
+    <button type="button" class="hdr-btn" data-look-menu aria-haspopup="true" aria-expanded="false" data-tour="look"></button>
+    <label class="visually-hidden" for="app-lang" data-t="c.language">Jazyk</label>
+    <select class="langsel hdr-btn" id="app-lang" data-tour="lang"></select>
+    <a class="hdr-btn hdr-112" href="tel:112" data-tour="call"></a>
+  </div>
+  <div class="look-pop" id="look-pop" hidden></div>
 </header>
 <div class="app-body">
   <nav class="app-nav no-print" id="app-nav" aria-label="Menu"></nav>
   <main id="view" tabindex="-1"></main>
 </div>
-<nav class="app-tabs no-print" id="app-tabs" aria-label="Menu"></nav>
+<nav class="app-tabs no-print" id="app-tabs" aria-label="Menu" data-tour="tabs"></nav>
 <div id="print-root" class="print-root"></div>
-<script defer src="../assets/js/app.js"></script>
+<script defer src="{{ROOT}}assets/downloads.js"></script>
+<script defer src="{{ROOT}}assets/js/app.js"></script>
 </body>
 </html>

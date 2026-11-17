@@ -1,10 +1,13 @@
 // Spoločné texty rozhrania pre knihu a web.
 const L = (sk, cs, en) => ({ sk, cs, en });
 
+// Poradie jazykov v prepínači. Kód „cs“ je jazyk (čeština), v rozhraní sa zobrazuje skratka CZ.
 export const LANGS = [
-  { id: 'sk', name: 'Slovenčina', short: 'SK' },
-  { id: 'cs', name: 'Čeština', short: 'CS' },
   { id: 'en', name: 'English', short: 'EN' },
+  { id: 'cs', name: 'Čeština', short: 'CZ' },
+  { id: 'sk', name: 'Slovenčina', short: 'SK' },
+  { id: 'pl', name: 'Polski', short: 'PL', unverified: true },
+  { id: 'hu', name: 'Magyar', short: 'HU', unverified: true },
 ];
 
 export const UI = {
@@ -106,4 +109,4 @@ export const UI = {
   offlineReady: L('Pripravené na offline použitie', 'Připraveno pro offline použití', 'Ready for offline use'),
 };
 
-export const t = (obj, lang) => (obj && typeof obj === 'object' ? (obj[lang] ?? obj.sk ?? '') : (obj ?? ''));
+export const t = (obj, lang) => (obj && typeof obj === 'object' ? (obj[lang] ?? obj.en ?? obj.sk ?? '') : (obj ?? ''));
