@@ -33,7 +33,7 @@ export function render(el, params, opts = {}) {
   <div class="inline"><label>${esc(t('map.radius'))} <select data-radius>${[1000, 3000, 5000, 10000].map((r) => `<option value="${r}"${r === radius ? ' selected' : ''}>${r / 1000} km</option>`).join('')}</select></label>
   <button class="btn" data-load>🔎 ${esc(t('map.load'))}</button></div>
 </div>
-<details class="layers" open><summary>${esc(t('map.layers'))}</summary><div class="chips">${Object.keys(LAYERS).concat('mine').map((id) => `<button type="button" class="chip" data-layer="${id}" aria-pressed="${id === 'mine' || layersOn.has(id)}">${id === 'mine' ? '⭐' : LAYERS[id].icon} ${esc(t('layer.' + id))}</button>`).join('')}</div></details>
+<details class="layers"${window.innerWidth >= 700 ? ' open' : ''}><summary>${esc(t('map.layers'))}</summary><div class="chips">${Object.keys(LAYERS).concat('mine').map((id) => `<button type="button" class="chip" data-layer="${id}" aria-pressed="${id === 'mine' || layersOn.has(id)}">${id === 'mine' ? '⭐' : LAYERS[id].icon} ${esc(t('layer.' + id))}</button>`).join('')}</div></details>
 <p id="m-status" class="muted small" aria-live="polite"></p>
 <div class="mapwrap"><div id="map" class="bigmap" role="application" aria-label="${esc(t('nav.map'))}"></div></div>
 <div class="btn-row"><button class="btn btn-ghost" data-addplace>⭐ ${esc(t('map.addPlace'))}</button><button class="btn btn-ghost" data-printmap>🖨️ ${esc(t('map.printMap'))}</button><a class="btn btn-ghost" href="${routesHref}">🧭 ${esc(t('nav.routes'))}</a></div>
