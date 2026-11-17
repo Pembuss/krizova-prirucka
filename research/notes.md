@@ -53,3 +53,34 @@ Checklist: https://www.bbk.bund.de/DE/Warnung-Vorsorge/Vorsorge/Ratgeber-Checkli
 ## UK: Prepare campaign https://prepare.campaign.gov.uk/
 ## EU: Preparedness Union Strategy (26. 3. 2025) – cieľ sebestačnosti min. 72 h, 30 kľúčových akcií.
 ## CH: 1 miesto v kryte pre každého obyvateľa v blízkosti bydliska (BABS fact sheet 31. 12. 2025); pridelenie krytu obcou/kantónom; revízia ZSV 1. 1. 2026.
+
+## Poľsko a Maďarsko – reálie pre preklad (overené 17. 11. 2026)
+
+### Poľsko
+- Sirény (rozporządzenie MSWiA z 14. 5. 2025 o alarmoch a varovných oznámeniach, platí od 31. 5. 2025):
+  - **Ogłoszenie alarmu** – modulovaný tón sirény 3 minúty + 3× opakované hlásenie „Uwaga! Ogłaszam alarm…“ (dôvod, oblasť).
+  - **Odwołanie alarmu** – stály tón 3 minúty + hlásenie „Uwaga! Odwołuję alarm…“.
+  - Cvičný alarm: stály tón 1 minúta; o cvičení informujú médiá najneskôr deň vopred.
+  - Samostatný „letecký poplach“ nemá vlastný zvuk – rozhoduje hlásenie.
+  - Zdroje: https://www.gov.pl/web/kppsp-pabianice/alerty-i-syreny-na-strazy-twojego-bezpieczenstwa ; https://www.gov.pl/web/rcb (sygnały alarmowe)
+- **Alert RCB** – SMS od Rządowe Centrum Bezpieczeństwa všetkým telefónom v oblasti ohrozenia, bez ohľadu na sieť. Cell Broadcast sa pripravuje (MSWiA, UKE, operátori; spustenie ohlásené na 2027).
+- **Poradnik bezpieczeństwa** (MON, MSWiA, RCB, 28. 8. 2025) – poradnikbezpieczenstwa.gov.pl; 72 hodín; doručovaný do domácností Poczta Polska; aj v mObywatel.
+- **Gdzie się ukryć** – mapa a aplikácia PSP (22. 12. 2025), gdziesieukryc.pl; ~70 000 overených objektov pre ~20 mil. osôb; punkty schronienia (pivnice, podchody, garáže), schrony, miejsca doraźnego schronienia. https://www.gov.pl/web/mswia/nowe-narzedzie-pomoze-znalezc-punkty-schronienia
+- **Ustawa o ochronie ludności i obronie cywilnej** z 5. 12. 2024 (Dz. U. poz. 1907): nové bytové domy a podzemné garáže s miestami doraźnego schronienia od 2026; novela 17. 4. 2026 zaviedla „punkt schronienia“.
+- Tiesňové čísla: 112, 997 polícia, 998 hasiči, 999 záchranka.
+- Počasie: IMGW-PIB (meteo.imgw.pl), výstrahy 3 stupne.
+- Kurz: NBP 6. 11. 2026 EUR/PLN 4,3925.
+
+### Maďarsko
+- Sirény (MoLaRi a motorové sirény CO; 234/2011. Korm. rendelet – katastrofálne poplachy, 290/2011. Korm. rendelet – letecký poplach):
+  - **Katasztrófariasztás** – 120 s tón s meniacou sa výškou.
+  - **Légiriasztás** – 3 × 30 s tón s meniacou sa výškou, medzi nimi 30 s pauza.
+  - **Riasztás vége** – 2 × 30 s rovnomerný tón, medzi nimi 30 s pauza (ruší letecký aj katastrofálny poplach).
+  - Teraz: ukryť sa doma alebo na vhodnom mieste, zavrieť dvere a okná, vypnúť vetranie a klimatizáciu, sledovať rozhlas a TV.
+  - Skúška: hlásenie obsahuje „Figyelem, ez próba“; pri skutočnom poplachu nie. Skúšky MoLaRi bývajú v pondelok o 11:00 (hlasné 2× ročne).
+  - Zdroj: https://fovaros.katasztrofavedelem.hu/26145/tajekoztato-riaszto-rendszerek
+- SMS varovanie obyvateľstva (lakosságtájékoztató üzenet, 16/2020. BM utasítás); cell broadcast zatiaľ nie.
+- Úkryty: óvóhely, szükségóvóhely; centrálna evidencia BM OKF; informácie dáva obec (önkormányzat).
+- Tiesňové čísla: 112, 104 záchranka, 105 hasiči, 107 polícia.
+- Počasie: HungaroMet (met.hu) – výstrahy žltá/oranžová/červená.
+- Kurz: MNB október 2026 EUR/HUF ≈ 363–370 (použité 365).

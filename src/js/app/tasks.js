@@ -1,6 +1,6 @@
 // Osobný plán: zoznam krokov podľa profilu domácnosti.
 import { shoppingList, energyPlan, householdNeeds, nearestNpp, DEVICE_WH } from '../calc.js';
-import { t } from './core.js';
+import { t, money } from './core.js';
 
 export function buildTasks(p) {
   const members = p.members || [];
@@ -33,7 +33,7 @@ export function buildTasks(p) {
   add('radio', 'supplies', t('task.radio'), 'book:varovanie#varovanie-bez-signalu', 1);
   add('light', 'supplies', t('task.light', { n: Math.max(1, members.filter((m) => Number(m.age) >= 5).length) }), '#/energia', 1);
   add('powerbank', 'supplies', t('task.powerbank', { n: en.powerbanks }), '#/energia', 2);
-  add('cash', 'supplies', t('task.cash', { eur: list.cashSuggested }), 'book:batozina#batozina-peniaze', 2);
+  add('cash', 'supplies', t('task.cash', { eur: money(list.cashSuggested) }), 'book:batozina#batozina-peniaze', 2);
   const electricCooking = ['electric', 'induction'].includes(u.cooking);
   if (!u.altCooking) add('stove', 'supplies', t('task.stove', { n: en.gasCartridges }), '#/energia', electricCooking ? 1 : 3);
   if (u.heating !== 'wood' && !u.altHeating) add('warmth', 'supplies', t('task.warmth'), 'book:mrazy#mrazy-vypadok', 2);

@@ -1,7 +1,7 @@
 // Úvodná inštruktáž pri prvom spustení: jazyk → vzhľad → domácnosť → hotovo (s ponukou prehliadky).
 // Adresa: #/uvod[/<krok>]
 import { store, uid } from '../store.js';
-import { t, esc, LANG, setLang } from '../core.js';
+import { t, esc, LANG, switchLang } from '../core.js';
 import { icon } from '../icons.js';
 import { LANGS as LANG_INFO } from '../../../data/ui.js';
 import { chosenTheme, autoDark, setTheme, setAutoDark, applyTheme } from '../theme.js';
@@ -72,7 +72,7 @@ ${[['flat', 'onb.flat'], ['house', 'onb.house']].map(([v, k]) => `<label class="
 <p class="small muted" style="text-align:center;margin:0">${icon('phone', 16)} ${esc(t('onb.emergency'))}</p></div></div>`;
 
   el.addEventListener('change', (e) => {
-    if (e.target.name === 'lang') { setLang(e.target.value); rerender(); }
+    if (e.target.name === 'lang') switchLang(e.target.value).then(rerender);
     if (e.target.name === 'look') setTheme(e.target.value);
     if (e.target.matches('[data-auto]')) setAutoDark(e.target.checked);
   });

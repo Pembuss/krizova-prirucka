@@ -1,6 +1,6 @@
 // Zásoby: nákupný zoznam s cenami a „mám“, postupný nákup, obmena zásob.
 import { store, uid, download } from '../store.js';
-import { t, tp, T, esc, money, num, fmtDate, toast, $, $$ } from '../core.js';
+import { t, tp, T, esc, money, num, fmtDate, toast, $, $$, toLocal, fromLocal } from '../core.js';
 import { shoppingList, purchaseSchedule } from '../../calc.js';
 import { CATEGORIES, ITEMS, itemById } from '../../../data/items.js';
 import { icsReminders } from '../tasks.js';
@@ -31,7 +31,7 @@ export function render(el, [tab = 'list']) {
   <div class="stat"><span class="stat-ico">💧</span><span>${esc(t('sup.water', { l: list.need.waterTotal, d: list.need.waterPerDay }))}</span></div>
   <div class="stat"><span class="stat-ico">🍽️</span><span>${esc(t('sup.kcal', { kcal: num(list.food.kcalNeeded), kpd: num(list.need.kcalPerDay) }))}</span></div>
   <div class="stat"><span class="stat-ico">🔥</span><span>${esc(t('sup.noCook', { p: Math.round(list.food.noCookShare * 100) }))}</span></div>
-  <div class="stat"><span class="stat-ico">💶</span><span>${esc(t('sup.cash', { eur: list.cashSuggested }))}</span></div>
+  <div class="stat"><span class="stat-ico">💶</span><span>${esc(t('sup.cash', { eur: money(list.cashSuggested) }))}</span></div>
 </div>
 <div class="tabs" role="tablist">${[['list', 'sup.tabList'], ['plan', 'sup.tabPlan'], ['rot', 'sup.tabRot']].map(([k, l]) => `<a role="tab" href="#/zasoby/${k}" aria-selected="${tab === k}">${esc(t(l))}</a>`).join('')}</div>`;
     let body = '';
@@ -40,7 +40,7 @@ export function render(el, [tab = 'list']) {
         const it = itemById(r.id);
         return `<tr class="${r.buy === 0 ? 'done' : ''}"><td>${CATEGORIES.find((c) => c.id === r.cat).icon}</td><th scope="row">${esc(T(it.name))}</th><td class="num">${r.qty}</td>
 <td><input class="qty" type="number" min="0" inputmode="numeric" data-have="${r.id}" value="${r.have || ''}" aria-label="${esc(t('sup.have'))}"></td><td class="num"><strong>${r.buy}</strong></td>
-<td><input class="price" type="number" min="0" step="0.01" inputmode="decimal" data-price="${r.id}" value="${r.price}" aria-label="${esc(t('sup.unit'))}"></td><td class="num">${money(r.buyCost)}</td></tr>`;
+<td><input class="price" type="number" min="0" step="0.01" inputmode="decimal" data-price="${r.id}" value="${toLocal(r.price)}" aria-label="${esc(t('sup.unit'))}"></td><td class="num">${money(r.buyCost)}</td></tr>`;
       }).join('')}</tbody>`;
       const cons = list.rows.filter((r) => !r.equip), eq = list.rows.filter((r) => r.equip);
       body = `<p class="muted small">${esc(t('sup.prices'))}</p>
@@ -51,8 +51,8 @@ ${section(cons, t('sup.consumables'))}${section(eq, t('sup.equipment'))}
     } else if (tab === 'plan') {
       const rows = list.rows.map((r) => ({ ...r, qty: r.buy, cost: r.buyCost })).filter((r) => r.qty > 0);
       const s = purchaseSchedule(rows, p.supplies.budgetMonthly || 60);
-      body = `<label class="field-row"><span class="lbl">${esc(t('sup.budget'))}</span><input type="number" min="0" step="10" data-budget value="${p.supplies.budgetMonthly || 60}"></label>
-<p><strong>${esc(t('sup.weekly', { eur: num(s.weekly, 2), n: s.weeks.length }))}</strong></p>
+      body = `<label class="field-row"><span class="lbl">${esc(t('sup.budget'))}</span><input type="number" min="0" step="any" data-budget value="${toLocal(p.supplies.budgetMonthly || 60)}"></label>
+<p><strong>${esc(t('sup.weekly', { eur: money(s.weekly), n: s.weeks.length }))}</strong></p>
 <ol class="weeks">${s.weeks.map((w, i) => `<li><div class="week-h"><strong>${esc(t('sup.week', { n: i + 1 }))}</strong><span>${money(w.cost)}</span></div><ul>${w.items.map((x) => `<li>${x.qty}× ${esc(T(itemById(x.id).name))}</li>`).join('')}</ul></li>`).join('')}</ol>
 <div class="btn-row"><button class="btn" data-print-plan>🖨️ ${esc(t('pr.purchase'))}</button></div>`;
     } else {
@@ -104,9 +104,9 @@ ${inv.map((x) => { const st = x.expiry && x.expiry < today ? 'expired' : x.expir
     const h = e.target.closest('[data-have]');
     if (h) { store.state.have[h.dataset.have] = Number(h.value) || 0; store.saveState(); draw(); }
     const pr = e.target.closest('[data-price]');
-    if (pr) { store.state.prices[pr.dataset.price] = Math.max(0, Number(String(pr.value).replace(',', '.')) || 0); store.saveState(); draw(); }
+    if (pr) { store.state.prices[pr.dataset.price] = Math.max(0, fromLocal(pr.value)); store.saveState(); draw(); }
     const b = e.target.closest('[data-budget]');
-    if (b) { p.supplies.budgetMonthly = Number(b.value) || 0; store.saveProfile(); draw(); }
+    if (b) { p.supplies.budgetMonthly = fromLocal(b.value); store.saveProfile(); draw(); }
     // Obmena: po výbere položky netreba vlastný názov a dátum spotreby sa doplní podľa trvanlivosti
     if (e.target.matches('#rot-item, #rot-bought')) {
       const it = $('#rot-item').value ? itemById($('#rot-item').value) : null;

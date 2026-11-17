@@ -109,4 +109,11 @@ export const UI = {
   offlineReady: L('Pripravené na offline použitie', 'Připraveno pro offline použití', 'Ready for offline use'),
 };
 
-export const t = (obj, lang) => (obj && typeof obj === 'object' ? (obj[lang] ?? obj.en ?? obj.sk ?? '') : (obj ?? ''));
+// Preklady PL a HU sú v src/i18n/<jazyk>/ (kľúč = anglický text); build a aplikácia ich vložia do globalThis.KP_I18N.
+const dict = (lang) => (typeof globalThis !== 'undefined' && globalThis.KP_I18N?.[lang]) || null;
+export const t = (obj, lang) => {
+  if (!obj || typeof obj !== 'object') return obj ?? '';
+  const v = obj[lang] ?? dict(lang)?.data?.[obj.en];
+  if (v == null && dict(lang)) globalThis.KP_I18N_MISS?.add(lang + '\u0001' + obj.en);
+  return v ?? obj.en ?? obj.sk ?? '';
+};

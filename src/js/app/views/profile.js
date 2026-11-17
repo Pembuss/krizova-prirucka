@@ -82,7 +82,7 @@ ${input('mobility.walkKm', t('mob.walkKm'), { type: 'number', attrs: 'min="0" in
       case 7:
         return `<div class="field-row"><span class="lbl">${esc(t('sup.current'))}</span>${chips('supplies.currentDays', [0, 1, 3, 7, 14, 30].map((d) => [d, String(d)]))}</div>
 <div class="field-row"><span class="lbl">${esc(t('sup.target'))}</span>${chips('supplies.targetDays', [3, 7, 14, 30].map((d) => [d, tp('c.days', d)]))}</div>
-${input('supplies.budgetMonthly', t('sup.budget'), { type: 'number', attrs: 'min="0" step="10" inputmode="numeric"' })}
+${input('supplies.budgetMonthly', t('sup.budget'), { type: 'number', kind: 'money', attrs: 'min="0" step="any" inputmode="numeric"' })}
 <div class="field-row"><span class="lbl">${esc(t('sup.norm'))}</span>${chips('supplies.waterNorm', [['nordic', t('norm.nordic')], ['bbk', t('norm.bbk')]])}</div>
 ${check('supplies.hygieneWater', t('sup.hygiene'))}${check('supplies.heat', t('sup.heat'))}`;
       case 8:

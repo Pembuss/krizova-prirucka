@@ -1,5 +1,6 @@
 // Build: aplikácia (PWA) s knihou vo všetkých jazykoch, kniha v PDF a EPUB, prehľad úkrytov CO.
 // Použitie: node tools/build.mjs [--no-pdf] [--no-epub] [--lang=sk]
+import { I18N } from './i18n-setup.mjs'; // preklady PL a HU – musí byť načítané pred dátami
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
@@ -399,6 +400,8 @@ function bundleScripts() {
 
 function copyAssets() {
   copyDir(path.join(ROOT, 'src/css'), path.join(DIST, 'assets/css'));
+  // preklady rozhrania a dát (PL, HU) – aplikácia ich načíta len pri zvolenom jazyku
+  for (const [lang, d] of Object.entries(I18N)) write(path.join(DIST, 'assets/i18n', `${lang}.js`), `window.KP_I18N=window.KP_I18N||{};window.KP_I18N[${JSON.stringify(lang)}]=${jsStr(d)};\n`);
   bundleScripts();
   fs.mkdirSync(path.join(DIST, 'assets/img'), { recursive: true });
   fs.copyFileSync(path.join(ROOT, 'src/img/logo.svg'), path.join(DIST, 'assets/img/logo.svg'));
@@ -603,6 +606,9 @@ async function main() {
   console.log(`✓ na stiahnutie: kniha ${Object.keys(dl.book).join(', ') || '–'}${dl.shelters ? ', úkryty' : ''}${Object.keys(dl.manual).length ? ', návod' : ''}`);
   const sw = buildServiceWorker();
   console.log(`✓ service worker ${sw.version}, ${sw.count} súborov na offline`);
+  const miss = {};
+  for (const k of globalThis.KP_I18N_MISS) { const [l] = k.split('\u0001'); miss[l] = (miss[l] || 0) + 1; }
+  for (const [l, n] of Object.entries(miss)) if (BUILD_LANGS.includes(l)) warn(`${l}: ${n} textov bez prekladu (node tools/i18n.mjs)`);
   if (warnings.size) console.log('Upozornenia:\n - ' + [...warnings].join('\n - '));
   console.log(`Hotovo za ${((Date.now() - t0) / 1000).toFixed(1)} s`);
 }

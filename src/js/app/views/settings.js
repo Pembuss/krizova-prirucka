@@ -2,7 +2,7 @@
 import { VERSION, VERSION_DATE } from '../../../data/version.js';
 import { LANGS as LANG_INFO } from '../../../data/ui.js';
 import { store, exportData, importData, download } from '../store.js';
-import { t, esc, LANG, setLang, toast, $ } from '../core.js';
+import { t, esc, LANG, switchLang, toast, $ } from '../core.js';
 import { icon } from '../icons.js';
 import { chosenTheme, autoDark, setTheme, setAutoDark, applyTheme } from '../theme.js';
 import { downloads, offlinePackage, fmtSize } from '../downloads.js';
@@ -74,7 +74,7 @@ ${pkg && !LOCAL ? `<button class="btn" data-zip>${icon('download', 20)} ${esc(t(
   window.scrollTo(0, 0);
   el.addEventListener('click', async (e) => {
     const l = e.target.closest('[data-lang]');
-    if (l) { setLang(l.dataset.lang); rerender(); return; }
+    if (l) { await switchLang(l.dataset.lang); rerender(); return; }
     const sz = e.target.closest('[data-size]');
     if (sz) { pr.size = sz.dataset.size || undefined; store.savePrefs(); applyTheme(); keep(draw); }
     const nm = e.target.closest('[data-nowmode]');

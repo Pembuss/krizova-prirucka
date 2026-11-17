@@ -1,6 +1,6 @@
 // Aplikácia: smerovanie, navigácia, jazyk, vzhľad, service worker.
 import { store } from './store.js';
-import { t, LANG, setLang, $, $$, esc } from './core.js';
+import { t, LANG, setLang, switchLang, ensureLang, $, $$, esc } from './core.js';
 import { LANGS as LANG_INFO } from '../../data/ui.js';
 import { icon } from './icons.js';
 import { THEMES, applyTheme, activeTheme, chosenTheme, autoDark, setTheme, setAutoDark, onThemeChange } from './theme.js';
@@ -106,19 +106,16 @@ document.addEventListener('change', (e) => {
   if (e.target.matches('[data-look-auto]')) setAutoDark(e.target.checked);
 });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLookPop(); });
-$('#app-lang').addEventListener('change', (e) => {
-  setLang(e.target.value);
-  const u = new URL(location.href);
-  u.searchParams.delete('lang');
-  history.replaceState(null, '', u);
+$('#app-lang').addEventListener('change', async (e) => {
+  await switchLang(e.target.value);
   rerender();
 });
 // vzhľad sa môže zmeniť aj sám (tmavý režim telefónu) – domovská obrazovka má pre každý vzhľad iné rozloženie
 onThemeChange(() => rerender());
 window.addEventListener('hashchange', route);
 applyTheme();
-setLang(LANG);
-route();
+// preklad PL/HU sa načíta pred prvým vykreslením
+ensureLang(LANG).then(() => { setLang(LANG); route(); });
 
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   navigator.serviceWorker.register('sw.js', { scope: './' }).catch(() => {});

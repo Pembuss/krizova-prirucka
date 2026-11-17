@@ -9,10 +9,15 @@ import { shoppingList, purchaseSchedule, energyPlan, householdNeeds } from '../s
 import { UI, t } from '../src/data/ui.js';
 import { SCENARIOS, scenarioForCrisis } from '../src/data/scenarios.js';
 import { READER_TAGS } from '../src/data/reader.js';
+import { CURRENCY } from '../src/data/currency.js';
 
 const L = (sk, cs, en) => ({ sk, cs, en });
 export const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-const money = (x, lang) => new Intl.NumberFormat(lang === 'en' ? 'en-IE' : lang === 'cs' ? 'cs-CZ' : 'sk-SK', { style: 'currency', currency: 'EUR' }).format(x);
+// ceny v eurách; PL a HU v miestnej mene prepočtom (src/data/currency.js)
+const money = (x, lang) => {
+  const c = CURRENCY[lang] || CURRENCY.sk;
+  return new Intl.NumberFormat({ en: 'en-IE', cs: 'cs-CZ', pl: 'pl-PL', hu: 'hu-HU' }[lang] || 'sk-SK', { style: 'currency', currency: c.code, maximumFractionDigits: c.code === 'HUF' ? 0 : 2 }).format(x * c.rate);
+};
 
 export const PRESETS = {
   single: { members: [{ age: 35 }], utilities: { cooking: 'gas', heating: 'gas' }, supplies: { waterNorm: 'nordic' } },
