@@ -51,17 +51,17 @@ export const COUNTRIES = [
     numbers: { general: '112', fire: '998', ambulance: '999', police: '997' },
     days: L('3 dni', '3 dny', '3 days'),
     authority: { name: 'RCB / MSWiA / PSP', url: 'https://www.gov.pl/web/rcb' },
-    guide: { title: 'Poradnik bezpieczeństwa (MSWiA a MON, 2025)', url: 'https://www.gov.pl/web/gov/poradnik-bezpieczenstwa' },
+    guide: { title: 'Poradnik bezpieczeństwa (MSWiA a MON, 2025)', url: 'https://www.poradnikbezpieczenstwa.gov.pl/' },
     warning: L(
-      'Sirény: vyhlásenie poplachu 3 min modulovaný tón; odvolanie 3 min stály tón. SMS varovania Alert RCB.',
-      'Sirény: vyhlášení poplachu 3 min modulovaný tón; odvolání 3 min stálý tón. SMS varování Alert RCB.',
-      'Sirens: alarm 3-minute modulated tone; all-clear 3-minute steady tone. SMS warnings via Alert RCB.'),
+      'Sirény (nariadenie MSWiA z 2025): vyhlásenie poplachu 3 min modulovaný tón s hláseniem; odvolanie 3 min stály tón; cvičný poplach 1 min stály tón (oznámený vopred). SMS varovania Alert RCB, Cell Broadcast sa pripravuje (2027).',
+      'Sirény (nařízení MSWiA z 2025): vyhlášení poplachu 3 min modulovaný tón s hlášením; odvolání 3 min stálý tón; cvičný poplach 1 min stálý tón (ohlášený předem). SMS varování Alert RCB, Cell Broadcast se připravuje (2027).',
+      'Sirens (MSWiA regulation, 2025): alarm 3-minute modulated tone with a spoken message; all-clear 3-minute steady tone; exercise 1-minute steady tone (announced in advance). SMS warnings via Alert RCB; Cell Broadcast in preparation (2027).'),
     shelters: L(
-      'Inventúra hasičov (~235 000 objektov): plnohodnotné kryty len pre ~300 000 osôb (0,8 %), ale úkryty a „miesta dočasného ukrytia“ (pivnice, podzemné garáže, podchody, metro) pre desiatky miliónov. Od roku 2026 sú miesta dočasného ukrytia povinné v nových bytových a verejných budovách. Mapa a aplikácia „Gdzie się ukryć“.',
-      'Inventura hasičů (~235 000 objektů): plnohodnotné kryty jen pro ~300 000 osob (0,8 %), ale úkryty a „místa dočasného ukrytí“ pro desítky milionů. Od roku 2026 jsou povinná v nových bytových a veřejných budovách. Mapa a aplikace „Gdzie się ukryć“.',
-      'Fire service inventory (~235,000 sites): true shelters only for ~300,000 people (0.8 %), but hiding places and "places of temporary shelter" (basements, garages, underpasses, metro) for tens of millions. From 2026 these are mandatory in new residential and public buildings. Map and app: "Gdzie się ukryć".'),
+      'Mapa a aplikácia hasičov „Gdzie się ukryć“ (december 2025): ~70 000 overených miest pre ~20 mil. osôb – kryty, úkryty a miesta dočasného ukrytia (pivnice, garáže, podchody, metro). Nové bytové domy a podzemné garáže musia mať miesta dočasného ukrytia (zákon o ochrane obyvateľstva z 2024).',
+      'Mapa a aplikace hasičů „Gdzie się ukryć“ (prosinec 2025): ~70 000 ověřených míst pro ~20 mil. osob – kryty, úkryty a místa dočasného ukrytí (sklepy, garáže, podchody, metro). Nové bytové domy a podzemní garáže musí mít místa dočasného ukrytí (zákon o ochraně obyvatelstva z 2024).',
+      'Fire service map and app "Gdzie się ukryć" (December 2025): ~70,000 verified places for ~20 million people – shelters, hiding places and temporary shelter places (basements, garages, underpasses, metro). New residential buildings and underground garages must include temporary shelter places (Civil Protection Act 2024).'),
     maps: [
-      { label: L('Gdzie się ukryć – mapa úkrytov', 'Gdzie się ukryć – mapa úkrytů', 'Gdzie się ukryć – shelter map'), url: 'https://www.gov.pl/web/mswia/nowe-narzedzie-pomoze-znalezc-punkty-schronienia' },
+      { label: L('Gdzie się ukryć – mapa úkrytov', 'Gdzie się ukryć – mapa úkrytů', 'Gdzie się ukryć – shelter map'), url: 'https://gdziesieukryc.pl/' },
     ],
   },
   {
@@ -69,9 +69,17 @@ export const COUNTRIES = [
     name: L('Maďarsko', 'Maďarsko', 'Hungary'),
     numbers: { general: '112', fire: '105', ambulance: '104', police: '107' },
     authority: { name: 'Országos Katasztrófavédelmi Főigazgatóság', url: 'https://www.katasztrofavedelem.hu/' },
-    warning: L('Sirény civilnej ochrany a hovorené hlásenia; informácie na stránke katastrofálnej ochrany.', 'Sirény civilní ochrany a mluvená hlášení; informace na stránce katastrofální ochrany.', 'Civil protection sirens and spoken announcements; information from the disaster management authority.'),
-    shelters: L('Verejné kryty z obdobia studenej vojny najmä v Budapešti (aj metro); väčšinou nie sú bežne prístupné. Ukrytie riešia obce v plánoch ochrany. V okolí JE Paks prebieha jódová profylaxia.', 'Veřejné kryty z období studené války hlavně v Budapešti (i metro); většinou nejsou běžně přístupné. Ukrytí řeší obce. V okolí JE Paks probíhá jodová profylaxe.', 'Cold War public shelters mostly in Budapest (including the metro), generally not open to the public. Municipalities plan sheltering. Iodine prophylaxis around the Paks nuclear plant.'),
-    maps: [],
+    warning: L(
+      'Sirény: katastrofálny poplach 120 s tón s meniacou sa výškou; letecký poplach 3 × 30 s s 30 s prestávkami; koniec poplachu 2 × 30 s stály tón. Pri skúške hlásenie „Figyelem, ez próba“. Varovné SMS obyvateľstvu.',
+      'Sirény: katastrofický poplach 120 s tón s měnící se výškou; letecký poplach 3 × 30 s s 30 s přestávkami; konec poplachu 2 × 30 s stálý tón. Při zkoušce hlášení „Figyelem, ez próba“. Varovné SMS obyvatelstvu.',
+      'Sirens: disaster alarm 120-second tone of varying pitch; air-raid alarm 3 × 30 s with 30-second pauses; all-clear 2 × 30 s steady tone. Tests are announced with "Figyelem, ez próba". SMS warnings to the population.'),
+    shelters: L(
+      'Úkryty (óvóhely, szükségóvóhely) eviduje generálne riaditeľstvo ochrany pred katastrofami; verejné kryty zo studenej vojny sú najmä v Budapešti (aj metro) a väčšinou nie sú bežne prístupné. O ukrytí informuje obec. V okolí JE Paks prebieha jódová profylaxia.',
+      'Úkryty (óvóhely, szükségóvóhely) eviduje generální ředitelství ochrany před katastrofami; veřejné kryty ze studené války jsou hlavně v Budapešti (i metro) a většinou nejsou běžně přístupné. O ukrytí informuje obec. V okolí JE Paks probíhá jodová profylaxe.',
+      'Shelters (óvóhely, emergency shelters) are registered by the national disaster management authority; Cold War public shelters are mostly in Budapest (including the metro) and generally not open to the public. Municipalities inform about sheltering. Iodine prophylaxis around the Paks nuclear plant.'),
+    maps: [
+      { label: L('Ochrana pred katastrofami – varovné signály', 'Ochrana před katastrofami – varovné signály', 'Disaster management – warning signals'), url: 'https://fovaros.katasztrofavedelem.hu/26145/tajekoztato-riaszto-rendszerek' },
+    ],
   },
   {
     cc: 'AT', flag: '🇦🇹', detail: true,
