@@ -1,5 +1,5 @@
 // Build: aplikácia (PWA) s knihou vo všetkých jazykoch, kniha v PDF a EPUB, prehľad úkrytov CO.
-// Použitie: node tools/build.mjs [--no-pdf] [--no-epub] [--lang=sk]
+// Použitie: node tools/build.mjs [--no-pdf] [--no-epub] [--no-manual] [--manual-only] [--lang=sk]
 import { I18N } from './i18n-setup.mjs'; // preklady PL a HU – musí byť načítané pred dátami
 import fs from 'node:fs';
 import path from 'node:path';
@@ -22,6 +22,7 @@ import { SHELTER_REGIONS, SHELTER_TOTAL, SHELTER_CITIES, SHELTER_SOURCE } from '
 
 const L = (sk, cs, en) => ({ sk, cs, en });
 import { expandPlaceholders, chapterLabel, esc, scenarioNumbers } from './render.mjs';
+import { shootScreens, manualHtml } from './manual.mjs';
 
 const require = createRequire(import.meta.url);
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -29,6 +30,8 @@ const DIST = process.env.KP_DIST ? path.resolve(process.env.KP_DIST) : path.join
 const args = process.argv.slice(2);
 const NO_PDF = args.includes('--no-pdf');
 const NO_EPUB = args.includes('--no-epub');
+const NO_MANUAL = args.includes('--no-manual');
+const MANUAL_ONLY = args.includes('--manual-only'); // len návod k aplikácii nad hotovým dist (po úprave content/navod)
 const ONLY = (args.find((a) => a.startsWith('--lang=')) || '').split('=')[1];
 const ALL_LANGS = LANGS.map((l) => l.id);
 const BUILD_LANGS = ALL_LANGS.filter((l) => fs.existsSync(path.join(ROOT, 'content', l, 'rozcestnik.md')) && (!ONLY || l === ONLY));
@@ -395,6 +398,32 @@ function buildDownloads() {
   return data;
 }
 
+// Návod k aplikácii (PDF): snímky obrazoviek zo zostavenej aplikácie + text z content/navod/<jazyk>.md
+const MANUAL_TITLE = { sk: 'Návod k aplikácii', cs: 'Návod k aplikaci', en: 'App manual', pl: 'Instrukcja aplikacji', hu: 'Felhasználói útmutató' };
+async function buildManual(browser, lang) {
+  const src = path.join(ROOT, 'content/navod', `${lang}.md`);
+  if (!fs.existsSync(src)) return null;
+  const work = path.join(ROOT, 'tools/.tmp/manual', lang);
+  fs.rmSync(work, { recursive: true, force: true });
+  const errors = await shootScreens(browser, { dist: DIST, lang, outDir: path.join(work, 'shots') });
+  for (const e of errors) warn(`Návod ${lang}: chyba v aplikácii pri snímkach: ${e}`);
+  const html = manualHtml({
+    md: read(src), lang, shotsRel: 'shots', title: MANUAL_TITLE[lang], subtitle: t(BOOK_TITLE, lang),
+    version: `${t(UI.versionLabel, lang)} ${VERSION}`, date: VERSION_DATE, logo: LOGO, unverified: UNVERIFIED[lang] || '',
+    cssHref: 'file://' + path.join(DIST, 'assets/css/manual.css'),
+  });
+  write(path.join(work, 'index.html'), html);
+  const page = await browser.newPage();
+  await page.goto('file://' + path.join(work, 'index.html'), { waitUntil: 'load' });
+  await page.evaluate(() => document.fonts.ready);
+  const footer = `<div style="font-family:Inter,Arial,sans-serif;font-size:8px;width:100%;padding:0 15mm;display:flex;justify-content:space-between;color:#444"><span>${esc(t(BOOK_TITLE, lang))} · ${esc(MANUAL_TITLE[lang])} · ${esc(VERSION)} · 112</span><span><span class="pageNumber"></span> / <span class="totalPages"></span></span></div>`;
+  const out = path.join(DIST, 'downloads', `navod-aplikacia-${lang}.pdf`);
+  fs.mkdirSync(path.dirname(out), { recursive: true });
+  await page.pdf({ path: out, format: 'A4', printBackground: true, displayHeaderFooter: true, headerTemplate: '<div></div>', footerTemplate: footer, margin: { top: '14mm', bottom: '16mm', left: '16mm', right: '16mm' }, outline: true, tagged: true });
+  await page.close();
+  return pdfPages(out);
+}
+
 // Skripty zabalené do bežných (nie modulových) súborov – fungujú aj po otvorení z disku (file://).
 function bundleScripts() {
   buildSync({
@@ -585,6 +614,20 @@ function buildServiceWorker() {
 // ---------- Hlavný beh ----------
 async function main() {
   const t0 = Date.now();
+  if (MANUAL_ONLY) {
+    if (!fs.existsSync(path.join(DIST, 'index.html'))) throw new Error('Najprv zostav aplikáciu: node tools/build.mjs');
+    fs.cpSync(path.join(ROOT, 'src/css/manual.css'), path.join(DIST, 'assets/css/manual.css'));
+    buildDownloads();
+    await withBrowser(async (browser) => {
+      for (const lang of BUILD_LANGS) { const n = await buildManual(browser, lang); if (n) console.log(`✓ návod k aplikácii ${lang}: ${n} strán`); }
+    });
+    buildDownloads();
+    const sw = buildServiceWorker();
+    console.log(`✓ service worker ${sw.version}`);
+    if (warnings.size) console.log('Upozornenia:\n - ' + [...warnings].join('\n - '));
+    console.log(`Hotovo za ${((Date.now() - t0) / 1000).toFixed(1)} s`);
+    return;
+  }
   if (!ONLY) fs.rmSync(DIST, { recursive: true, force: true });
   fs.mkdirSync(DIST, { recursive: true });
   copyAssets();
@@ -609,6 +652,12 @@ async function main() {
       if (!NO_EPUB) { const cover = await renderCover(browser, lang); buildEpub(lang, books[lang], cover, pageOf); console.log(`✓ EPUB ${lang}${NO_PDF ? ' (bez čísel strán – PDF sa nezostavovalo)' : ''}`); }
     }
   });
+  if (!NO_PDF && !NO_MANUAL) {
+    buildDownloads(); // aplikácia na snímkach ukáže knihy na stiahnutie
+    await withBrowser(async (browser) => {
+      for (const lang of BUILD_LANGS) { const n = await buildManual(browser, lang); if (n) console.log(`✓ návod k aplikácii ${lang}: ${n} strán`); }
+    });
+  }
   const dl = buildDownloads();
   console.log(`✓ na stiahnutie: kniha ${Object.keys(dl.book).join(', ') || '–'}${dl.shelters ? ', úkryty' : ''}${Object.keys(dl.manual).length ? ', návod' : ''}`);
   const sw = buildServiceWorker();
