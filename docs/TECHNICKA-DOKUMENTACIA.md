@@ -30,6 +30,7 @@ Zostavenie robí `tools/build.mjs`: Markdown → HTML (pandoc), kniha v aplikác
 | `src/js/app/store.js` | úložisko (`kp.profile`, `kp.state`, `kp.prefs`), záloha a obnova (aj šifrovaná) |
 | `src/js/app/theme.js` | vzhľady A/B/C, automatický tmavý režim, veľkosť písma |
 | `src/js/app/tour.js` | prehliadka so šípkami (kroky sa viažu na `data-tour="…"`) |
+| `src/js/app/install.js`, `views/install.js` | inštalácia do telefónu: zistenie zariadenia, natívne inštalačné okno, návody (`#/instalacia`) |
 | `src/js/app/bookrt.js`, `bookdata.js` | čítačka knihy: profil čitateľa, voľby „pre teba“, odporúčania, prečítané kapitoly, prehrávač scenárov, zoznamy |
 | `src/js/app/downloads.js` | zoznam súborov na stiahnutie (`window.KP_DOWNLOADS` z `assets/downloads.js`) |
 | `src/js/app/printdocs.js`, `tasks.js` | tlačové dokumenty, kroky plánu |
@@ -108,7 +109,17 @@ Build zlyhá, ak niektorému jazyku chýba kapitola. Upozornenia vypíše na kon
 1. `main.js` zistí jazyk: parameter `?lang=`, potom uložená voľba, potom jazyk prehliadača.
 2. Pri PL a HU najprv načíta `assets/i18n/<jazyk>.js` (`ensureLang`).
 3. Vykreslí obrazovku podľa adresy za `#/`. Prvé slovo je kľúč v `ROUTES`, ďalšie časti sú parametre (`#/teraz/blackout/2` → `teraz`, `['blackout', '2']`).
-4. Pri prvom spustení (`prefs.onboarded` nie je nastavené) presmeruje na úvodnú inštruktáž `#/uvod`.
+4. Pri prvom otvorení na webe presmeruje na **ponuku inštalácie** `#/instalacia`: „Nainštalovať do telefónu“ alebo „Pokračovať v prehliadači“. Potom nasleduje úvodná inštruktáž `#/uvod`. Nainštalovaná aplikácia (spustená z ikony na ploche, `display-mode: standalone`) a kópia otvorená z disku idú rovno na inštruktáž. Priamy odkaz na obrazovku (napr. `#/teraz/flood`) sa otvorí hneď.
+
+### Inštalácia do telefónu
+
+- `install.js` zistí, či aplikácia beží nainštalovaná (`isStandalone`), či ide o web (`isWeb`) a aké je zariadenie (`platform`): `ios`, `ios-other` (Chrome na iPhone), `android`, `desktop`, `inapp` (prehliadač vo Facebooku, Instagrame…).
+- `main.js` zachytí udalosť `beforeinstallprompt` (Chrome, Edge, Samsung Internet). Tlačidlo „Nainštalovať“ potom otvorí natívne inštalačné okno. Kde okno nie je (iPhone, Firefox, vstavané prehliadače), ukáže sa návod krok za krokom s prepínačom zariadenia (`#/instalacia/navod/<zariadenie>`).
+- Po inštalácii (`appinstalled`) sa zobrazí `#/instalacia/hotovo`.
+- Voľba sa uloží do `prefs.installChoice` (`install` / `browser`). Kto zvolil prehliadač, uvidí na Domove pripomienku. Zavrie ju natrvalo (`prefs.installHintOff`).
+- Inštaláciu ponúkajú aj Nastavenia a Pomoc. V nainštalovanej aplikácii sa neponúka.
+- Manifest má snímky obrazoviek (`assets/img/screens/`, z návodu v slovenčine), s ktorými Chrome na Androide ukáže väčšie inštalačné okno.
+- Na iPhone má aplikácia na ploche vlastné úložisko oddelené od Safari, preto sa inštalácia ponúka ešte pred úvodnou inštruktážou.
 
 Obrazovka (`views/*.js`) exportuje `render(el, params)` a môže vrátiť funkciu na upratanie. Voliteľne exportuje `update(el, params)` (zmena parametrov bez prekreslenia, napr. skok v rámci kapitoly) a `keepScroll`.
 
@@ -128,7 +139,7 @@ Obrazovka (`views/*.js`) exportuje `render(el, params)` a môže vrátiť funkci
 |---|---|---|
 | `kp.profile` | localStorage | profil domácnosti, miesta, trasy |
 | `kp.state` | localStorage | stav plánu, zásob, odškrtnutia, `wizardDone` |
-| `kp.prefs` | localStorage | jazyk, vzhľad, veľkosť písma, `onboarded`, `tourDone`, `nowMode` |
+| `kp.prefs` | localStorage | jazyk, vzhľad, veľkosť písma, `onboarded`, `tourDone`, `nowMode`, `installChoice`, `installHintOff`, `installed` |
 | `kp.reader`, `kp.read` | localStorage | profil čitateľa knihy, prečítané kapitoly |
 | `kp.scen`, `kp.checks` | localStorage | priebeh scenárov, odškrtnutia v zoznamoch knihy |
 | `kp.back`, `kp.hl`, `kp.tour`, `kp.skipIntro` | sessionStorage | návrat na voľbu, zvýraznenie hľadaného slova, prehliadka, preskočenie inštruktáže |
@@ -282,10 +293,11 @@ Adresy sú v `src/js/map/geo.js`. Pri veľkej návštevnosti ich treba nahradiť
 
 1. Žiadny súbor nemá viac ako 10 MB (limit Netlify).
 2. Všetky súbory v `assets/downloads.js` existujú a sedí im veľkosť. Kniha (PDF, EPUB) a návod sú vo všetkých jazykoch a kniha v aplikácii má 36 kapitol.
-3. V každom z 5 jazykov sa zobrazí 25 obrazoviek bez chýb v konzole a bez chýbajúcich súborov. Externé služby sú v testoch blokované.
-4. Offline trasa Bratislava → Žilina vyjde v rozumnej dĺžke, čím sa overí aj načítanie rozdelenej cestnej siete.
-5. Service worker sa aktivuje a uloží všetky súbory. Nová verzia service workera znova nestiahne žiadny nezmenený súbor. Domovská obrazovka, kapitola knihy aj Kríza teraz fungujú bez internetu.
-6. Offline balík sa stiahne cez tlačidlo v Nastaveniach a kontrolný súčet spojeného ZIP sedí.
+3. V každom z 5 jazykov sa zobrazí 31 obrazoviek (vrátane návodov na inštaláciu pre všetky zariadenia) bez chýb v konzole a bez chýbajúcich súborov. Externé služby sú v testoch blokované.
+4. Prvé otvorenie na webe ponúkne inštaláciu. Bez natívneho okna sa ukáže návod, „Pokračovať v prehliadači“ vedie na inštruktáž a na Domove je pripomienka, ktorá sa dá zavrieť. Nainštalovaná aplikácia ponuku nezobrazí.
+5. Offline trasa Bratislava → Žilina vyjde v rozumnej dĺžke, čím sa overí aj načítanie rozdelenej cestnej siete.
+6. Service worker sa aktivuje a uloží všetky súbory. Nová verzia service workera znova nestiahne žiadny nezmenený súbor. Domovská obrazovka, kapitola knihy aj Kríza teraz fungujú bez internetu.
+7. Offline balík sa stiahne cez tlačidlo v Nastaveniach a kontrolný súčet spojeného ZIP sedí.
 
 GitHub Actions spúšťa rýchle testy (`--quick`) pri každom pushi a úplné testy pred každým nasadením. Ak niektorý zlyhá, nová verzia sa nezverejní. Premenná `KP_DIST` nasmeruje build aj testy do iného priečinka.
 

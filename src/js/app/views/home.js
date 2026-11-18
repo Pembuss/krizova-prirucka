@@ -9,6 +9,7 @@ import { icon } from '../icons.js';
 import { VERSION } from '../../../data/version.js';
 import { LANGS as LANG_INFO } from '../../../data/ui.js';
 import { bookFile, fmtSize } from '../downloads.js';
+import { showInstallHint } from '../install.js';
 
 function state() {
   const p = store.profile;
@@ -92,7 +93,9 @@ ${readyCard(s)}
 export function render(el) {
   const s = state();
   const look = activeTheme();
-  el.innerHTML = look === 'b' ? homeB(s) : look === 'c' ? homeC(s) : homeA(s);
+  // pripomienka inštalácie pre toho, kto pri prvom otvorení zvolil prehliadač
+  const hint = showInstallHint() ? `<div class="install-hint" role="note">${icon('mobile', 22)}<span>${esc(t('inst.hint'))}</span><a class="btn btn-sm" href="#/instalacia/navod">${esc(t('inst.hintBtn'))}</a><button type="button" class="hint-x" data-hint-off aria-label="${esc(t('c.close'))}">${icon('close', 18)}</button></div>` : '';
+  el.innerHTML = hint + (look === 'b' ? homeB(s) : look === 'c' ? homeC(s) : homeA(s));
   el.addEventListener('submit', (e) => {
     if (!e.target.matches('[data-search]')) return;
     e.preventDefault();
@@ -100,6 +103,7 @@ export function render(el) {
     if (q) location.hash = `#/kniha/hladat/${encodeURIComponent(q)}`;
   });
   el.addEventListener('click', (e) => {
+    if (e.target.closest('[data-hint-off]')) { store.prefs.installHintOff = true; store.savePrefs(); el.querySelector('.install-hint')?.remove(); return; }
     const b = e.target.closest('[data-pdf-lang]');
     if (!b) return;
     const f = bookFile(b.dataset.pdfLang, 'pdf');

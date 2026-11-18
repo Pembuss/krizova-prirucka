@@ -17,7 +17,20 @@ Twoje dane (gospodarstwo, zapasy, plan) zostają **tylko na twoim urządzeniu**.
 
 ## Instalacja i praca bez internetu
 
-Aplikacja działa w przeglądarce. Wystarczy otworzyć jej adres internetowy. Do telefonu dodasz ją jak zwykłą aplikację:
+Aplikacja działa w przeglądarce. Wystarczy otworzyć jej adres internetowy i od razu się uruchomi. Przy pierwszym otwarciu w internecie zaproponuje dwie możliwości:
+
+- **Zainstaluj w telefonie** (zalecane). Na Androidzie i na komputerze z Chrome lub Edge otworzy się okno instalacji – wystarczy potwierdzić. Na iPhonie i w innych przeglądarkach aplikacja pokaże instrukcję krok po kroku dla twojego urządzenia.
+- **Kontynuuj w przeglądarce.** Aplikacja otworzy się od razu. Zainstalować ją możesz też później: **Więcej → Pomoc → Zainstaluj w telefonie**, w Ustawieniach albo przez przypomnienie na ekranie Start.
+
+Zainstalowana aplikacja uruchamia się z ikony na ekranie głównym na pełnym ekranie, od razu bez tej propozycji.
+
+::: shots
+![Pierwsze otwarcie w internecie](shot:install)
+
+![Instrukcja dla iPhone'a](shot:install-ios)
+:::
+
+Jeśli chcesz zainstalować ją ręcznie:
 
 - **Android (Chrome):** stuknij **⋮** w prawym górnym rogu i wybierz **Zainstaluj aplikację** lub **Dodaj do ekranu głównego**.
 - **iPhone i iPad (Safari):** stuknij ikonę **Udostępnij** (kwadrat ze strzałką) i wybierz **Do ekranu początkowego**.

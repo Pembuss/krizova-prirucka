@@ -16,7 +16,7 @@ const require = createRequire(import.meta.url);
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = process.env.KP_DIST ? path.resolve(process.env.KP_DIST) : path.join(ROOT, 'dist'); // KP_DIST: iný priečinok
 const QUICK = process.argv.includes('--quick');
-const ROUTES = ['', 'teraz', 'teraz/blackout/1', 'teraz/flood/vsetko', 'kniha', 'kniha/vypadok-elektriny', 'kniha/hladat/voda', 'mapa', 'trasy', 'plan', 'profil', 'zasoby', 'energia', 'batohy', 'rodina', 'karty', 'zoznamy', 'krajiny', 'kryty', 'tlac', 'pomoc', 'nastavenia', 'o-aplikacii', 'viac', 'uvod/0'];
+const ROUTES = ['', 'teraz', 'teraz/blackout/1', 'teraz/flood/vsetko', 'kniha', 'kniha/vypadok-elektriny', 'kniha/hladat/voda', 'mapa', 'trasy', 'plan', 'profil', 'zasoby', 'energia', 'batohy', 'rodina', 'karty', 'zoznamy', 'krajiny', 'kryty', 'tlac', 'pomoc', 'nastavenia', 'o-aplikacii', 'viac', 'uvod/0', 'instalacia', 'instalacia/navod/ios', 'instalacia/navod/android', 'instalacia/navod/desktop', 'instalacia/navod/inapp', 'instalacia/hotovo'];
 
 let failed = 0;
 const ok = (msg) => console.log('  ✓ ' + msg);
@@ -50,11 +50,20 @@ function walk(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(path.join(dir, e.name)) : [path.join(dir, e.name)]));
 }
 
-async function newPage(browser, base, lang, extra = {}) {
+// fresh: prvé otvorenie (bez uložených nastavení); standalone: ako nainštalovaná aplikácia z ikony na ploche
+async function newPage(browser, base, lang, extra = {}, { fresh = false, standalone = false } = {}) {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, serviceWorkers: 'block', acceptDownloads: true, ...extra });
   // iba lokálny server – externé mapové a vyhľadávacie služby sa v testoch nevolajú
   await ctx.route((u) => !u.href.startsWith(base), (r) => r.abort());
-  await ctx.addInitScript((l) => { if (!localStorage.getItem('kp.prefs')) localStorage.setItem('kp.prefs', JSON.stringify({ lang: l, onboarded: true, tourDone: true })); }, lang);
+  if (!fresh) await ctx.addInitScript((l) => { if (!localStorage.getItem('kp.prefs')) localStorage.setItem('kp.prefs', JSON.stringify({ lang: l, onboarded: true, tourDone: true })); }, lang);
+  // natívne inštalačné okno Chromia v testoch nechceme
+  await ctx.addInitScript(() => window.addEventListener('beforeinstallprompt', (e) => e.stopImmediatePropagation(), true));
+  if (standalone) {
+    await ctx.addInitScript(() => {
+      const orig = window.matchMedia.bind(window);
+      window.matchMedia = (q) => (/display-mode:\s*standalone/.test(q) ? { matches: true, media: q, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {} } : orig(q));
+    });
+  }
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
@@ -106,6 +115,42 @@ async function main() {
       check(!empty.length, empty.length ? `prázdne obrazovky: ${empty.join(', ')}` : `${ROUTES.length} obrazoviek sa zobrazí`);
       check(await page.evaluate((l) => document.documentElement.lang === l, lang), `jazyk stránky je ${lang}`);
       check(!errors.length, errors.length ? `chyby: ${[...new Set(errors)].slice(0, 5).join(' | ')}` : 'bez chýb v konzole');
+      await ctx.close();
+    }
+
+    console.log('Prvé otvorenie: inštalácia do telefónu');
+    {
+      const { ctx, page, errors } = await newPage(browser, base, 'sk', {}, { fresh: true });
+      await page.goto(base + 'index.html');
+      await page.waitForSelector('[data-install]', { timeout: 10000 }).catch(() => {});
+      check(await page.evaluate(() => location.hash) === '#/instalacia', 'na webe sa najprv ponúkne inštalácia do telefónu');
+      check(await page.locator('[data-install]').isVisible() && await page.locator('[data-browser]').isVisible(), 'tlačidlá „Nainštalovať“ a „Pokračovať v prehliadači“');
+      await page.click('[data-install]');
+      await page.waitForTimeout(400);
+      check(await page.evaluate(() => location.hash) === '#/instalacia/navod' && await page.locator('.inst-steps li').count() === 3, 'bez natívneho okna sa ukáže návod krok za krokom');
+      await page.goto(base + 'index.html#/instalacia');
+      await page.waitForSelector('[data-browser]');
+      await page.click('[data-browser]');
+      await page.waitForTimeout(400);
+      check(await page.evaluate(() => location.hash.startsWith('#/uvod')), '„Pokračovať v prehliadači“ otvorí úvodnú inštruktáž');
+      await page.evaluate(() => { const p = JSON.parse(localStorage.getItem('kp.prefs')); p.onboarded = true; localStorage.setItem('kp.prefs', JSON.stringify(p)); location.hash = '#/'; location.reload(); });
+      await page.waitForSelector('#view *');
+      await page.waitForTimeout(400);
+      check(await page.locator('.install-hint').count() === 1, 'na Domove je pripomienka inštalácie');
+      await page.click('[data-hint-off]');
+      await page.reload(); await page.waitForTimeout(500);
+      check(await page.locator('.install-hint').count() === 0, 'pripomienka sa dá natrvalo zavrieť');
+      check(!errors.length, errors.length ? `chyby: ${errors.slice(0, 3).join(' | ')}` : 'bez chýb v konzole');
+      await ctx.close();
+    }
+    {
+      const { ctx, page } = await newPage(browser, base, 'sk', {}, { fresh: true, standalone: true });
+      await page.goto(base + 'index.html');
+      await page.waitForTimeout(800);
+      check(await page.evaluate(() => location.hash.startsWith('#/uvod')), 'nainštalovaná aplikácia ide rovno na inštruktáž, bez ponuky inštalácie');
+      await page.goto(base + 'index.html#/nastavenia');
+      await page.waitForTimeout(500);
+      check(await page.locator('a[href="#/instalacia/navod"]').count() === 0, 'v nainštalovanej aplikácii sa inštalácia neponúka');
       await ctx.close();
     }
 

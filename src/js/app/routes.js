@@ -22,6 +22,7 @@ export const ROUTES = {
   'o-aplikacii': { load: () => import('./views/about.js'), nav: 'about', ico: 'info' },
   viac: { load: () => import('./views/more.js'), nav: 'more', ico: 'menu' },
   uvod: { load: () => import('./views/onboarding.js'), nav: 'welcome', ico: 'home', bare: true },
+  instalacia: { load: () => import('./views/install.js'), nav: 'install', ico: 'mobile', bare: true },
 };
 // Bočné menu (počítač) po skupinách; obrazovka „Viac“ používa skupiny 2–4
 export const NAV_GROUPS = [

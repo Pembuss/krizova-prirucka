@@ -17,7 +17,20 @@ Your data (household, supplies, plan) stays **only on your device**. It is never
 
 ## Installing and working offline
 
-The app runs in your web browser: just open its web address. To add it to your phone as a regular app:
+The app runs in your web browser: just open its web address and it starts straight away. The first time you open it on the web, it offers two options:
+
+- **Install on my phone** (recommended). On Android, and on a computer with Chrome or Edge, an install dialog opens and you just confirm it. On iPhone and in other browsers, the app shows step-by-step instructions for your device.
+- **Continue in the browser.** The app opens straight away. You can still install it later: **More → Help → Install on my phone**, in Settings, or from the reminder on the Home screen.
+
+Once installed, the app starts full screen from the icon on your home screen, without this choice.
+
+::: shots
+![First visit on the web](shot:install)
+
+![Instructions for iPhone](shot:install-ios)
+:::
+
+To install it manually:
 
 - **Android (Chrome):** tap **⋮** in the top right and choose **Install app** or **Add to Home screen**.
 - **iPhone and iPad (Safari):** tap the **Share** icon (a square with an arrow) and choose **Add to Home Screen**.

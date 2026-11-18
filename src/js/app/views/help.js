@@ -4,6 +4,7 @@ import { icon } from '../icons.js';
 import { FAQ } from '../../../data/help.js';
 import { manualFile, fmtSize } from '../downloads.js';
 import { requestTour } from '../tour.js';
+import { isWeb, isStandalone } from '../install.js';
 import { store } from '../store.js';
 
 export function render(el) {
@@ -14,6 +15,7 @@ export function render(el) {
 <div class="tile-grid">
 <button type="button" class="tile" data-tour-start>${icon('play', 26)}<strong>${esc(t('help.tour'))}</strong><small>${esc(t('help.tourSub'))}</small></button>
 <button type="button" class="tile" data-intro>${icon('flag', 26)}<strong>${esc(t('help.intro'))}</strong><small>${esc(t('help.introSub'))}</small></button>
+${isWeb() && !isStandalone() ? `<a class="tile" href="#/instalacia/navod">${icon('mobile', 26)}<strong>${esc(t('inst.install'))}</strong><small>${esc(t('inst.tileSub'))}</small></a>` : ''}
 ${man ? `<a class="tile" href="${esc(man.file)}" download>${icon('download', 26)}<strong>${esc(t('help.manual'))}</strong><small>PDF · ${esc(fmtSize(man.size, LANG))}</small></a>` : ''}
 <a class="tile" href="#/kniha">${icon('book', 26)}<strong>${esc(t('nav.book'))}</strong><small>${esc(t('home.tBookSub'))}</small></a>
 </div>

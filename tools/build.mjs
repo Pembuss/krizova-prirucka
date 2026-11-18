@@ -361,7 +361,7 @@ function buildRoot() {
 <script>location.replace('../index.html' + location.search + location.hash);</script></head><body><a href="../index.html">Krízová príručka</a></body></html>`);
   const manifest = {
     name: 'Krízová príručka – Crisis Handbook', short_name: 'Krízová príručka', id: './', start_url: './index.html', scope: './', display: 'standalone',
-    background_color: '#F4F7FA', theme_color: '#0B5C7A', lang: 'sk', description: t(SITE.tagline, 'sk'),
+    background_color: '#F4F7FA', theme_color: '#0B5C7A', lang: 'sk', dir: 'ltr', description: t(SITE.tagline, 'sk'), categories: ['utilities', 'education', 'books'],
     icons: [
       { src: 'assets/img/icon-192.png', sizes: '192x192', type: 'image/png' },
       { src: 'assets/img/icon-512.png', sizes: '512x512', type: 'image/png' },
@@ -425,6 +425,26 @@ async function buildManual(browser, lang) {
   await page.pdf({ path: out, format: 'A4', printBackground: true, displayHeaderFooter: true, headerTemplate: '<div></div>', footerTemplate: footer, margin: { top: '14mm', bottom: '16mm', left: '16mm', right: '16mm' }, outline: true, tagged: true });
   await page.close();
   return pdfPages(out);
+}
+
+// Snímky obrazoviek v manifeste – Chrome na Androide ich ukáže vo väčšom inštalačnom okne
+function addManifestScreenshots() {
+  const src = path.join(ROOT, 'tools/.tmp/manual/sk/shots');
+  const file = path.join(DIST, 'manifest.webmanifest');
+  if (!fs.existsSync(src) || !fs.existsSync(file)) return 0;
+  const shots = [['home-a', 'Domov'], ['now-step', 'Kríza teraz – krok za krokom'], ['book-reader', 'Príručka – kniha-hra'], ['map', 'Offline mapa']];
+  const out = [];
+  for (const [n, label] of shots) {
+    const f = path.join(src, `${n}.jpg`);
+    if (!fs.existsSync(f)) continue;
+    fs.mkdirSync(path.join(DIST, 'assets/img/screens'), { recursive: true });
+    fs.copyFileSync(f, path.join(DIST, 'assets/img/screens', `${n}.jpg`));
+    out.push({ src: `assets/img/screens/${n}.jpg`, sizes: '780x1560', type: 'image/jpeg', form_factor: 'narrow', label });
+  }
+  const m = JSON.parse(read(file));
+  m.screenshots = out;
+  write(file, JSON.stringify(m, null, 2));
+  return out.length;
 }
 
 // Skripty zabalené do bežných (nie modulových) súborov – fungujú aj po otvorení z disku (file://).
@@ -655,7 +675,7 @@ function buildServiceWorker() {
   buildHeaders();
   // Z offline mapy sa vopred ukladá len prehľad Európy; podrobné balíky sa uložia, keď ich mapa načíta.
   const mapPre = (f) => !f.startsWith('assets/map/') || /^assets\/map\/(index|labels|countries|base|6-[0-9-]+)\.js$/.test(f);
-  const files = listFiles(DIST).filter((f) => !f.startsWith('downloads/') && !f.startsWith('print/') && !f.startsWith('app/') && f !== 'sw.js' && f !== 'OTVOR-PRIRUCKU.html' && !f.endsWith('.map') && !f.endsWith('.txt') && !f.startsWith('.') && !f.startsWith('_') && !f.endsWith('.toml') && !f.endsWith('.zip') && mapPre(f));
+  const files = listFiles(DIST).filter((f) => !f.startsWith('downloads/') && !f.startsWith('print/') && !f.startsWith('app/') && f !== 'sw.js' && f !== 'OTVOR-PRIRUCKU.html' && !f.endsWith('.map') && !f.endsWith('.txt') && !f.startsWith('.') && !f.startsWith('_') && !f.endsWith('.toml') && !f.startsWith('assets/img/screens/') && !f.endsWith('.zip') && mapPre(f));
   // každý súbor s kontrolným súčtom – service worker pri aktualizácii stiahne len zmenené súbory
   const hash = crypto.createHash('sha1');
   const pre = files.map((f) => {
@@ -680,6 +700,7 @@ async function main() {
       await withBrowser(async (browser) => {
         for (const lang of BUILD_LANGS) { const n = await buildManual(browser, lang); if (n) console.log(`✓ návod k aplikácii ${lang}: ${n} strán`); }
       });
+      addManifestScreenshots();
     }
     const dl = buildDownloads();
     console.log(`✓ na stiahnutie: kniha ${Object.keys(dl.book).join(', ') || '–'}${dl.offline ? `, offline balík (${dl.offline.parts.length} častí)` : ''}`);
@@ -718,6 +739,8 @@ async function main() {
     await withBrowser(async (browser) => {
       for (const lang of BUILD_LANGS) { const n = await buildManual(browser, lang); if (n) console.log(`✓ návod k aplikácii ${lang}: ${n} strán`); }
     });
+    const n = addManifestScreenshots();
+    if (n) console.log(`✓ manifest: ${n} snímky obrazovky pre inštalačné okno`);
   }
   const dl = buildDownloads();
   console.log(`✓ na stiahnutie: kniha ${Object.keys(dl.book).join(', ') || '–'}${dl.shelters ? ', úkryty' : ''}${Object.keys(dl.manual).length ? ', návod' : ''}`);

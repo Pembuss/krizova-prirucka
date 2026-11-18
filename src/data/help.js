@@ -26,9 +26,9 @@ export const FAQ = [
   {
     q: L('Ako si ju dám do mobilu ako aplikáciu?', 'Jak si ji dám do mobilu jako aplikaci?', 'How do I install it on my phone?'),
     a: L(
-      'Android (Chrome): otvor stránku, ťukni na ⋮ vpravo hore a zvoľ „Inštalovať aplikáciu“ alebo „Pridať na plochu“. iPhone (Safari): ťukni na ikonu Zdieľať (štvorec so šípkou) a zvoľ „Pridať na plochu“. Ikona sa objaví medzi ostatnými aplikáciami a funguje aj offline.',
-      'Android (Chrome): otevři stránku, ťukni na ⋮ vpravo nahoře a zvol „Instalovat aplikaci“ nebo „Přidat na plochu“. iPhone (Safari): ťukni na ikonu Sdílet (čtverec se šipkou) a zvol „Přidat na plochu“. Ikona se objeví mezi ostatními aplikacemi a funguje i offline.',
-      'Android (Chrome): open the page, tap ⋮ at the top right and choose “Install app” or “Add to Home screen”. iPhone (Safari): tap the Share icon (square with an arrow) and choose “Add to Home Screen”. The icon appears among your apps and works offline.'),
+      'Najjednoduchšie: pri prvom otvorení zvoľ „Nainštalovať do telefónu“, alebo neskôr Viac → Pomoc → „Nainštalovať do telefónu“. Aplikácia ťa prevedie krok za krokom. Ručne: Android (Chrome) – ťukni na ⋮ vpravo hore a zvoľ „Inštalovať aplikáciu“ alebo „Pridať na plochu“. iPhone (Safari) – ťukni na ikonu Zdieľať (štvorec so šípkou) a zvoľ „Pridať na plochu“. Ikona sa objaví medzi ostatnými aplikáciami a funguje aj offline.',
+      'Nejjednodušší: při prvním otevření zvol „Nainstalovat do telefonu“, nebo později Více → Nápověda → „Nainstalovat do telefonu“. Aplikace tě provede krok za krokem. Ručně: Android (Chrome) – ťukni na ⋮ vpravo nahoře a zvol „Instalovat aplikaci“ nebo „Přidat na plochu“. iPhone (Safari) – ťukni na ikonu Sdílet (čtverec se šipkou) a zvol „Přidat na plochu“. Ikona se objeví mezi ostatními aplikacemi a funguje i offline.',
+      'The easiest way: when you first open the app, choose “Install on my phone”, or later go to More → Help → “Install on my phone”. The app guides you step by step. Manually: Android (Chrome) – tap ⋮ at the top right and choose “Install app” or “Add to Home screen”. iPhone (Safari) – tap the Share icon (square with an arrow) and choose “Add to Home Screen”. The icon appears among your apps and works offline.'),
   },
   {
     q: L('Kde sú uložené moje údaje?', 'Kde jsou uložena moje data?', 'Where is my data stored?'),
@@ -104,6 +104,7 @@ export const FAQ = [
 
 // Novinky vo verzii (O aplikácii)
 export const CHANGES = [
+  L('Inštalácia do telefónu pri prvom otvorení: jedným ťuknutím alebo s návodom pre iPhone, Android a počítač', 'Instalace do telefonu při prvním otevření: jedním ťuknutím nebo s návodem pro iPhone, Android a počítač', 'Install on your phone when you first open the app: with one tap or with steps for iPhone, Android and computer'),
   L('Nová aplikácia: všetko na jednom mieste – kniha, kríza teraz, plán, mapa', 'Nová aplikace: vše na jednom místě – kniha, krize teď, plán, mapa', 'New app: everything in one place – book, crisis now, plan, map'),
   L('Tri vzhľady (A, B, C), automatický tmavý režim', 'Tři vzhledy (A, B, C), automatický tmavý režim', 'Three looks (A, B, C), automatic dark mode'),
   L('„Kríza teraz“ po krokoch s odškrtávaním', '„Krize teď“ po krocích s odškrtáváním', '“Crisis now” step by step with tick-off'),

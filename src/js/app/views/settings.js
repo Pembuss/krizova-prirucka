@@ -7,6 +7,7 @@ import { icon } from '../icons.js';
 import { chosenTheme, autoDark, setTheme, setAutoDark, applyTheme } from '../theme.js';
 import { downloads, offlinePackage, fmtSize } from '../downloads.js';
 import { requestTour } from '../tour.js';
+import { isStandalone } from '../install.js';
 import { rerender } from '../main.js';
 
 const LOCAL = location.protocol === 'file:';
@@ -43,7 +44,8 @@ ${LANG_INFO.find((l) => l.id === LANG)?.unverified ? `<p class="unverified">${es
 <button class="btn btn-ghost danger" data-reset>🗑️ ${esc(t('set.reset'))}</button></section>
 
 <section class="card"><h2 class="card-h">${icon('check', 22)} ${esc(t('set.offline'))}</h2><p id="sw-status" class="muted">…</p>
-<div class="btn-row">${LOCAL ? '' : `<button class="btn btn-ghost" data-docs>💾 ${esc(t('set.saveDocs'))}</button>`}<button class="btn btn-ghost" data-install hidden>📲 ${esc(t('set.install'))}</button></div>
+<div class="btn-row">${LOCAL ? '' : `<button class="btn btn-ghost" data-docs>💾 ${esc(t('set.saveDocs'))}</button>`}${LOCAL || isStandalone() ? '' : `<a class="btn btn-ghost" href="#/instalacia/navod">${icon('mobile', 20)} ${esc(t('set.install'))}</a>`}</div>
+${!LOCAL && isStandalone() ? `<p class="small">✓ ${esc(t('inst.installed'))}</p>` : ''}
 <p id="docs-status" class="muted small" aria-live="polite"></p>
 <h3 class="card-h">${esc(t('set.zip'))}</h3>
 <p class="small muted">${esc(t('set.zipLead'))}</p>
@@ -57,7 +59,6 @@ ${pkg && !LOCAL ? `<button class="btn" data-zip>${icon('download', 20)} ${esc(t(
 <p><strong>${esc(t('set.version'))}:</strong> ${esc(VERSION)} (${esc(VERSION_DATE)}) · <a href="#/o-aplikacii">${esc(t('nav.about'))}</a></p></section>
 </div>`;
     swStatus();
-    if (window._installPrompt) $('[data-install]', el).hidden = false;
   };
   async function swStatus() {
     const out = $('#sw-status', el);
@@ -99,7 +100,6 @@ ${pkg && !LOCAL ? `<button class="btn" data-zip>${icon('download', 20)} ${esc(t(
       reg.active.postMessage({ type: 'cache-docs', urls }, [ch.port2]);
     }
     if (e.target.closest('[data-zip]')) downloadZip(pkg, $('#zip-status', el), e.target.closest('[data-zip]'));
-    if (e.target.closest('[data-install]') && window._installPrompt) { window._installPrompt.prompt(); window._installPrompt = null; }
     if (e.target.closest('[data-tour-start]')) requestTour();
     if (e.target.closest('[data-intro]')) { store.prefs.onboarded = false; store.savePrefs(); location.hash = '#/uvod'; }
   });

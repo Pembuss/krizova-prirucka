@@ -373,3 +373,32 @@ span.unverified { display: inline-block; margin: 0 0 0 .35rem; padding: .05rem .
 .reader-top .btn { white-space: nowrap; }
 .btn small { color: inherit; opacity: .8; font-weight: 600; }
 .toc-part a[aria-current="page"] { border-color: var(--primary); background: var(--primary-soft); font-weight: 800; }
+
+/* ---------- Inštalácia do telefónu (#/instalacia) ---------- */
+.inst .onb-top { flex-wrap: wrap; gap: .5rem; }
+.inst-langs { margin: 0; gap: .3rem; }
+.inst-langs .chip { min-height: 36px; padding: .2rem .6rem; font-size: .85rem; }
+.inst-hero { display: flex; align-items: center; gap: .9rem; }
+.inst-hero img { flex: none; border-radius: 16px; }
+.inst-benefits { list-style: none; margin: 0; padding: .9rem 1rem; display: grid; gap: .7rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+.inst-benefits li { display: flex; gap: .75rem; align-items: center; font-weight: 600; }
+.inst-benefits .ic { flex: none; color: var(--primary); }
+.btn-lg { min-height: calc(var(--tap) + 10px); font-size: 1.12rem; }
+.inst .box { margin: 0; padding: .7rem .9rem; border-left: 5px solid var(--border); border-radius: 0 var(--radius) var(--radius) 0; background: var(--surface); color: var(--ink); }
+.inst .box.tip { border-color: var(--primary); background: var(--primary-soft); }
+.inst .box.note { border-color: var(--urgent, #E8590C); }
+.inst-status { margin: 0; color: var(--muted); }
+.inst-steps li { align-items: center; }
+.inst-steps li > span:last-child { line-height: 1.45; }
+.inst-ic { display: inline-flex; vertical-align: -4px; padding: 2px 4px; margin: 0 1px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); }
+a.chip { display: inline-flex; align-items: center; gap: .35rem; text-decoration: none; padding: .35rem .8rem; }
+.inst-copy { display: flex; gap: .5rem; }
+.inst-copy input { flex: 1; min-width: 0; min-height: 44px; padding: 0 .7rem; border: 2px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--ink); font: inherit; font-size: .9rem; }
+/* pripomienka na domovskej obrazovke */
+/* [hidden] musí vyhrať aj nad display:flex tlačidiel */
+.btn[hidden], .inst [hidden] { display: none !important; }
+.install-hint { display: grid; grid-template-columns: auto 1fr auto; column-gap: .7rem; row-gap: .45rem; align-items: center; max-width: 960px; margin: .8rem auto 0; width: calc(100% - 2rem); padding: .7rem .5rem .7rem .9rem; border-radius: var(--radius); background: var(--primary-soft); border: 1px solid var(--primary); color: var(--ink); }
+.install-hint > .ic { grid-row: 1 / span 2; color: var(--primary); }
+.install-hint > span { grid-column: 2; font-weight: 600; font-size: .95rem; line-height: 1.3; }
+.install-hint > .btn { grid-column: 2; justify-self: start; }
+.install-hint .hint-x { grid-column: 3; grid-row: 1 / span 2; align-self: start; display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 10px; background: transparent; color: var(--muted); cursor: pointer; }

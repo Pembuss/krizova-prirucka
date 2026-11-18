@@ -17,7 +17,20 @@ Az adataid (háztartás, készletek, terv) **csak a saját eszközödön** marad
 
 ## Telepítés és használat internet nélkül
 
-Az alkalmazás böngészőben fut. Elég megnyitni a webcímét. A telefonodra így teheted fel alkalmazásként:
+Az alkalmazás böngészőben fut. Elég megnyitni a webcímét, és azonnal elindul. Az első webes megnyitáskor két lehetőséget kínál:
+
+- **Telepítés a telefonra** (ajánlott). Androidon, valamint Chrome-mal vagy Edge-dzsel számítógépen megnyílik a telepítési ablak, csak jóvá kell hagyni. iPhone-on és más böngészőkben az alkalmazás lépésről lépésre megmutatja, mit kell tenni az eszközödön.
+- **Folytatás a böngészőben.** Az alkalmazás azonnal megnyílik. Később is telepítheted: **Továbbiak → Súgó → Telepítés a telefonra**, a Beállításokban vagy a Kezdőlapon megjelenő emlékeztetővel.
+
+A telepített alkalmazás a kezdőképernyő ikonjáról teljes képernyőn indul, ez a választás nélkül.
+
+::: shots
+![Első megnyitás a weben](shot:install)
+
+![Útmutató iPhone-hoz](shot:install-ios)
+:::
+
+Kézi telepítés:
 
 - **Android (Chrome):** koppints a jobb felső **⋮** ikonra, és válaszd az **Alkalmazás telepítése** vagy a **Hozzáadás a kezdőképernyőhöz** lehetőséget.
 - **iPhone és iPad (Safari):** koppints a **Megosztás** ikonra (négyzet nyíllal), és válaszd a **Főképernyőhöz adás** lehetőséget.

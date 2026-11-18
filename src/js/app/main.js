@@ -5,6 +5,7 @@ import { LANGS as LANG_INFO } from '../../data/ui.js';
 import { icon } from './icons.js';
 import { THEMES, applyTheme, activeTheme, chosenTheme, autoDark, setTheme, setAutoDark, onThemeChange } from './theme.js';
 import { ROUTES, NAV_GROUPS, TABS, UNDER_MORE } from './routes.js';
+import { offerOnFirstRun } from './install.js';
 
 const navLink = (k, active, cls = '', tab = false) => {
   const r = ROUTES[k];
@@ -42,8 +43,12 @@ async function route() {
   const hash = location.hash.replace(/^#\/?/, '');
   const [name, ...params] = hash.split('/');
   const key = ROUTES[name] ? name : '';
-  // prvé spustenie: úvodná inštruktáž (nie pri priamom odkaze, napr. na krízový postup)
-  if (!store.prefs.onboarded && key === '' && !sessionStorage.getItem('kp.skipIntro')) { location.replace('#/uvod'); return; }
+  // prvé spustenie (nie pri priamom odkaze, napr. na krízový postup): na webe najprv ponuka inštalácie
+  // do telefónu, potom úvodná inštruktáž. Nainštalovaná aplikácia (z ikony na ploche) ide rovno na inštruktáž.
+  if (key === '' && !sessionStorage.getItem('kp.skipIntro')) {
+    if (offerOnFirstRun()) { location.replace('#/instalacia'); return; }
+    if (!store.prefs.onboarded) { location.replace('#/uvod'); return; }
+  }
   const r = ROUTES[key];
   const args = params.map(decodeURIComponent);
   document.body.classList.toggle('bare', !!r.bare);
@@ -120,5 +125,12 @@ ensureLang(LANG).then(() => { setLang(LANG); route(); });
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   navigator.serviceWorker.register('sw.js', { scope: './' }).catch(() => {});
 }
-window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); window._installPrompt = e; });
+// Natívne inštalačné okno (Chrome, Edge, Samsung Internet) – ponúkne ho obrazovka Inštalácia
+window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); window._installPrompt = e; window.dispatchEvent(new Event('kp-installable')); });
+window.addEventListener('appinstalled', () => {
+  window._installPrompt = null;
+  store.prefs.installed = true;
+  store.savePrefs();
+  window.dispatchEvent(new Event('kp-installed'));
+});
 export { route };

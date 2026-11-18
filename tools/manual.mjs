@@ -7,6 +7,8 @@ import { spawnSync } from 'node:child_process';
 
 // Obrazovky na odfotenie: názov → adresa v aplikácii a príprava
 export const SHOTS = [
+  ['install', '#/instalacia'],
+  ['install-ios', '#/instalacia/navod/ios'],
   ['onb-lang', '#/uvod/0'],
   ['onb-look', '#/uvod/1'],
   ['onb-home', '#/uvod/2'],
@@ -44,6 +46,8 @@ async function show(page, hash, wait = 700) {
 export async function shootScreens(browser, { dist, lang, outDir }) {
   fs.mkdirSync(outDir, { recursive: true });
   const ctx = await browser.newContext({ viewport: VIEW, deviceScaleFactor: 2, colorScheme: 'light', reducedMotion: 'reduce' });
+  // obrazovka inštalácie sa má na snímkach správať ako na webe v telefóne s Androidom
+  await ctx.addInitScript(() => { window.__KP_SHOT = 'android'; });
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', (e) => errors.push(String(e)));
@@ -52,6 +56,10 @@ export async function shootScreens(browser, { dist, lang, outDir }) {
   await page.goto(`${url}?lang=${lang}#/uvod/0`);
   await page.waitForTimeout(900);
   const shot = (name) => page.screenshot({ path: path.join(outDir, `${name}.jpg`), type: 'jpeg', quality: 78 });
+  // inštalácia ešte pred úvodnou inštruktážou (ako pri prvom otvorení na webe)
+  await show(page, '#/instalacia'); await shot('install');
+  await show(page, '#/instalacia/navod/ios'); await shot('install-ios');
+  await show(page, '#/uvod/0');
   await shot('onb-lang');
   await show(page, '#/uvod/1'); await shot('onb-look');
   await show(page, '#/uvod/2');
@@ -60,7 +68,7 @@ export async function shootScreens(browser, { dist, lang, outDir }) {
   await page.click('[data-save-home]'); await page.waitForTimeout(400);
   await page.click('[data-finish]:not([data-finish="tour"])'); await page.waitForTimeout(700);
   for (const [name, hash, o = {}] of SHOTS) {
-    if (name.startsWith('onb-')) continue;
+    if (name.startsWith('onb-') || name.startsWith('install')) continue;
     if (o.look) { await setPrefs(page, { look: o.look }); await page.reload(); await page.waitForTimeout(800); }
     if (o.tour) {
       await show(page, '#/viac', 300);

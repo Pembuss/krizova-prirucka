@@ -17,7 +17,20 @@ Tvoje údaje (domácnosť, zásoby, plán) zostávajú **iba v tvojom zariadení
 
 ## Inštalácia a práca bez internetu
 
-Aplikácia beží v prehliadači. Stačí otvoriť jej webovú adresu. Do mobilu si ju pridáš ako bežnú aplikáciu:
+Aplikácia beží v prehliadači. Stačí otvoriť jej webovú adresu a hneď sa spustí. Pri prvom otvorení na webe ti ponúkne dve možnosti:
+
+- **Nainštalovať do telefónu** (odporúčané). Na Androide a v počítači s Chrome alebo Edge sa otvorí inštalačné okno, stačí potvrdiť. Na iPhone a v ostatných prehliadačoch aplikácia ukáže návod krok za krokom pre tvoje zariadenie.
+- **Pokračovať v prehliadači.** Aplikácia sa otvorí hneď. Nainštalovať si ju môžeš aj neskôr: **Viac → Pomoc → Nainštalovať do telefónu**, v Nastaveniach alebo cez pripomienku na obrazovke Domov.
+
+Nainštalovaná aplikácia sa spúšťa z ikony na ploche na celú obrazovku, rovno bez tejto ponuky.
+
+::: shots
+![Prvé otvorenie na webe](shot:install)
+
+![Návod pre iPhone](shot:install-ios)
+:::
+
+Ak by si chcel inštalovať ručne:
 
 - **Android (Chrome):** ťukni na **⋮** vpravo hore a zvoľ **Inštalovať aplikáciu** alebo **Pridať na plochu**.
 - **iPhone a iPad (Safari):** ťukni na ikonu **Zdieľať** (štvorec so šípkou) a zvoľ **Pridať na plochu**.
