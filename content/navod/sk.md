@@ -212,6 +212,10 @@ V časti **Moje údaje**:
 - **Obnoviť zo zálohy:** načíta zálohu, napríklad v novom telefóne alebo u člena rodiny.
 - **Vymazať všetky údaje z tohto zariadenia.**
 
+Na telefóne sa po ťuknutí na **Stiahnuť zálohu** otvorí ponuka, kam zálohu uložiť (Súbory, Disk Google, iCloud, e-mail, správa). Záloha obsahuje aj prečítané kapitoly a odškrtnutia. Ak si zálohu dlho nestiahol, pripomenie to aplikácia na obrazovke Domov.
+
+**Aktualizácia aplikácie:** aplikácia kontroluje novú verziu sama pri otvorení. Keď je pripravená, ukáže sa pás **Aktualizovať**. Údaje ostanú zachované. Ručne to urobíš v **Nastaveniach → Aktualizácia aplikácie → Skontrolovať aktualizácie**. Ak sa aplikácia správa čudne, použi **Opraviť aplikáciu**, ktorá znova stiahne jej súbory.
+
 ![Nastavenia](shot:settings)
 
 ::: tip

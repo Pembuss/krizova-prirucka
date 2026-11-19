@@ -212,6 +212,10 @@ W części **Moje dane**:
 - **Przywróć z kopii:** wczytuje kopię, np. na nowym telefonie albo u członka rodziny.
 - **Usuń wszystkie dane z tego urządzenia.**
 
+Na telefonie po stuknięciu **Pobierz kopię zapasową** otworzy się menu wyboru miejsca zapisu (Pliki, Dysk Google, iCloud, e-mail, wiadomość). Kopia zawiera także przeczytane rozdziały i zaznaczenia. Jeśli długo nie robisz kopii, aplikacja przypomni o tym na ekranie Start.
+
+**Aktualizacja aplikacji:** aplikacja sama sprawdza nową wersję przy otwarciu. Gdy jest gotowa, pojawia się pasek **Zaktualizuj**. Twoje dane zostają zachowane. Ręcznie zrobisz to w **Ustawienia → Aktualizacja aplikacji → Sprawdź aktualizacje**. Jeśli aplikacja dziwnie się zachowuje, użyj **Napraw aplikację**, która pobierze jej pliki ponownie.
+
 ![Ustawienia](shot:settings)
 
 ::: tip

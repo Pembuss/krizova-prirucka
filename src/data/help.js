@@ -104,6 +104,7 @@ export const FAQ = [
 
 // Novinky vo verzii (O aplikácii)
 export const CHANGES = [
+  L('Zálohovanie údajov cez ponuku telefónu, pripomienka zálohy, aktualizácia a oprava nainštalovanej aplikácie', 'Zálohování dat přes nabídku telefonu, připomínka zálohy, aktualizace a oprava nainstalované aplikace', 'Backups via the phone share menu, backup reminders, update and repair of the installed app'),
   L('Inštalácia do telefónu pri prvom otvorení: jedným ťuknutím alebo s návodom pre iPhone, Android a počítač', 'Instalace do telefonu při prvním otevření: jedním ťuknutím nebo s návodem pro iPhone, Android a počítač', 'Install on your phone when you first open the app: with one tap or with steps for iPhone, Android and computer'),
   L('Nová aplikácia: všetko na jednom mieste – kniha, kríza teraz, plán, mapa', 'Nová aplikace: vše na jednom místě – kniha, krize teď, plán, mapa', 'New app: everything in one place – book, crisis now, plan, map'),
   L('Tri vzhľady (A, B, C), automatický tmavý režim', 'Tři vzhledy (A, B, C), automatický tmavý režim', 'Three looks (A, B, C), automatic dark mode'),

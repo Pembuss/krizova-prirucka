@@ -5,7 +5,9 @@ import { LANGS as LANG_INFO } from '../../data/ui.js';
 import { icon } from './icons.js';
 import { THEMES, applyTheme, activeTheme, chosenTheme, autoDark, setTheme, setAutoDark, onThemeChange } from './theme.js';
 import { ROUTES, NAV_GROUPS, TABS, UNDER_MORE } from './routes.js';
-import { offerOnFirstRun } from './install.js';
+import { offerOnFirstRun, isStandalone } from './install.js';
+import { initUpdates, applyUpdate } from './update.js';
+import { keepStorage } from './store.js';
 
 const navLink = (k, active, cls = '', tab = false) => {
   const r = ROUTES[k];
@@ -124,7 +126,24 @@ ensureLang(LANG).then(() => { setLang(LANG); route(); });
 
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   navigator.serviceWorker.register('sw.js', { scope: './' }).catch(() => {});
+  initUpdates();
 }
+// Nainštalovaná aplikácia požiada prehliadač o trvalé uloženie údajov (inak ich môže po dlhšom nepoužívaní zmazať)
+if (isStandalone() || store.prefs.installed) keepStorage();
+
+// Pás „Nová verzia je pripravená“ – aplikácia sa neobnoví sama, aby neprerušila čítanie postupu
+function showUpdateBanner() {
+  if (document.getElementById('update-banner')) return;
+  const b = document.createElement('div');
+  b.id = 'update-banner'; b.className = 'update-banner no-print'; b.setAttribute('role', 'status');
+  b.innerHTML = `${icon('download', 20)}<span>${esc(t('upd.ready'))}</span><button type="button" class="btn btn-sm" data-upd-apply>${esc(t('upd.apply'))}</button><button type="button" class="hint-x" data-upd-close aria-label="${esc(t('c.close'))}">${icon('close', 18)}</button>`;
+  b.addEventListener('click', (e) => {
+    if (e.target.closest('[data-upd-apply]')) applyUpdate();
+    if (e.target.closest('[data-upd-close]')) b.remove();
+  });
+  document.body.appendChild(b);
+}
+window.addEventListener('kp-update-ready', showUpdateBanner);
 // Natívne inštalačné okno (Chrome, Edge, Samsung Internet) – ponúkne ho obrazovka Inštalácia
 window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); window._installPrompt = e; window.dispatchEvent(new Event('kp-installable')); });
 window.addEventListener('appinstalled', () => {

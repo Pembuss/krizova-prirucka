@@ -1301,4 +1301,5 @@ export default {
   "Bomb-disposal experts arrive within the hour and safely remove the fragment – part of a drone, still carrying explosives.": "A tűzszerészek egy órán belül kiérkeznek, és biztonságosan elszállítják a darabot – egy drón részét, még robbanóanyaggal.",
   "In the evening you go over with your family where the shelter is, which spot in the flat meets the two-wall rule and what belongs in the shelter bag.": "Este átbeszélitek a családdal, hol az óvóhely, melyik hely felel meg a lakásban a két fal szabályának, és mi kerül az óvóhelyi csomagba.",
   "Install on your phone when you first open the app: with one tap or with steps for iPhone, Android and computer": "Telepítés a telefonra az első megnyitáskor: egy koppintással vagy lépésenkénti útmutatóval iPhone-ra, Androidra és számítógépre",
+  "Backups via the phone share menu, backup reminders, update and repair of the installed app": "Mentés a telefon megosztási menüjével, mentési emlékeztető, a telepített alkalmazás frissítése és javítása",
 };

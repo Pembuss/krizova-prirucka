@@ -212,6 +212,10 @@ Under **My data**:
 - **Restore from backup:** loads a backup, for example on a new phone or on a family member's phone.
 - **Delete all data from this device.**
 
+On a phone, tapping **Download backup** opens a menu to choose where to save it (Files, Google Drive, iCloud, email, a message). The backup also includes the chapters you have read and your ticks. If you have not backed up for a long time, the app reminds you on the Home screen.
+
+**App update:** the app checks for a new version by itself when you open it. When one is ready, an **Update** bar appears. Your data is kept. To check by hand, go to **Settings → App update → Check for updates**. If the app behaves oddly, use **Repair the app**, which downloads its files again.
+
 ![Settings](shot:settings)
 
 ::: tip

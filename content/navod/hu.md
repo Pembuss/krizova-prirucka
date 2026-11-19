@@ -212,6 +212,10 @@ Az **Adataim** részben:
 - **Visszaállítás mentésből:** betölti a mentést, például új telefonon vagy egy családtagnál.
 - **Minden adat törlése erről az eszközről.**
 
+Telefonon a **Biztonsági mentés letöltése** gombra koppintva megnyílik egy menü, ahol kiválaszthatod, hová mented (Fájlok, Google Drive, iCloud, e-mail, üzenet). A mentés az elolvasott fejezeteket és a pipákat is tartalmazza. Ha régóta nem mentettél, az alkalmazás emlékeztet a Kezdőlapon.
+
+**Az alkalmazás frissítése:** az alkalmazás megnyitáskor magától keresi az új verziót. Ha elkészült, megjelenik a **Frissítés** sáv. Az adataid megmaradnak. Kézzel a **Beállítások → Az alkalmazás frissítése → Frissítések keresése** pontban indíthatod. Ha az alkalmazás furcsán viselkedik, használd az **Az alkalmazás javítása** gombot, amely újraletölti a fájlokat.
+
 ![Beállítások](shot:settings)
 
 ::: tip

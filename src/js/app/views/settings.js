@@ -1,20 +1,21 @@
 // Nastavenia: vzhľad, jazyk, Kríza teraz, moje údaje (záloha), offline (kniha, balík ZIP, inštalácia), pomoc.
 import { VERSION, VERSION_DATE } from '../../../data/version.js';
 import { LANGS as LANG_INFO } from '../../../data/ui.js';
-import { store, exportData, importData, download } from '../store.js';
+import { store, importData, saveBackup, keepStorage } from '../store.js';
 import { t, esc, LANG, switchLang, toast, $ } from '../core.js';
 import { icon } from '../icons.js';
 import { chosenTheme, autoDark, setTheme, setAutoDark, applyTheme } from '../theme.js';
 import { downloads, offlinePackage, fmtSize } from '../downloads.js';
 import { requestTour } from '../tour.js';
 import { isStandalone } from '../install.js';
+import { updateSupported, updateReady, checkForUpdate, applyUpdate, repairApp, appVersion } from '../update.js';
 import { rerender } from '../main.js';
 
 const LOCAL = location.protocol === 'file:';
 const LOOKS = [['a', 'look.a', 'look.aDesc'], ['b', 'look.b', 'look.bDesc'], ['c', 'look.c', 'look.cDesc']];
 
 export const keepScroll = true;
-export function render(el) {
+export function render(el, [section] = []) {
   const pr = store.prefs;
   const pkg = offlinePackage();
   const draw = () => {
@@ -38,10 +39,19 @@ ${LANG_INFO.find((l) => l.id === LANG)?.unverified ? `<p class="unverified">${es
 <p class="small muted">${esc(t('set.nowMode'))}</p>
 <div class="chips">${[['steps', 'now.showSteps'], ['list', 'now.showAll']].map(([v, k]) => `<button type="button" class="chip" data-nowmode="${v}" aria-pressed="${(pr.nowMode || 'steps') === v}">${esc(t(k))}</button>`).join('')}</div></section>
 
-<section class="card"><h2 class="card-h">${icon('shield', 22)} ${esc(t('set.data'))}</h2><p class="muted">${esc(t('set.privacy'))}</p>
+<section class="card" id="backup-card"><h2 class="card-h">${icon('shield', 22)} ${esc(t('set.data'))}</h2><p class="muted">${esc(t('set.privacy'))}</p>
+<p class="small ${pr.lastBackup ? '' : 'backup-none'}" data-backup-status>${pr.lastBackup ? '✓ ' + esc(t('set.lastBackup', { date: new Date(pr.lastBackup).toLocaleDateString(LANG) })) : esc(t('set.noBackup'))}</p>
+<p class="small muted" data-storage-status></p>
+<p class="small muted">${esc(t('set.backupHint'))}</p>
 <div class="btn-row"><button class="btn" data-export>${icon('download', 20)} ${esc(t('set.export'))}</button><button class="btn btn-ghost" data-export-enc>🔒 ${esc(t('set.exportEnc'))}</button>
 <label class="btn btn-ghost">⬆️ ${esc(t('set.import'))}<input type="file" accept=".json,application/json" data-import hidden></label></div>
 <button class="btn btn-ghost danger" data-reset>🗑️ ${esc(t('set.reset'))}</button></section>
+
+<section class="card" id="update-card"><h2 class="card-h">${icon('download', 22)} ${esc(t('set.update'))}</h2>
+<p class="small muted">${esc(t('set.version'))}: <strong>${esc(appVersion())}</strong> (${esc(VERSION_DATE)})</p>
+${updateSupported() ? `<p id="upd-status" class="small" aria-live="polite">${updateReady() ? '✓ ' + esc(t('set.updateReady')) : esc(t('set.updateNote'))}</p>
+<div class="btn-row"><button class="btn ${updateReady() ? '' : 'btn-ghost'}" data-upd-main>${icon('download', 20)} ${esc(t(updateReady() ? 'upd.apply' : 'set.updateCheck'))}</button><button class="btn btn-ghost" data-repair>🔧 ${esc(t('set.repair'))}</button></div>
+<p class="small muted">${esc(t('set.repairNote'))}</p>` : `<p class="small">${esc(t('set.updateNa'))}</p>`}</section>
 
 <section class="card"><h2 class="card-h">${icon('check', 22)} ${esc(t('set.offline'))}</h2><p id="sw-status" class="muted">…</p>
 <div class="btn-row">${LOCAL ? '' : `<button class="btn btn-ghost" data-docs>💾 ${esc(t('set.saveDocs'))}</button>`}${LOCAL || isStandalone() ? '' : `<a class="btn btn-ghost" href="#/instalacia/navod">${icon('mobile', 20)} ${esc(t('set.install'))}</a>`}</div>
@@ -59,7 +69,14 @@ ${pkg && !LOCAL ? `<button class="btn" data-zip>${icon('download', 20)} ${esc(t(
 <p><strong>${esc(t('set.version'))}:</strong> ${esc(VERSION)} (${esc(VERSION_DATE)}) · <a href="#/o-aplikacii">${esc(t('nav.about'))}</a></p></section>
 </div>`;
     swStatus();
+    storageStatus();
   };
+  async function storageStatus() {
+    const out = $('[data-storage-status]', el);
+    if (!out) return;
+    const ok = await keepStorage();
+    if (out.isConnected && ok !== null) out.textContent = ok ? '🔒 ' + t('set.storageOk') : '⚠️ ' + t('set.storageNo');
+  }
   async function swStatus() {
     const out = $('#sw-status', el);
     if (LOCAL) { out.textContent = '✓ ' + t('set.offlineLocal'); return; }
@@ -73,6 +90,8 @@ ${pkg && !LOCAL ? `<button class="btn" data-zip>${icon('download', 20)} ${esc(t(
   const keep = (fn) => { const y = window.scrollY; fn(); window.scrollTo(0, y); };
   draw();
   window.scrollTo(0, 0);
+  if (section === 'zaloha') setTimeout(() => $('#backup-card', el)?.scrollIntoView({ block: 'start' }), 50);
+  window.addEventListener('kp-update-ready', () => { if (el.isConnected) keep(draw); }, { once: true });
   el.addEventListener('click', async (e) => {
     const l = e.target.closest('[data-lang]');
     if (l) { await switchLang(l.dataset.lang); rerender(); return; }
@@ -80,10 +99,25 @@ ${pkg && !LOCAL ? `<button class="btn" data-zip>${icon('download', 20)} ${esc(t(
     if (sz) { pr.size = sz.dataset.size || undefined; store.savePrefs(); applyTheme(); keep(draw); }
     const nm = e.target.closest('[data-nowmode]');
     if (nm) { pr.nowMode = nm.dataset.nowmode; store.savePrefs(); keep(draw); }
-    if (e.target.closest('[data-export]')) download(`krizova-prirucka-zaloha-${new Date().toISOString().slice(0, 10)}.json`, await exportData());
+    const bk = async (pw) => { const r = await saveBackup(pw); if (r !== 'cancelled') { toast(t('set.backupDone')); keep(draw); } };
+    if (e.target.closest('[data-export]')) bk();
     if (e.target.closest('[data-export-enc]')) {
       const pw = prompt(t('set.passwordPrompt'));
-      if (pw) download(`krizova-prirucka-zaloha-sifrovana-${new Date().toISOString().slice(0, 10)}.json`, await exportData(pw));
+      if (pw) bk(pw);
+    }
+    const um = e.target.closest('[data-upd-main]');
+    if (um) {
+      if (updateReady()) { applyUpdate(); return; }
+      const st = $('#upd-status', el);
+      um.disabled = true; st.textContent = t('set.updateChecking');
+      const r = await checkForUpdate();
+      um.disabled = false;
+      if (r === 'ready') { keep(draw); return; }
+      st.textContent = r === 'latest' ? '✓ ' + t('set.updateLatest', { v: appVersion() }) : t(r === 'offline' ? 'set.updateOffline' : 'set.updateErr');
+    }
+    if (e.target.closest('[data-repair]') && confirm(t('set.repairConfirm'))) {
+      if (navigator.onLine === false) { toast(t('set.updateOffline'), 4000); return; }
+      repairApp();
     }
     if (e.target.closest('[data-reset]') && confirm(t('set.resetConfirm'))) { store.reset(); toast(t('c.saved')); location.hash = '#/'; }
     if (e.target.closest('[data-docs]')) {

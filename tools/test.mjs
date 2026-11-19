@@ -154,6 +154,37 @@ async function main() {
       await ctx.close();
     }
 
+    console.log('Záloha a obnova údajov');
+    {
+      const { ctx, page, errors } = await newPage(browser, base, 'sk');
+      await page.goto(base + 'index.html');
+      const DAY = 864e5;
+      await page.evaluate((DAY) => {
+        localStorage.setItem('kp.state', JSON.stringify({ wizardDone: true }));
+        localStorage.setItem('kp.read', JSON.stringify({ povodne: 1 }));
+        localStorage.setItem('kp.reader', JSON.stringify({ tags: ['kids'], src: 'manual' }));
+        const p = JSON.parse(localStorage.getItem('kp.prefs')); p.backupFirstSeen = Date.now() - 10 * DAY; localStorage.setItem('kp.prefs', JSON.stringify(p));
+      }, DAY);
+      await page.reload(); await page.waitForSelector('#view *'); await page.waitForTimeout(400);
+      check(await page.locator('[data-bk-off]').count() === 1, 'na Domove je pripomienka zálohy');
+      await page.goto(base + 'index.html#/nastavenia/zaloha'); await page.waitForSelector('[data-export]');
+      check((await page.locator('[data-backup-status]').innerText()).includes('nemáš'), 'Nastavenia: zatiaľ žiadna záloha');
+      const [dl] = await Promise.all([page.waitForEvent('download'), page.click('[data-export]')]);
+      const backup = JSON.parse(fs.readFileSync(await dl.path(), 'utf8'));
+      check(backup.extra?.['kp.read']?.povodne === 1 && backup.extra['kp.reader'].tags[0] === 'kids', 'záloha obsahuje aj prečítané kapitoly a profil čitateľa');
+      await page.waitForTimeout(400);
+      check((await page.locator('[data-backup-status]').innerText()).startsWith('✓'), 'zobrazí sa dátum poslednej zálohy');
+      await page.evaluate(() => { localStorage.removeItem('kp.read'); localStorage.removeItem('kp.reader'); });
+      await page.setInputFiles('[data-import]', await dl.path());
+      await page.waitForTimeout(800);
+      const back = await page.evaluate(() => [localStorage.getItem('kp.read'), localStorage.getItem('kp.reader')]);
+      check(back[0] && JSON.parse(back[0]).povodne === 1 && back[1], 'obnova zo zálohy vráti údaje');
+      await page.goto(base + 'index.html#/'); await page.waitForSelector('#view *'); await page.waitForTimeout(400);
+      check(await page.locator('[data-bk-off]').count() === 0, 'po zálohe pripomienka zmizne');
+      check(!errors.length, errors.length ? `chyby: ${errors.slice(0, 3).join(' | ')}` : 'bez chýb v konzole');
+      await ctx.close();
+    }
+
     console.log('Offline trasa (bez internetu)');
     {
       const { ctx, page, errors } = await newPage(browser, base, 'sk');
@@ -178,6 +209,8 @@ async function main() {
       ]));
       check(ready, 'service worker je aktívny');
       await page.waitForTimeout(3000); // dokončenie ukladania súborov
+      // druhé otvorenie už riadi service worker – nová verzia sa potom ponúkne pásom „Aktualizovať“
+      await page.reload(); await page.waitForTimeout(1500);
       // aktualizácia: nová verzia service workera nesmie znova sťahovať nezmenené súbory
       const before = HITS.length;
       const swText = fs.readFileSync(path.join(DIST, 'sw.js'), 'utf8');
@@ -192,6 +225,9 @@ async function main() {
       const refetched = HITS.slice(before).filter((p) => p !== '/sw.js');
       check(changed && refetched.length === 0, changed ? `aktualizácia service workera: znova stiahnutých súborov ${refetched.length}${refetched.length ? ' (' + refetched.slice(0, 3).join(', ') + '…)' : ''}` : 'nová verzia service workera sa neaktivovala');
       SW_EXTRA = '';
+      check(await page.locator('#update-banner [data-upd-apply]').isVisible(), 'po novej verzii sa ukáže pás „Aktualizovať“');
+      await page.evaluate(() => { location.hash = '#/nastavenia'; }); await page.waitForTimeout(600);
+      check((await page.locator('[data-upd-main]').innerText()).includes('Aktualizovať'), 'v Nastaveniach je tlačidlo „Aktualizovať“');
       await ctx.setOffline(true);
       await page.reload();
       await page.waitForSelector('#view *', { timeout: 10000 }).catch(() => {});

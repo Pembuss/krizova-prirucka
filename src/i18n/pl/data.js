@@ -1301,4 +1301,5 @@ export default {
   "Bomb-disposal experts arrive within the hour and safely remove the fragment – part of a drone, still carrying explosives.": "Saperzy przyjeżdżają w ciągu godziny i bezpiecznie usuwają fragment – część drona, wciąż z materiałem wybuchowym.",
   "In the evening you go over with your family where the shelter is, which spot in the flat meets the two-wall rule and what belongs in the shelter bag.": "Wieczorem omawiasz z rodziną, gdzie jest schronienie, które miejsce w mieszkaniu spełnia zasadę dwóch ścian i co należy do torby do schronu.",
   "Install on your phone when you first open the app: with one tap or with steps for iPhone, Android and computer": "Instalacja w telefonie przy pierwszym otwarciu: jednym stuknięciem albo z instrukcją dla iPhone’a, Androida i komputera",
+  "Backups via the phone share menu, backup reminders, update and repair of the installed app": "Kopie zapasowe przez menu telefonu, przypomnienie o kopii, aktualizacja i naprawa zainstalowanej aplikacji",
 };

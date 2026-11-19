@@ -402,3 +402,11 @@ a.chip { display: inline-flex; align-items: center; gap: .35rem; text-decoration
 .install-hint > span { grid-column: 2; font-weight: 600; font-size: .95rem; line-height: 1.3; }
 .install-hint > .btn { grid-column: 2; justify-self: start; }
 .install-hint .hint-x { grid-column: 3; grid-row: 1 / span 2; align-self: start; display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 10px; background: transparent; color: var(--muted); cursor: pointer; }
+
+/* pás „Nová verzia je pripravená“ nad spodným menu */
+.update-banner { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(76px + env(safe-area-inset-bottom)); z-index: 60; display: flex; align-items: center; gap: .6rem; width: min(560px, calc(100% - 1.5rem)); padding: .55rem .5rem .55rem .9rem; border-radius: var(--radius); background: var(--ink); color: var(--bg); box-shadow: 0 6px 24px rgba(0,0,0,.28); }
+.update-banner > span { flex: 1; font-weight: 600; font-size: .92rem; line-height: 1.3; }
+.update-banner .btn { background: var(--primary); color: var(--on-primary); }
+.update-banner .hint-x { display: grid; place-items: center; width: 38px; height: 38px; border: 0; border-radius: 10px; background: transparent; color: inherit; cursor: pointer; opacity: .8; }
+@media (min-width: 900px) { .update-banner { bottom: 1.2rem; } }
+.backup-none { color: var(--urgent-strong, #C2410C); font-weight: 700; }

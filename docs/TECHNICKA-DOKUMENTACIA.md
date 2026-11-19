@@ -139,12 +139,12 @@ Obrazovka (`views/*.js`) exportuje `render(el, params)` a môže vrátiť funkci
 |---|---|---|
 | `kp.profile` | localStorage | profil domácnosti, miesta, trasy |
 | `kp.state` | localStorage | stav plánu, zásob, odškrtnutia, `wizardDone` |
-| `kp.prefs` | localStorage | jazyk, vzhľad, veľkosť písma, `onboarded`, `tourDone`, `nowMode`, `installChoice`, `installHintOff`, `installed` |
+| `kp.prefs` | localStorage | jazyk, vzhľad, veľkosť písma, `onboarded`, `tourDone`, `nowMode`, `installChoice`, `installHintOff`, `installed`, `lastBackup`, `backupSnooze` |
 | `kp.reader`, `kp.read` | localStorage | profil čitateľa knihy, prečítané kapitoly |
 | `kp.scen`, `kp.checks` | localStorage | priebeh scenárov, odškrtnutia v zoznamoch knihy |
 | `kp.back`, `kp.hl`, `kp.tour`, `kp.skipIntro` | sessionStorage | návrat na voľbu, zvýraznenie hľadaného slova, prehliadka, preskočenie inštruktáže |
 
-Záloha (`exportData` v `store.js`) obsahuje `kp.profile` a `kp.state`, voliteľne šifrované (AES-GCM, PBKDF2). Nastavenia (`kp.prefs`) v nej nie sú, pretože patria k zariadeniu.
+Záloha (`exportData` v `store.js`) obsahuje `kp.profile`, `kp.state` a `extra`, voliteľne šifrované (AES-GCM, PBKDF2). Nastavenia (`kp.prefs`) v nej nie sú, pretože patria k zariadeniu.
 
 ### Service worker (`src/sw.js`)
 
@@ -160,6 +160,12 @@ Service worker sa posiela s `Cache-Control: no-cache`, aby sa nové verzie dosta
 ### Kniha v aplikácii
 
 Build prevedie kapitoly cez pandoc a prepíše odkazy na `#/kniha/<kapitola>/<id>`. Výsledok uloží ako `assets/book/<jazyk>/<kapitola>.js`. Index (`index.js`) obsahuje obsah, nadpisy pre vyhľadávanie, značky čitateľa, odporúčania a texty čítačky. Ak kniha v danom jazyku nie je, aplikácia zobrazí anglickú.
+
+### Aktualizácia a záloha nainštalovanej aplikácie
+
+- **Aktualizácia** (`update.js`): service worker novú verziu stiahne a aktivuje sám (`skipWaiting`), ale otvorená stránka beží so starým kódom. `main.js` preto po zmene riadiaceho workera (`controllerchange`) ukáže pás **Aktualizovať** a stránku obnoví až po ťuknutí, aby sa neprerušilo čítanie postupu v kríze. Kontrola prebehne pri štarte a pri návrate do aplikácie (najviac raz za hodinu). V Nastaveniach je ručná kontrola a **Opraviť aplikáciu** (zmaže `kp-core-*` cache a odhlási service worker, údaje v `localStorage` sa nedotknú).
+- **Záloha** (`store.js`): `saveBackup()` použije Web Share API so súborom (Súbory, Disk, e-mail, správa), inak stiahne súbor. Záloha obsahuje profil, stav a `extra` (`kp.reader`, `kp.read`, `kp.checks`, `kp.scen`). Staršie zálohy bez `extra` sa dajú obnoviť. Dátum poslednej zálohy je v `prefs.lastBackup`. `backupDue()` riadi pripomienku na Domove (nikdy nezálohované 3 dni po vyplnení profilu, alebo záloha staršia ako 30 dní, odloženie o 14 dní).
+- **Trvalé úložisko:** nainštalovaná aplikácia volá `navigator.storage.persist()` (`keepStorage`), aby prehliadač údaje po dlhšom nepoužívaní nezmazal. Stav ukazujú Nastavenia.
 
 ### Mena
 

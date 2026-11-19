@@ -68,8 +68,11 @@ async function deriveKey(password, salt) {
   const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
   return crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations: 250000, hash: 'SHA-256' }, base, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
 }
+// Ďalšie údaje používateľa mimo profilu: profil čitateľa knihy, prečítané kapitoly, odškrtnutia, priebeh scenárov
+const EXTRA_KEYS = ['kp.reader', 'kp.read', 'kp.checks', 'kp.scen'];
+const readExtra = () => Object.fromEntries(EXTRA_KEYS.map((k) => [k, load(k, null)]).filter(([, v]) => v != null));
 export async function exportData(password) {
-  const payload = JSON.stringify({ app: 'krizova-prirucka', v: 1, exported: new Date().toISOString(), profile: store.profile, state: { ...store.state, overpass: {} } });
+  const payload = JSON.stringify({ app: 'krizova-prirucka', v: 1, exported: new Date().toISOString(), profile: store.profile, state: { ...store.state, overpass: {} }, extra: readExtra() });
   if (!password) return payload;
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const iv = crypto.getRandomValues(new Uint8Array(12));
@@ -89,6 +92,39 @@ export async function importData(text, password) {
   store.profile = merge(defaultProfile(), obj.profile);
   store.state = merge(defaultState(), obj.state || {});
   store.saveProfile(); store.saveState();
+  for (const k of EXTRA_KEYS) if (obj.extra && obj.extra[k] != null) save(k, obj.extra[k]);
+}
+
+// Záloha pre telefón: ponuka „Zdieľať“ (Súbory, Disk, e-mail, správa); inak stiahnutie súboru.
+// Vráti 'shared' | 'downloaded' | 'cancelled'. Dátum poslednej zálohy sa uloží do nastavení.
+export async function saveBackup(password) {
+  const text = await exportData(password);
+  const name = `krizova-prirucka-zaloha${password ? '-sifrovana' : ''}-${new Date().toISOString().slice(0, 10)}.json`;
+  let how = 'downloaded';
+  try {
+    const file = new File([text], name, { type: 'application/json' });
+    if (navigator.canShare?.({ files: [file] })) { await navigator.share({ files: [file], title: name }); how = 'shared'; }
+  } catch (e) {
+    if (e?.name === 'AbortError') return 'cancelled';
+  }
+  if (how === 'downloaded') download(name, text);
+  store.prefs.lastBackup = Date.now();
+  store.savePrefs();
+  return how;
+}
+// Prehliadač smie údaje stránky po dlhšom nepoužívaní zmazať; nainštalovaná aplikácia o trvalé uloženie môže požiadať
+export async function keepStorage() {
+  try {
+    if (!navigator.storage?.persist) return null;
+    return (await navigator.storage.persisted()) || (await navigator.storage.persist());
+  } catch { return null; }
+}
+// Pripomienka zálohy: nikdy nezálohované (3 dni po vyplnení profilu) alebo záloha staršia ako 30 dní
+export function backupDue() {
+  const pr = store.prefs, now = Date.now(), DAY = 864e5;
+  if (!store.state.wizardDone || (pr.backupSnooze || 0) > now) return false;
+  if (!pr.backupFirstSeen) { pr.backupFirstSeen = now; store.savePrefs(); }
+  return now - (pr.lastBackup || pr.backupFirstSeen) > (pr.lastBackup ? 30 : 3) * DAY;
 }
 export function download(filename, text, type = 'application/json') {
   const a = document.createElement('a');
