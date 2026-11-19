@@ -778,4 +778,6 @@ export const S = {
   'look.dDesc': ['Teplé zemité farby, karty a technické písmo', 'Teplé zemité barvy, karty a technické písmo', 'Warm earth tones, tab cards and technical type'],
   'home.dPlace': ['Zadaj miesto bydliska', 'Zadej místo bydliště', 'Set your home location'],
   'home.dClock': ['Aktuálny čas', 'Aktuální čas', 'Current time'],
+  'look.e': ['E · Dlaždice', 'E · Dlaždice', 'E · Tiles'],
+  'look.eDesc': ['Chladné dlaždice, tenké linky a veľké hodiny', 'Chladné dlaždice, tenké linky a velké hodiny', 'Cool tiles, thin lines and large clock'],
 };

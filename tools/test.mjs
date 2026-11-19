@@ -154,8 +154,8 @@ async function main() {
       await ctx.close();
     }
 
-    console.log('Vzhľady A, B, C, D');
-    for (const [look, sel] of [['a', '.home-a'], ['b', '.home-b'], ['c', '.home-c'], ['d', '.home-d']]) {
+    console.log('Vzhľady A, B, C, D, E');
+    for (const [look, sel] of [['a', '.home-a'], ['b', '.home-b'], ['c', '.home-c'], ['d', '.home-d'], ['e', '.home-e']]) {
       const { ctx, page, errors } = await newPage(browser, base, 'sk');
       await ctx.addInitScript((l) => localStorage.setItem('kp.prefs', JSON.stringify({ lang: 'sk', look: l, autoDark: false, onboarded: true, tourDone: true, installChoice: 'browser' })), look);
       await page.goto(base + 'index.html#/'); await page.waitForSelector(sel, { timeout: 8000 }).catch(() => {});

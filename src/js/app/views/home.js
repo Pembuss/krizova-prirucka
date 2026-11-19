@@ -82,7 +82,7 @@ function homeD(s) {
   return `<div class="home-d">
 <div class="d-date" aria-hidden="true"><span class="d-month">${esc(month)}</span><span class="d-day">${esc(dayLine)}</span></div>
 <div class="d-stack">
-<div class="d-tab d-clock" data-d-clock role="timer" aria-label="${esc(t('home.dClock'))}">${timeText()}</div>
+<div class="d-tab d-clock" data-clock role="timer" aria-label="${esc(t('home.dClock'))}">${timeText()}</div>
 <a class="d-tab d-place" href="${place ? '#/mapa' : '#/profil'}"><span class="d-ic">${icon('pin', 26)}</span><span class="d-lab">${esc(place || t('home.dPlace'))}</span></a>
 ${cards.map(([h, i, a, b, c, tour]) => `<a class="d-tab ${c}" href="${h}"${tour ? ` data-tour="${tour}"` : ''}><span class="d-ic">${icon(i, 26)}</span><span class="d-lab">${esc(t(a))}<small>${esc(t(b))}</small></span></a>`).join('')}
 <a class="d-tab d-ready" href="${s.done ? '#/plan' : '#/profil'}" data-tour="ready"><span class="d-ic">${icon('check', 26)}</span><span class="d-lab">${esc(t('home.readiness'))}<small>${esc(s.done ? (s.next ? s.next.text : t('home.allDone')) : t('home.startWizard'))}</small></span><b>${s.r.pct} %</b><span class="ready-bar" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${s.r.pct}"><span style="width:${s.r.pct}%"></span></span></a>
@@ -90,6 +90,31 @@ ${cards.map(([h, i, a, b, c, tour]) => `<a class="d-tab ${c}" href="${h}"${tour 
 </div>
 <p class="d-foot muted">${esc(t('c.disclaimer'))}</p>
 </div>`;
+}
+
+// Domov E: mriežka dlaždíc (štýl Metro) – veľké tenké hodiny, Kríza teraz, rýchle akcie, pripravenosť
+function homeE(s) {
+  const now = new Date();
+  const dateLine = now.toLocaleDateString(LANG, { weekday: 'long', day: 'numeric', month: 'long' });
+  const place = (s.p.location?.label || '').split(',')[0].trim();
+  const tiles = [
+    ['#/plan', 'flag', 'home.tPrepare', 'home.tPrepareSub', 'e-fill'],
+    ['#/kniha', 'book', 'nav.book', 'home.tBookSub', ''],
+    ['#/mapa', 'pin', 'home.tMap', 'home.tMapSub', ''],
+    ['#/rodina', 'family', 'nav.family', 'home.tFamilySub', 'e-fill'],
+  ];
+  return `<div class="home-e"><div class="e-grid">
+<div class="e-tile e-wide e-clock"><span class="e-time" data-clock role="timer" aria-label="${esc(t('home.dClock'))}">${timeText()}</span><span class="e-date">${esc(dateLine)}</span>
+<a class="e-place" href="${place ? '#/mapa' : '#/profil'}">${icon('pin', 16)} ${esc(place || t('home.dPlace'))}</a></div>
+<a class="e-tile e-wide e-urgent" href="#/teraz" data-tour="crisis"><span class="e-lab">${esc(t('home.crisisNow'))}<small>${esc(t('home.crisisSub'))}</small></span>${icon('bolt', 44)}</a>
+${tiles.map(([h, i, a, b, c], k) => `<a class="e-tile ${c}" href="${h}"${k === 0 ? ' data-tour="tiles"' : ''}>${icon(i, 30)}<span class="e-lab">${esc(t(a))}<small>${esc(t(b))}</small></span></a>`).join('')}
+<a class="e-tile e-wide e-ready" href="${s.done ? '#/plan' : '#/profil'}" data-tour="ready"><span class="e-pct">${s.r.pct}<small style="font-size:1.2rem"> %</small></span><span class="e-lab">${esc(t('home.readiness'))}<small>${esc(s.done ? (s.next ? s.next.text : t('home.allDone')) : t('home.startWizard'))}</small></span>${icon('next', 22)}<span class="ready-bar" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${s.r.pct}"><span style="width:${s.r.pct}%"></span></span></a>
+<div class="e-mini">
+<a class="e-tile e-call" href="tel:112">${icon('phone', 24)}<span class="e-lab">${esc(t('home.call112'))}</span></a>
+<a class="e-tile" href="#/pomoc">${icon('help', 24)}<span class="e-lab">${esc(t('nav.help'))}</span></a>
+<a class="e-tile" href="#/nastavenia">${icon('settings', 24)}<span class="e-lab">${esc(t('nav.settings'))}</span></a>
+</div></div>
+<p class="e-foot muted">${esc(t('c.disclaimer'))}</p></div>`;
 }
 
 function homeC(s) {
@@ -125,7 +150,7 @@ export function render(el) {
   const hint = showInstallHint() ? `<div class="install-hint" role="note">${icon('mobile', 22)}<span>${esc(t('inst.hint'))}</span><a class="btn btn-sm" href="#/instalacia/navod">${esc(t('inst.hintBtn'))}</a><button type="button" class="hint-x" data-hint-off aria-label="${esc(t('c.close'))}">${icon('close', 18)}</button></div>` : '';
   // pripomienka zálohy údajov (nikdy nezálohované, alebo záloha staršia ako 30 dní)
   const bkHint = !hint && backupDue() ? `<div class="install-hint" role="note">${icon('shield', 22)}<span>${esc(t('bk.hint'))}</span><a class="btn btn-sm" href="#/nastavenia/zaloha">${esc(t('bk.hintBtn'))}</a><button type="button" class="hint-x" data-bk-off aria-label="${esc(t('c.close'))}">${icon('close', 18)}</button></div>` : '';
-  el.innerHTML = hint + bkHint + (look === 'b' ? homeB(s) : look === 'c' ? homeC(s) : look === 'd' ? homeD(s) : homeA(s));
+  el.innerHTML = hint + bkHint + (look === 'b' ? homeB(s) : look === 'c' ? homeC(s) : look === 'd' ? homeD(s) : look === 'e' ? homeE(s) : homeA(s));
   el.addEventListener('submit', (e) => {
     if (!e.target.matches('[data-search]')) return;
     e.preventDefault();
@@ -143,7 +168,7 @@ export function render(el) {
     if (a && f) a.href = f.file;
   });
   // živé hodiny vo vzhľade D
-  const clock = el.querySelector('[data-d-clock]');
+  const clock = el.querySelector('[data-clock]');
   if (!clock) return undefined;
   const id = setInterval(() => { if (clock.isConnected) clock.textContent = timeText(); }, 15000);
   return () => clearInterval(id);

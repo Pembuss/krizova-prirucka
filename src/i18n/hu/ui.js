@@ -807,4 +807,6 @@ export default {
   'look.dDesc': 'Meleg földszínek, kártyák és technikai betűtípus',
   'home.dPlace': 'Add meg a lakóhelyed',
   'home.dClock': 'Pontos idő',
+  'look.e': 'E · Csempék',
+  'look.eDesc': 'Hűvös csempék, vékony vonalak és nagy óra',
 };

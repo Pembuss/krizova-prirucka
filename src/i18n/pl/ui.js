@@ -807,4 +807,6 @@ export default {
   'look.dDesc': 'Ciepłe ziemiste kolory, karty i techniczna czcionka',
   'home.dPlace': 'Podaj miejsce zamieszkania',
   'home.dClock': 'Aktualny czas',
+  'look.e': 'E · Kafelki',
+  'look.eDesc': 'Chłodne kafelki, cienkie linie i duży zegar',
 };

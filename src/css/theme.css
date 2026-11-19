@@ -1,4 +1,4 @@
-/* Krízová príručka – vzhľady aplikácie (A – Pokojný sprievodca, B – Núdzový signál, C – Príručka do vrecka, D – Zemité karty).
+/* Krízová príručka – vzhľady aplikácie (A – Pokojný sprievodca, B – Núdzový signál, C – Príručka do vrecka, D – Zemité karty, E – Dlaždice).
    Každý vzhľad nastaví premenné; súčasti obrazoviek ich používajú, takže vzhľad mení všetky okná. */
 
 /* ---------- Písma (v balíku, fungujú aj offline) ---------- */
@@ -25,6 +25,11 @@
 @font-face { font-family: 'Oxanium'; font-style: normal; font-weight: 500; font-display: swap; src: url(../fonts/oxanium-latin-ext-500-normal.woff2) format('woff2'); unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
 @font-face { font-family: 'Oxanium'; font-style: normal; font-weight: 700 800; font-display: swap; src: url(../fonts/oxanium-latin-700-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
 @font-face { font-family: 'Oxanium'; font-style: normal; font-weight: 700 800; font-display: swap; src: url(../fonts/oxanium-latin-ext-700-normal.woff2) format('woff2'); unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 200; font-display: swap; src: url(../fonts/inter-latin-200-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 200; font-display: swap; src: url(../fonts/inter-latin-ext-200-normal.woff2) format('woff2'); unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 300; font-display: swap; src: url(../fonts/inter-latin-300-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 300; font-display: swap; src: url(../fonts/inter-latin-ext-300-normal.woff2) format('woff2'); unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
 
 /* ---------- Premenné vzhľadov ---------- */
 :root, :root[data-look="a"] {
@@ -73,6 +78,18 @@
   --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; --head: 'Oxanium', 'Inter', system-ui, sans-serif;
   --radius: 20px; --btn-radius: 16px; --tap: 52px; --fs: 17px; --tab-h: 68px;
   --shadow: 0 5px 0 rgba(24, 18, 15, .26);
+  color-scheme: light;
+}
+:root[data-look="e"] {
+  --bg: #E4E9F1; --surface: #F8FAFD; --surface-2: #D3DBE8; --ink: #0F1724; --muted: #46526A; --border: rgba(15, 23, 36, .42);
+  --primary: #4B5A8C; --primary-strong: #36436B; --primary-soft: #D5DBEA; --on-primary: #FFFFFF;
+  --urgent: #C2331A; --urgent-strong: #962410; --urgent-soft: #F7DDD6; --on-urgent: #FFFFFF;
+  --call: #B3261E; --on-call: #FFFFFF; --heading: #0F1724; --link: #2D3F7A;
+  --ok: #1E6B3E; --danger: #A31D1D;
+  --urgent-bg: #F7E3DC; --urgent-border: #C2331A; --tip-bg: #DCEBE0; --tip-border: #2E7D4F; --warn-bg: #F6DDDA; --warn-border: #B3261E; --note-bg: #DBE3F4; --note-border: #3F5AA8;
+  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; --head: 'Inter', system-ui, sans-serif;
+  --radius: 4px; --btn-radius: 3px; --tap: 50px; --fs: 17px; --tab-h: 62px;
+  --shadow: none;
   color-scheme: light;
 }
 :root[data-size="l"] { --fs: 19px; }
@@ -146,6 +163,7 @@ th { background: var(--surface-2); }
 .look-sw-b { background: linear-gradient(135deg, #0B1220 50%, #FFB020 50%); }
 .look-sw-c { background: linear-gradient(135deg, #FBFAF7 50%, #2F6F4E 50%); }
 .look-sw-d { background: linear-gradient(135deg, #A39896 50%, #6E4A3E 50%); }
+.look-sw-e { background: linear-gradient(135deg, #E4E9F1 50%, #8791B4 50%); }
 .look-auto { display: flex; gap: .5rem; align-items: center; margin-top: .3rem; font-size: .92rem; }
 .look-auto input { width: 22px; height: 22px; accent-color: var(--primary); }
 @media (max-width: 420px) { .brand-name { display: none; } }
@@ -335,6 +353,7 @@ mark { background: color-mix(in srgb, var(--urgent) 30%, transparent); color: in
 .look-prev-b { background: #0B1220; } .look-prev-b i:nth-child(1) { height: 34px; background: #FFB020; } .look-prev-b i:nth-child(2), .look-prev-b i:nth-child(3) { height: 14px; background: #162033; } .look-prev-b i:nth-child(4) { height: 12px; background: #DC2626; }
 .look-prev-c { background: #FBFAF7; } .look-prev-c i:nth-child(1) { height: 10px; width: 70%; background: #1E2430; } .look-prev-c i:nth-child(2) { height: 22px; background: #FDEEE6; border: 1px solid #F3C9B2; } .look-prev-c i:nth-child(3) { height: 26px; background: #2F6F4E; } .look-prev-c i:nth-child(4) { height: 8px; background: #E0DACC; }
 .look-prev-d { background: #A39896; padding-right: 0; } .look-prev-d i { margin-left: 14px; border-radius: 6px 0 0 6px; } .look-prev-d i:nth-child(1) { height: 22px; background: #E7E1D7; } .look-prev-d i:nth-child(2) { height: 16px; background: #A58F95; } .look-prev-d i:nth-child(3) { height: 16px; background: #6E4A3E; } .look-prev-d i:nth-child(4) { height: 16px; background: #665858; }
+.look-prev-e { background: #E4E9F1; gap: 3px; } .look-prev-e i { border-radius: 2px; } .look-prev-e i:nth-child(1) { height: 26px; background: #8791B4; } .look-prev-e i:nth-child(2) { height: 14px; background: #C2331A; } .look-prev-e i:nth-child(3) { height: 20px; background: #F8FAFD; border: 1px solid #0F1724; } .look-prev-e i:nth-child(4) { height: 10px; background: #36436B; width: 55%; }
 .count-row { display: flex; align-items: center; gap: .8rem; justify-content: space-between; padding: .5rem .9rem; border-radius: 14px; background: var(--surface); border: 1px solid var(--border); }
 .count-row .cr-label { font-weight: 700; }
 .count-row .cr-label small { display: block; font-weight: 500; }
@@ -466,3 +485,51 @@ a.chip { display: inline-flex; align-items: center; gap: .35rem; text-decoration
 .home-d .d-foot { grid-column: 1 / -1; margin: .4rem 1rem 0 0; font-size: .8rem; }
 @media (min-width: 700px) { .home-d { padding-right: 1rem; } .d-tab { border-radius: 26px; } }
 @media print { .home-d { display: none; } }
+
+/* ---------- Vzhľad E · Dlaždice (štýl Metro: chladné plochy, tenké linky, veľké tenké číslice) ---------- */
+:root[data-look="e"] h1 { font-weight: 300; font-size: 2rem; letter-spacing: -.01em; }
+:root[data-look="e"] h2, :root[data-look="e"] h3 { font-weight: 600; letter-spacing: 0; }
+:root[data-look="e"] .btn { font-weight: 600; letter-spacing: .02em; }
+/* všetky karty, dlaždice a polia: takmer ostré rohy a tenká linka */
+:root[data-look="e"] .tile, :root[data-look="e"] .list-link, :root[data-look="e"] .card, :root[data-look="e"] .step-card, :root[data-look="e"] .crisis-grid a, :root[data-look="e"] .ready-card,
+:root[data-look="e"] .book-card, :root[data-look="e"] .dl-row, :root[data-look="e"] .toc-part a, :root[data-look="e"] .reader-pager a, :root[data-look="e"] .search-results a,
+:root[data-look="e"] .look-card, :root[data-look="e"] .count-row, :root[data-look="e"] .mini-grid a, :root[data-look="e"] .risk-chip, :root[data-look="e"] .now-panel, :root[data-look="e"] .big-list a,
+:root[data-look="e"] .hdr-btn, :root[data-look="e"] .chip, :root[data-look="e"] .mode-toggle, :root[data-look="e"] .step-check, :root[data-look="e"] .stepper button, :root[data-look="e"] .look-pop, :root[data-look="e"] .look-opt,
+:root[data-look="e"] .crisis-cta, :root[data-look="e"] .look-prev, :root[data-look="e"] .unverified, :root[data-look="e"] .install-hint { border-radius: var(--radius); }
+:root[data-look="e"] .app-header { background: var(--surface); }
+:root[data-look="e"] .app-tabs { background: var(--surface); }
+:root[data-look="e"] .app-tabs a { border-top: 3px solid transparent; }
+:root[data-look="e"] .app-tabs a[aria-current="page"] { border-top-color: var(--primary); }
+:root[data-look="e"] .app-tabs a.tab-urgent { border-top-color: var(--urgent); }
+:root[data-look="e"] .step-num { font-weight: 200; font-size: 4rem; }
+:root[data-look="e"] .step-progress span { border-radius: 0; height: 4px; }
+:root[data-look="e"] .reader-content { background: var(--surface); border: 1px solid var(--border); padding: 1rem 1.1rem 1.4rem; }
+
+/* Domov E: mriežka dlaždíc */
+.home-e { max-width: 640px; margin: 0 auto; padding: .6rem .6rem 1.6rem; }
+.e-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
+.e-tile { position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: .6rem; min-height: 9.2rem; padding: .85rem .9rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--ink); text-decoration: none; overflow: hidden; }
+a.e-tile:active { filter: brightness(.94); transform: scale(.985); }
+.e-tile .ic { color: currentColor; }
+.e-tile .e-lab { font-weight: 600; font-size: 1.02rem; line-height: 1.2; }
+.e-tile .e-lab small { display: block; margin-top: .2rem; font-weight: 400; font-size: .8rem; color: inherit; opacity: .8; }
+.e-wide { grid-column: span 2; min-height: 0; }
+.e-fill { background: #8791B4; border-color: #8791B4; color: #0F1724; }
+.e-clock { min-height: 11rem; background: linear-gradient(160deg, #B7C0DA 0%, #8791B4 100%); border-color: #8791B4; color: #0B1220; justify-content: flex-end; }
+.e-clock .e-time { font-size: 5.2rem; font-weight: 200; line-height: .95; letter-spacing: -.03em; }
+.e-clock .e-date { font-size: 1rem; font-weight: 500; margin-top: .3rem; }
+.e-clock .e-place { display: inline-flex; align-items: center; gap: .3rem; font-size: .88rem; margin-top: .2rem; color: inherit; text-decoration: none; opacity: .9; }
+.e-urgent { background: var(--urgent); border-color: var(--urgent); color: var(--on-urgent); flex-direction: row; align-items: center; min-height: 6.4rem; }
+.e-urgent .e-lab { font-size: 1.5rem; font-weight: 300; }
+.e-urgent .e-lab small { font-size: .88rem; font-weight: 400; }
+.e-ready { flex-direction: row; align-items: center; gap: 1rem; min-height: 0; padding: .9rem; }
+.e-ready .e-pct { font-size: 2.8rem; font-weight: 200; line-height: 1; letter-spacing: -.02em; }
+.e-ready .e-lab { flex: 1; min-width: 0; }
+.e-ready .ready-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 5px; border-radius: 0; background: var(--surface-2); }
+.e-ready .ready-bar > span { border-radius: 0; background: var(--primary); }
+.e-mini { grid-column: span 2; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
+.e-mini .e-tile { min-height: 5.2rem; padding: .7rem; align-items: flex-start; }
+.e-mini .e-lab { font-size: .85rem; }
+.e-call { background: var(--call); border-color: var(--call); color: var(--on-call); }
+.home-e .e-foot { margin: .8rem .3rem 0; font-size: .8rem; }
+@media print { .home-e { display: none; } }

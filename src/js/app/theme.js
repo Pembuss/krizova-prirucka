@@ -2,8 +2,8 @@
 // Pri tmavom režime telefónu sa automaticky použije B (dá sa vypnúť v Nastaveniach).
 import { store } from './store.js';
 
-export const THEMES = ['a', 'b', 'c', 'd'];
-export const THEME_COLOR = { a: '#0B5C7A', b: '#0B1220', c: '#2F6F4E', d: '#A39896' };
+export const THEMES = ['a', 'b', 'c', 'd', 'e'];
+export const THEME_COLOR = { a: '#0B5C7A', b: '#0B1220', c: '#2F6F4E', d: '#A39896', e: '#E4E9F1' };
 const dark = typeof matchMedia === 'function' ? matchMedia('(prefers-color-scheme: dark)') : null;
 
 export const chosenTheme = () => (THEMES.includes(store.prefs.look) ? store.prefs.look : 'a');
