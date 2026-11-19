@@ -392,7 +392,7 @@ a.chip { display: inline-flex; align-items: center; gap: .35rem; text-decoration
 :root[data-look="b"] .book-card, :root[data-look="b"] .dl-row, :root[data-look="b"] .toc-part a, :root[data-look="b"] .reader-pager a, :root[data-look="b"] .search-results a,
 :root[data-look="b"] .look-card, :root[data-look="b"] .count-row, :root[data-look="b"] .mini-grid a, :root[data-look="b"] .risk-chip, :root[data-look="b"] .now-panel, :root[data-look="b"] .big-list a,
 :root[data-look="b"] .hdr-btn, :root[data-look="b"] .chip, :root[data-look="b"] .mode-toggle, :root[data-look="b"] .step-check, :root[data-look="b"] .stepper button, :root[data-look="b"] .look-pop, :root[data-look="b"] .look-opt,
-:root[data-look="b"] .look-prev, :root[data-look="b"] .unverified, :root[data-look="b"] .install-hint, :root[data-look="b"] .update-banner, :root[data-look="b"] .box, :root[data-look="b"] input, :root[data-look="b"] select, :root[data-look="b"] textarea { border-radius: 0; border-width: 1px; }
+:root[data-look="b"] .look-prev, :root[data-look="b"] .unverified, :root[data-look="b"] .install-hint, :root[data-look="b"] .update-banner, :root[data-look="b"] .box, :root[data-look="b"] .search-box, :root[data-look="b"] .lang-pick button, :root[data-look="b"] input, :root[data-look="b"] select, :root[data-look="b"] textarea { border-radius: 0; border-width: 1px; }
 :root[data-look="b"] .app-header, :root[data-look="b"] .app-tabs { background: var(--surface); }
 :root[data-look="b"] .app-header { border-bottom: 1px solid var(--ink); }
 :root[data-look="b"] .app-tabs { border-top: 1px solid var(--ink); }
@@ -408,6 +408,19 @@ a.chip { display: inline-flex; align-items: center; gap: .35rem; text-decoration
 :root[data-look="b"] .tile-grid, :root[data-look="b"] .crisis-grid, :root[data-look="b"] .dl-grid, :root[data-look="b"] .list-links, :root[data-look="b"] .toc-part ol, :root[data-look="b"] .search-results, :root[data-look="b"] .mini-grid, :root[data-look="b"] .big-list { gap: 2px; }
 :root[data-look="b"] .more-wrap .tile-grid, :root[data-look="b"] .home-a .tile-grid { gap: 2px; }
 :root[data-look="b"] .chips, :root[data-look="b"] .btn-row { gap: .3rem; }
+
+
+/* Tlačidlá majú malú hĺbku: svetlý horný okraj, spodná hrana a jemný tieň; pri stlačení sa „zatlačia“ */
+:root[data-look="b"] .btn, :root[data-look="b"] .chip, :root[data-look="b"] .hdr-btn, :root[data-look="b"] .mode-toggle, :root[data-look="b"] .stepper button {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .85), 0 2px 0 rgba(17, 18, 20, .55), 0 3px 4px rgba(17, 18, 20, .18);
+  transition: transform .06s, box-shadow .06s; }
+:root[data-look="b"] .btn:not(.btn-ghost):not(.btn-block-flat), :root[data-look="b"] .chip[aria-pressed="true"], :root[data-look="b"] .hdr-112 {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .28), inset 0 -2px 0 rgba(0, 0, 0, .55), 0 2px 0 #000, 0 3px 4px rgba(17, 18, 20, .25); }
+:root[data-look="b"] .btn:active, :root[data-look="b"] .chip:active, :root[data-look="b"] .hdr-btn:active, :root[data-look="b"] .mode-toggle:active, :root[data-look="b"] .stepper button:active {
+  transform: translateY(2px); box-shadow: inset 0 2px 3px rgba(17, 18, 20, .35); }
+:root[data-look="b"] .btn:disabled { box-shadow: none; opacity: .5; }
+:root[data-look="b"] input[type="text"], :root[data-look="b"] input[type="search"], :root[data-look="b"] input[type="number"], :root[data-look="b"] input[type="tel"], :root[data-look="b"] input[type="date"], :root[data-look="b"] input:not([type]), :root[data-look="b"] select, :root[data-look="b"] textarea { box-shadow: inset 0 1px 2px rgba(17, 18, 20, .18); }
+:root[data-look="b"] .hdr-btn { margin-bottom: 2px; }
 
 /* Domov 2: tri stĺpce dlaždíc rôznej veľkosti (2×2 a 1×1) oddelených čiarou 1 px, na celú šírku obrazovky */
 .home-b { max-width: 640px; margin: 0 auto; padding: 0 0 1.4rem; }
