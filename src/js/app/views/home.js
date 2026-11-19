@@ -46,29 +46,28 @@ ${cards.map(([h, i, a, b, c, tour]) => `<a class="a-tab ${c}" href="${h}"${tour 
 </div>`;
 }
 
-// Domov 2 (Dlaždice): mriežka dlaždíc (štýl Metro) – veľké tenké hodiny, Kríza teraz, rýchle akcie, pripravenosť
+// Domov 2 (Dlaždice): súvislá mriežka sklenených dlaždíc – veľké tenké hodiny, Kríza teraz, pripravenosť, rýchle akcie
 function homeB(s) {
   const now = new Date();
   const dateLine = now.toLocaleDateString(LANG, { weekday: 'long', day: 'numeric', month: 'long' });
   const place = (s.p.location?.label || '').split(',')[0].trim();
-  const tiles = [
-    ['#/plan', 'flag', 'home.tPrepare', 'home.tPrepareSub', 'b-fill'],
-    ['#/kniha', 'book', 'nav.book', 'home.tBookSub', ''],
-    ['#/mapa', 'pin', 'home.tMap', 'home.tMapSub', ''],
-    ['#/rodina', 'family', 'nav.family', 'home.tFamilySub', 'b-fill'],
-  ];
+  const small = (h, i, k, extra = '') => `<a class="b-tile ${extra}" href="${h}">${icon(i, 26)}<span class="b-lab">${esc(t(k))}</span></a>`;
+  const pale = (h, i, k) => `<a class="b-tile b-pale" href="${h}">${icon(i, 26)}<span class="b-lab">${esc(t(k))}</span></a>`;
+  const on = Math.round((s.r.pct / 100) * 8);
   return `<div class="home-b"><div class="b-grid">
-<div class="b-tile b-wide b-clock"><span class="b-time" data-clock role="timer" aria-label="${esc(t('home.dClock'))}">${timeText()}</span><span class="b-date">${esc(dateLine)}</span>
+<div class="b-tile b-big b-clock"><span class="b-time" data-clock role="timer" aria-label="${esc(t('home.dClock'))}">${timeText()}</span><span class="b-date">${esc(dateLine)}</span>
 <a class="b-place" href="${place ? '#/mapa' : '#/profil'}">${icon('pin', 16)} ${esc(place || t('home.dPlace'))}</a></div>
-<a class="b-tile b-wide b-urgent" href="#/teraz" data-tour="crisis"><span class="b-lab">${esc(t('home.crisisNow'))}<small>${esc(t('home.crisisSub'))}</small></span>${icon('bolt', 44)}</a>
-${tiles.map(([h, i, a, b, c], k) => `<a class="b-tile ${c}" href="${h}"${k === 0 ? ' data-tour="tiles"' : ''}>${icon(i, 30)}<span class="b-lab">${esc(t(a))}<small>${esc(t(b))}</small></span></a>`).join('')}
-<a class="b-tile b-wide b-ready" href="${s.done ? '#/plan' : '#/profil'}" data-tour="ready"><span class="b-pct">${s.r.pct}<small style="font-size:1.2rem"> %</small></span><span class="b-lab">${esc(t('home.readiness'))}<small>${esc(s.done ? (s.next ? s.next.text : t('home.allDone')) : t('home.startWizard'))}</small></span>${icon('next', 22)}<span class="ready-bar" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${s.r.pct}"><span style="width:${s.r.pct}%"></span></span></a>
-<div class="b-mini">
-<a class="b-tile b-call" href="tel:112">${icon('phone', 24)}<span class="b-lab">${esc(t('home.call112'))}</span></a>
-<a class="b-tile" href="#/pomoc">${icon('help', 24)}<span class="b-lab">${esc(t('nav.help'))}</span></a>
-<a class="b-tile" href="#/nastavenia">${icon('settings', 24)}<span class="b-lab">${esc(t('nav.settings'))}</span></a>
-</div></div>
-<p class="b-foot muted">${esc(t('c.disclaimer'))}</p></div>`;
+${small('#/kniha', 'book', 'nav.book')}
+${small('#/rodina', 'family', 'nav.family')}
+<a class="b-tile b-big b-urgent" href="#/teraz" data-tour="crisis">${icon('bolt', 52)}<span class="b-lab">${esc(t('home.crisisNow'))}<small>${esc(t('home.crisisSub'))}</small></span></a>
+${small('#/mapa', 'pin', 'home.tMap')}
+${small('#/plan', 'flag', 'home.tPrepare')}
+<a class="b-tile b-big b-ready" href="${s.done ? '#/plan' : '#/profil'}" data-tour="ready"><span><span class="b-pct">${s.r.pct}<small> %</small></span><span class="b-lab">${esc(t('home.readiness'))}<small>${esc(s.done ? (s.next ? s.next.text : t('home.allDone')) : t('home.startWizard'))}</small></span></span>
+<span class="b-seg" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${s.r.pct}">${Array.from({ length: 8 }, (_, i) => `<span class="${i < on ? 'on' : ''}"></span>`).join('')}</span></a>
+${small('tel:112', 'phone', 'home.call112', 'b-call')}
+${small('#/pomoc', 'help', 'nav.help')}
+<div class="b-row4">${pale('#/zoznamy', 'list', 'nav.lists')}${pale('#/karty', 'cards', 'nav.cards')}${pale('#/krajiny', 'globe', 'nav.countries')}${pale('#/nastavenia', 'settings', 'nav.settings')}</div>
+</div><p class="b-foot muted">${esc(t('c.disclaimer'))}</p></div>`;
 }
 
 export function render(el) {

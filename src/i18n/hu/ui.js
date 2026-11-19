@@ -586,7 +586,7 @@ export default {
   'look.a': '1 · Földszínű kártyák',
   'look.aDesc': 'Meleg földszínek, kártyák és technikai betűtípus',
   'look.b': '2 · Csempék',
-  'look.bDesc': 'Hűvös csempék, vékony vonalak és nagy óra',
+  'look.bDesc': 'Üveghatású csempék vékony vonalas rácsban és nagy vékony óra',
   'home.hello': 'Jó napot',
   'home.helloName': 'Szia, {name}',
   'home.question': 'Mire van szükséged?',
