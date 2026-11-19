@@ -803,4 +803,8 @@ export default {
   'set.storageNo': 'Przeglądarka może usunąć dane po dłuższym nieużywaniu. Zapisz więc kopię zapasową.',
   'bk.hint': 'Zrób kopię danych, aby ich nie stracić przy zgubieniu lub wymianie telefonu.',
   'bk.hintBtn': 'Zrób kopię',
+  'look.d': 'D · Ziemiste karty',
+  'look.dDesc': 'Ciepłe ziemiste kolory, karty i techniczna czcionka',
+  'home.dPlace': 'Podaj miejsce zamieszkania',
+  'home.dClock': 'Aktualny czas',
 };

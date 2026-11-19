@@ -803,4 +803,8 @@ export default {
   'set.storageNo': 'A böngésző hosszabb használaton kívüli idő után törölheti az adatokat. Ezért ments biztonsági másolatot.',
   'bk.hint': 'Mentsd el az adataidat, hogy ne vesszenek el a telefon elvesztésekor vagy cseréjekor.',
   'bk.hintBtn': 'Mentés',
+  'look.d': 'D · Földszínű kártyák',
+  'look.dDesc': 'Meleg földszínek, kártyák és technikai betűtípus',
+  'home.dPlace': 'Add meg a lakóhelyed',
+  'home.dClock': 'Pontos idő',
 };

@@ -774,4 +774,8 @@ export const S = {
   'set.storageNo': ['Prehliadač môže údaje po dlhšom nepoužívaní zmazať. Preto si stiahni zálohu.', 'Prohlížeč může data po delším nepoužívání smazat. Proto si stáhni zálohu.', 'The browser may delete data after long periods of non-use. Save a backup.'],
   'bk.hint': ['Zálohuj si údaje, aby si o ne neprišiel pri strate alebo výmene telefónu.', 'Zálohuj si data, abys o ně nepřišel při ztrátě nebo výměně telefonu.', 'Back up your data so you do not lose it if you lose or replace your phone.'],
   'bk.hintBtn': ['Zálohovať', 'Zálohovat', 'Back up'],
+  'look.d': ['D · Zemité karty', 'D · Zemité karty', 'D · Earth tabs'],
+  'look.dDesc': ['Teplé zemité farby, karty a technické písmo', 'Teplé zemité barvy, karty a technické písmo', 'Warm earth tones, tab cards and technical type'],
+  'home.dPlace': ['Zadaj miesto bydliska', 'Zadej místo bydliště', 'Set your home location'],
+  'home.dClock': ['Aktuálny čas', 'Aktuální čas', 'Current time'],
 };

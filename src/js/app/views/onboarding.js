@@ -9,7 +9,7 @@ import { requestTour } from '../tour.js';
 import { rerender } from '../main.js';
 
 const STEPS = 4;
-const LOOKS = [['a', 'look.a', 'look.aDesc'], ['b', 'look.b', 'look.bDesc'], ['c', 'look.c', 'look.cDesc']];
+const LOOKS = [['a', 'look.a', 'look.aDesc'], ['b', 'look.b', 'look.bDesc'], ['c', 'look.c', 'look.cDesc'], ['d', 'look.d', 'look.dDesc']];
 
 function counts() {
   const m = store.profile.members || [];

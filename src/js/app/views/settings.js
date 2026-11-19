@@ -12,7 +12,7 @@ import { updateSupported, updateReady, checkForUpdate, applyUpdate, repairApp, a
 import { rerender } from '../main.js';
 
 const LOCAL = location.protocol === 'file:';
-const LOOKS = [['a', 'look.a', 'look.aDesc'], ['b', 'look.b', 'look.bDesc'], ['c', 'look.c', 'look.cDesc']];
+const LOOKS = [['a', 'look.a', 'look.aDesc'], ['b', 'look.b', 'look.bDesc'], ['c', 'look.c', 'look.cDesc'], ['d', 'look.d', 'look.dDesc']];
 
 export const keepScroll = true;
 export function render(el, [section] = []) {

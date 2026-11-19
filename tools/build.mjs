@@ -466,7 +466,7 @@ function copyAssets() {
   fs.copyFileSync(path.join(ROOT, 'src/img/logo.svg'), path.join(DIST, 'assets/img/logo.svg'));
   copyDir(path.join(ROOT, 'node_modules/leaflet/dist'), path.join(DIST, 'assets/vendor/leaflet'));
   // písma (OFL) podľa src/css/theme.css
-  const fontDirs = ['inter', 'space-grotesk', 'atkinson-hyperlegible', 'source-serif-4'].map((f) => path.join(ROOT, 'node_modules/@fontsource', f, 'files'));
+  const fontDirs = ['inter', 'space-grotesk', 'atkinson-hyperlegible', 'source-serif-4', 'oxanium'].map((f) => path.join(ROOT, 'node_modules/@fontsource', f, 'files'));
   fs.mkdirSync(path.join(DIST, 'assets/fonts'), { recursive: true });
   for (const [, name] of read(path.join(ROOT, 'src/css/theme.css')).matchAll(/url\(\.\.\/fonts\/([^)]+)\)/g)) {
     const src = fontDirs.map((d) => path.join(d, name)).find((x) => fs.existsSync(x));
