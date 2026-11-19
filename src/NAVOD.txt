@@ -25,8 +25,8 @@ SPODNÉ MENU
               pomoc, nastavenia
 
 VZHĽAD A JAZYK (vpravo hore)
-  A – Pokojný sprievodca, B – Núdzový signál (tmavý, veľké písmo),
-  C – Príručka do vrecka. Jazyky SK, CZ, EN, PL, HU.
+  1 – Zemité karty (predvolený), 2 – Dlaždice (tlačidlo s paletou).
+  Jazyky SK, CZ, EN, PL, HU.
 
 DOBRÉ VEDIEŤ
 - Kniha, postupy, zoznamy, plánovač, mapa, vyhľadanie a trasy fungujú

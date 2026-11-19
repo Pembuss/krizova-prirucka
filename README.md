@@ -12,7 +12,7 @@ Aplikácia pre domácnosti: ako sa pripraviť, ako konať a ako sa zotaviť pri 
 | **Príprava** | plán, profil domácnosti, zásoby s nákupným zoznamom a rozpočtom v miestnej mene, energia, batohy, rodinný plán, tlač |
 | **Pomoc** | úvodná inštruktáž, prehliadka so šípkami, časté otázky, návod k aplikácii v PDF |
 
-Aplikácia má tri vzhľady: **A** Pokojný sprievodca, **B** Núdzový signál (tmavý, zapne sa aj automaticky v tmavom režime telefónu) a **C** Príručka do vrecka. Poľská a maďarská verzia sú označené ako **neoverené**, kým ich neskontroluje rodený hovoriaci (pozri [docs/TRANSLATIONS.md](docs/TRANSLATIONS.md)).
+Aplikácia má dva vzhľady: **1 Zemité karty** (predvolený: teplé zemité farby, zväzok kariet, zvislý dátum a hodiny) a **2 Dlaždice** (chladné dlaždice s tenkými linkami a veľkými hodinami). Poľská a maďarská verzia sú označené ako **neoverené**, kým ich neskontroluje rodený hovoriaci (pozri [docs/TRANSLATIONS.md](docs/TRANSLATIONS.md)).
 
 ## Dokumentácia
 

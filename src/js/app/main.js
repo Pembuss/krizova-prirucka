@@ -3,7 +3,7 @@ import { store } from './store.js';
 import { t, LANG, setLang, switchLang, ensureLang, $, $$, esc } from './core.js';
 import { LANGS as LANG_INFO } from '../../data/ui.js';
 import { icon } from './icons.js';
-import { THEMES, applyTheme, activeTheme, chosenTheme, autoDark, setTheme, setAutoDark, onThemeChange } from './theme.js';
+import { THEMES, THEME_NUM, applyTheme, activeTheme, chosenTheme, setTheme, onThemeChange } from './theme.js';
 import { ROUTES, NAV_GROUPS, TABS, UNDER_MORE } from './routes.js';
 import { offerOnFirstRun, isStandalone } from './install.js';
 import { initUpdates, applyUpdate } from './update.js';
@@ -23,7 +23,7 @@ function renderChrome(active) {
   sel.value = LANG;
   sel.title = LANG_INFO.find((l) => l.id === LANG)?.name || '';
   const lb = $('[data-look-menu]');
-  lb.innerHTML = `${icon('palette', 20)}<span class="look-letter">${activeTheme().toUpperCase()}</span>`;
+  lb.innerHTML = `${icon('palette', 20)}<span class="look-letter">${THEME_NUM[activeTheme()]}</span>`;
   lb.setAttribute('aria-label', `${t('look.title')}: ${t('look.' + activeTheme())}`);
   const call = $('.hdr-112');
   call.innerHTML = `${icon('phone', 18)}<span>112</span>`;
@@ -34,8 +34,7 @@ function renderChrome(active) {
 function lookPopHtml() {
   const cur = chosenTheme();
   return `<p class="look-pop-title">${esc(t('look.title'))}</p>
-${THEMES.map((id) => `<button type="button" class="look-opt" data-look="${id}" aria-pressed="${id === cur}"><span class="look-swatch look-sw-${id}" aria-hidden="true"></span><span><strong>${esc(t('look.' + id))}</strong><small>${esc(t('look.' + id + 'Desc'))}</small></span></button>`).join('')}
-<label class="look-auto"><input type="checkbox" data-look-auto ${autoDark() ? 'checked' : ''}> ${esc(t('look.auto'))}</label>`;
+${THEMES.map((id) => `<button type="button" class="look-opt" data-look="${id}" aria-pressed="${id === cur}"><span class="look-swatch look-sw-${id}" aria-hidden="true"></span><span><strong>${esc(t('look.' + id))}</strong><small>${esc(t('look.' + id + 'Desc'))}</small></span></button>`).join('')}`;
 }
 function closeLookPop() { const p = $('#look-pop'); p.hidden = true; $('[data-look-menu]').setAttribute('aria-expanded', 'false'); }
 
@@ -102,22 +101,17 @@ document.addEventListener('click', (e) => {
   const lo = e.target.closest('[data-look]');
   if (lo && lo.closest('#look-pop')) {
     setTheme(lo.dataset.look);
-    // výslovná voľba vzhľadu má prednosť pred automatickým tmavým režimom
-    if (activeTheme() !== lo.dataset.look) setAutoDark(false);
     closeLookPop();
     return;
   }
   if (!e.target.closest('#look-pop')) closeLookPop();
-});
-document.addEventListener('change', (e) => {
-  if (e.target.matches('[data-look-auto]')) setAutoDark(e.target.checked);
 });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLookPop(); });
 $('#app-lang').addEventListener('change', async (e) => {
   await switchLang(e.target.value);
   rerender();
 });
-// vzhľad sa môže zmeniť aj sám (tmavý režim telefónu) – domovská obrazovka má pre každý vzhľad iné rozloženie
+// domovská obrazovka má pre každý vzhľad iné rozloženie
 onThemeChange(() => rerender());
 window.addEventListener('hashchange', route);
 applyTheme();

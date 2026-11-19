@@ -4,7 +4,7 @@ import { LANGS as LANG_INFO } from '../../../data/ui.js';
 import { store, importData, saveBackup, keepStorage } from '../store.js';
 import { t, esc, LANG, switchLang, toast, $ } from '../core.js';
 import { icon } from '../icons.js';
-import { chosenTheme, autoDark, setTheme, setAutoDark, applyTheme } from '../theme.js';
+import { chosenTheme, setTheme, applyTheme } from '../theme.js';
 import { downloads, offlinePackage, fmtSize } from '../downloads.js';
 import { requestTour } from '../tour.js';
 import { isStandalone } from '../install.js';
@@ -12,7 +12,7 @@ import { updateSupported, updateReady, checkForUpdate, applyUpdate, repairApp, a
 import { rerender } from '../main.js';
 
 const LOCAL = location.protocol === 'file:';
-const LOOKS = [['a', 'look.a', 'look.aDesc'], ['b', 'look.b', 'look.bDesc'], ['c', 'look.c', 'look.cDesc'], ['d', 'look.d', 'look.dDesc'], ['e', 'look.e', 'look.eDesc']];
+const LOOKS = [['a', 'look.a', 'look.aDesc'], ['b', 'look.b', 'look.bDesc']];
 
 export const keepScroll = true;
 export function render(el, [section] = []) {
@@ -27,7 +27,6 @@ export function render(el, [section] = []) {
 <fieldset class="look-cards" style="border:0;margin:0;padding:0"><legend class="visually-hidden">${esc(t('set.theme'))}</legend>
 ${LOOKS.map(([id, n, d]) => `<label class="look-card"><input type="radio" name="look" value="${id}" ${id === cur ? 'checked' : ''}><span class="look-prev look-prev-${id}" aria-hidden="true"><i></i><i></i><i></i></span><span class="rc-main"><strong>${esc(t(n))}</strong><small class="muted" style="display:block">${esc(t(d))}</small></span></label>`).join('')}
 </fieldset>
-<label class="check-row"><input type="checkbox" data-auto ${autoDark() ? 'checked' : ''}><span>${esc(t('look.auto'))}<small class="muted" style="display:block">${esc(t('look.autoSub'))}</small></span></label>
 <h3 class="card-h">${esc(t('set.size'))}</h3>
 <div class="chips">${[['', 'size.normal'], ['l', 'size.l'], ['xl', 'size.xl']].map(([v, k]) => `<button type="button" class="chip" data-size="${v}" aria-pressed="${(pr.size || '') === v}">${esc(t(k))}</button>`).join('')}</div></section>
 
@@ -139,7 +138,6 @@ ${pkg && !LOCAL ? `<button class="btn" data-zip>${icon('download', 20)} ${esc(t(
   });
   el.addEventListener('change', async (e) => {
     if (e.target.name === 'look') setTheme(e.target.value);
-    if (e.target.matches('[data-auto]')) { setAutoDark(e.target.checked); keep(draw); }
     if (e.target.matches('[data-import]')) {
       const file = e.target.files[0];
       if (!file) return;

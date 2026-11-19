@@ -15,7 +15,6 @@ export const SHOTS = [
   ['home-a', '#/'],
   ['tour', '#/', { tour: true }],
   ['home-b', '#/', { look: 'b' }],
-  ['home-c', '#/', { look: 'c' }],
   ['now-pick', '#/teraz'],
   ['now-step', '#/teraz/blackout/2'],
   ['now-list', '#/teraz/blackout/vsetko'],

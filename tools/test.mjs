@@ -154,14 +154,14 @@ async function main() {
       await ctx.close();
     }
 
-    console.log('Vzhľady A, B, C, D, E');
-    for (const [look, sel] of [['a', '.home-a'], ['b', '.home-b'], ['c', '.home-c'], ['d', '.home-d'], ['e', '.home-e']]) {
+    console.log('Vzhľady 1 a 2');
+    for (const [look, sel] of [['a', '.home-a'], ['b', '.home-b']]) {
       const { ctx, page, errors } = await newPage(browser, base, 'sk');
-      await ctx.addInitScript((l) => localStorage.setItem('kp.prefs', JSON.stringify({ lang: 'sk', look: l, autoDark: false, onboarded: true, tourDone: true, installChoice: 'browser' })), look);
+      await ctx.addInitScript((l) => localStorage.setItem('kp.prefs', JSON.stringify({ lang: 'sk', look: l, onboarded: true, tourDone: true, installChoice: 'browser' })), look);
       await page.goto(base + 'index.html#/'); await page.waitForSelector(sel, { timeout: 8000 }).catch(() => {});
       const okHome = await page.locator(sel).count() === 1 && await page.evaluate((l) => document.documentElement.dataset.look === l, look);
       for (const r of ['teraz/blackout/1', 'kniha/vypadok-elektriny', 'viac', 'nastavenia']) { await page.evaluate((h) => { location.hash = h; }, '#/' + r); await page.waitForTimeout(250); }
-      check(okHome && !errors.length, okHome ? (errors.length ? `vzhľad ${look.toUpperCase()}: chyby ${errors.slice(0, 2).join(' | ')}` : `vzhľad ${look.toUpperCase()}: domov a obrazovky bez chýb`) : `vzhľad ${look.toUpperCase()}: domovská obrazovka sa nezobrazila`);
+      check(okHome && !errors.length, okHome ? (errors.length ? `vzhľad ${look === 'a' ? 1 : 2}: chyby ${errors.slice(0, 2).join(' | ')}` : `vzhľad ${look === 'a' ? 1 : 2}: domov a obrazovky bez chýb`) : `vzhľad ${look === 'a' ? 1 : 2}: domovská obrazovka sa nezobrazila`);
       await ctx.close();
     }
 

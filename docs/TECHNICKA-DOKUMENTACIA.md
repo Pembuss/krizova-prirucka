@@ -28,7 +28,7 @@ Zostavenie robí `tools/build.mjs`: Markdown → HTML (pandoc), kniha v aplikác
 | `src/js/app/core.js` | jazyk (`LANG`, `switchLang`), preklady `t()`, `tp()` (množné číslo), `T()` (text z dát), mena (`toLocal`, `fromLocal`, `money`), formuláre |
 | `src/js/app/strings.js` | texty rozhrania: `'kľúč': [sk, cs, en]` (PL a HU sú v `src/i18n/`) |
 | `src/js/app/store.js` | úložisko (`kp.profile`, `kp.state`, `kp.prefs`), záloha a obnova (aj šifrovaná) |
-| `src/js/app/theme.js` | vzhľady A/B/C, automatický tmavý režim, veľkosť písma |
+| `src/js/app/theme.js` | dva vzhľady (a – Zemité karty, b – Dlaždice), veľkosť písma |
 | `src/js/app/tour.js` | prehliadka so šípkami (kroky sa viažu na `data-tour="…"`) |
 | `src/js/app/install.js`, `views/install.js` | inštalácia do telefónu: zistenie zariadenia, natívne inštalačné okno, návody (`#/instalacia`) |
 | `src/js/app/bookrt.js`, `bookdata.js` | čítačka knihy: profil čitateľa, voľby „pre teba“, odporúčania, prečítané kapitoly, prehrávač scenárov, zoznamy |
@@ -131,7 +131,7 @@ Obrazovka (`views/*.js`) exportuje `render(el, params)` a môže vrátiť funkci
 
 ### Vzhľady
 
-`html[data-look="a|b|c"]` a `html[data-size=""|l|xl]` nastavuje `theme.js`. Štýly vzhľadov sú v `theme.css`. Každý vzhľad má vlastné rozloženie domovskej obrazovky (`views/home.js`). Ak je zapnuté `prefs.autoDark` (predvolene áno) a telefón je v tmavom režime, použije sa B.
+`html[data-look="a|b"]` a `html[data-size=""|l|xl]` nastavuje `theme.js`. Vzhľad `a` (Zemité karty) je predvolený, `b` je Dlaždice. Neznáma hodnota (napr. zo staršej verzie) sa nahradí predvoleným. Štýly vzhľadov sú v `theme.css`: každý vzhľad je blok premenných (`:root[data-look="…"]`) a pár úprav tvaru komponentov. Každý vzhľad má vlastné rozloženie domovskej obrazovky (`views/home.js`: `homeA`, `homeB`). Nový vzhľad pridáš v `theme.js` (`THEMES`, `THEME_COLOR`, `THEME_NUM`), v `index.html` (zoznam v úvodnom skripte), v `LOOKS` v `settings.js` a `onboarding.js`, v `theme.css` (premenné, náhľad `.look-prev-…`, `.look-sw-…`) a v textoch `look.<id>` (strings.js a src/i18n).
 
 ### Úložisko v prehliadači
 

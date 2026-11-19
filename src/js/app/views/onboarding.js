@@ -4,12 +4,12 @@ import { store, uid } from '../store.js';
 import { t, esc, LANG, switchLang } from '../core.js';
 import { icon } from '../icons.js';
 import { LANGS as LANG_INFO } from '../../../data/ui.js';
-import { chosenTheme, autoDark, setTheme, setAutoDark, applyTheme } from '../theme.js';
+import { chosenTheme, setTheme, applyTheme } from '../theme.js';
 import { requestTour } from '../tour.js';
 import { rerender } from '../main.js';
 
 const STEPS = 4;
-const LOOKS = [['a', 'look.a', 'look.aDesc'], ['b', 'look.b', 'look.bDesc'], ['c', 'look.c', 'look.cDesc'], ['d', 'look.d', 'look.dDesc'], ['e', 'look.e', 'look.eDesc']];
+const LOOKS = [['a', 'look.a', 'look.aDesc'], ['b', 'look.b', 'look.bDesc']];
 
 function counts() {
   const m = store.profile.members || [];
@@ -48,7 +48,6 @@ ${LANG_INFO.map((l) => `<label class="radio-card"><input type="radio" name="lang
 <fieldset class="look-cards" style="border:0;margin:0;padding:0"><legend class="visually-hidden">${esc(t('onb.look'))}</legend>
 ${LOOKS.map(([id, n, d]) => `<label class="look-card"><input type="radio" name="look" value="${id}" ${id === cur ? 'checked' : ''}><span class="look-prev look-prev-${id}" aria-hidden="true"><i></i><i></i><i></i></span><span class="rc-main"><strong>${esc(t(n))}</strong><small class="muted" style="display:block">${esc(t(d))}</small></span></label>`).join('')}
 </fieldset>
-<label class="check-row"><input type="checkbox" data-auto ${autoDark() ? 'checked' : ''}><span>${esc(t('look.auto'))}<small class="muted" style="display:block">${esc(t('look.autoSub'))}</small></span></label>
 <div><p class="small" style="margin:.2rem 0"><strong>${esc(t('set.size'))}</strong></p><div class="chips">${[['', 'size.normal'], ['l', 'size.l'], ['xl', 'size.xl']].map(([v, k]) => `<button type="button" class="chip" data-size="${v}" aria-pressed="${(store.prefs.size || '') === v}">${esc(t(k))}</button>`).join('')}</div></div>`;
     actions = `<button type="button" class="btn btn-block" data-go="2">${esc(t('onb.next'))} ${icon('next', 20)}</button>${back}`;
   } else if (step === 2) {
@@ -74,7 +73,6 @@ ${[['flat', 'onb.flat'], ['house', 'onb.house']].map(([v, k]) => `<label class="
   el.addEventListener('change', (e) => {
     if (e.target.name === 'lang') switchLang(e.target.value).then(rerender);
     if (e.target.name === 'look') setTheme(e.target.value);
-    if (e.target.matches('[data-auto]')) setAutoDark(e.target.checked);
   });
   el.addEventListener('click', (e) => {
     const g = e.target.closest('[data-go]');

@@ -51,7 +51,7 @@ Po prvom otvorení sa aplikácia uloží do zariadenia, spolu s knihou, postupmi
 Pri prvom otvorení ťa privíta krátka inštruktáž v štyroch krokoch:
 
 1. **Jazyk:** vyber si jeden z piatich jazykov. Poľská a maďarská verzia sú označené ako neoverené, kým ich neskontroluje rodený hovoriaci.
-2. **Vzhľad:** vyber si vzhľad A, B alebo C a veľkosť písma (pozri nižšie).
+2. **Vzhľad:** vyber si jeden z dvoch vzhľadov, Zemité karty alebo Dlaždice, a veľkosť písma (pozri nižšie).
 3. **Domácnosť:** zadaj, koľko vás je (dospelí, deti, seniori, zvieratá) a či bývate v byte alebo v rodinnom dome. Podľa toho aplikácia vypočíta zásoby a prispôsobí knihu.
 4. **Hotovo:** môžeš začať, alebo si pozrieť **prehliadku aplikácie**.
 
@@ -70,7 +70,7 @@ Inštruktáž môžeš preskočiť tlačidlom **Preskočiť**. Kedykoľvek ju sp
 **Hlavička** je vždy hore:
 
 - označenie verzie (**beta 3.0**),
-- tlačidlo s **paletou** – prepína vzhľad A, B, C,
+- tlačidlo s **paletou** – prepína medzi dvoma vzhľadmi,
 - výber **jazyka** (SK, CZ, EN, PL, HU),
 - červené tlačidlo **112** – jedným ťuknutím zavolá tiesňovú linku.
 
@@ -79,30 +79,27 @@ Inštruktáž môžeš preskočiť tlačidlom **Preskočiť**. Kedykoľvek ju sp
 Na obrazovke **Domov** je veľké tlačidlo **Kríza teraz** a dlaždice: Pripraviť sa, Príručka, Mapa a Rodinný plán. Nižšie je ukazovateľ **Pripravenosť** s návrhom ďalšieho kroku.
 
 ::: shots
-![Domov (vzhľad A)](shot:home-a)
+![Domov](shot:home-a)
 
 ![Prehliadka aplikácie](shot:tour)
 :::
 
 **Prehliadka aplikácie** šípkami ukáže, čo je kde. Spustíš ju v časti **Pomoc** alebo v Nastaveniach. Ďalej ideš tlačidlom **Ďalej** a ukončíš ju tlačidlom **Preskočiť**.
 
-## Tri vzhľady
+## Dva vzhľady
 
-Aplikácia má tri vzhľady. Každý má vlastnú úvodnú obrazovku a mení farby aj tvar všetkých obrazoviek:
+Aplikácia má dva vzhľady. Každý má vlastnú úvodnú obrazovku a mení farby aj tvar všetkých obrazoviek:
 
-- **A · Pokojný sprievodca:** svetlý a prehľadný, s dlaždicami. Vhodný na bežnú prípravu.
-- **B · Núdzový signál:** tmavý, s veľkým písmom a tlačidlami. Hodí sa v noci a v strese a na telefónoch s OLED displejom šetrí batériu.
-- **C · Príručka do vrecka:** papierový vzhľad. Do popredia dáva knihu a vyhľadávanie.
+- **1 · Zemité karty** (predvolený): teplé zemité farby, zväzok kariet, zvislý dátum a hodiny. Tlačidlá a nadpisy majú technické písmo.
+- **2 · Dlaždice:** chladné dlaždice s tenkými linkami, veľké tenké hodiny a prehľadná mriežka.
 
 ::: {.shots .wide}
-![A · Pokojný sprievodca](shot:home-a)
+![1 · Zemité karty](shot:home-a)
 
-![B · Núdzový signál](shot:home-b)
-
-![C · Príručka do vrecka](shot:home-c)
+![2 · Dlaždice](shot:home-b)
 :::
 
-Vzhľad zmeníš tlačidlom s paletou v hlavičke alebo v **Nastaveniach**. Keď má telefón zapnutý tmavý režim, aplikácia sa sama prepne na vzhľad B. Vypneš to v Nastaveniach voľbou **Tmavý režim telefónu = vzhľad B**. Tam nastavíš aj **Veľkosť písma**: normálna, väčšia alebo najväčšia.
+Vzhľad zmeníš tlačidlom s paletou v hlavičke alebo v **Nastaveniach**. Tam nastavíš aj **Veľkosť písma**: normálna, väčšia alebo najväčšia.
 
 ## Kríza teraz
 
@@ -200,7 +197,7 @@ Všetko sa tlačí na A4 a je čitateľné aj čiernobielo, s políčkami na od�
 
 V **Nastaveniach** (Viac → Nastavenia) zmeníš:
 
-- **Vzhľad**, tmavý režim a **veľkosť písma**,
+- **Vzhľad** a **veľkosť písma**,
 - **jazyk**,
 - ako sa otvára **Kríza teraz** (po krokoch alebo celý zoznam),
 - **Offline režim**: stav, uloženie kníh na offline, offline balík ZIP a inštalácia.
@@ -241,7 +238,7 @@ V časti **Viac → Pomoc** nájdeš:
 | Stratili sa moje údaje | Údaje sú v prehliadači. Ak ho vyčistíš alebo použiješ súkromné okno, zmiznú. Obnov ich zo zálohy. |
 | Mapa nemá podrobnosti | Mimo Slovenska je offline mapa len prehľadná. Pripoj sa na internet a prezri si oblasť, uloží sa. |
 | PDF sa nestiahne | Skontroluj pripojenie. Na offline si súbory ulož vopred v Nastaveniach. |
-| Text je príliš malý | Nastavenia → Veľkosť písma, alebo vzhľad B. |
+| Text je príliš malý | Nastavenia → Veľkosť písma. |
 | Nefunguje poloha (GPS) | Povoľ prehliadaču prístup k polohe. Inak vyhľadaj adresu alebo klikni do mapy. |
 
 **Stav údajov:** kniha, postupy a čísla sú overené k októbru 2026. Pokyny úradov sa môžu meniť. V kríze vždy platia aktuálne pokyny obce, polície, hasičov a krízových štábov.

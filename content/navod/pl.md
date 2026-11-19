@@ -51,7 +51,7 @@ Po pierwszym otwarciu aplikacja zapisuje się na urządzeniu, razem z książką
 Przy pierwszym otwarciu powita cię krótkie wprowadzenie w czterech krokach:
 
 1. **Język:** wybierz jeden z pięciu języków. Wersje polska i węgierska są oznaczone jako niezweryfikowane, dopóki nie sprawdzi ich native speaker.
-2. **Wygląd:** wybierz wygląd A, B lub C oraz rozmiar tekstu (zob. niżej).
+2. **Wygląd:** wybierz jeden z dwóch wyglądów, Ziemiste karty lub Kafelki, oraz rozmiar tekstu (zob. niżej).
 3. **Gospodarstwo domowe:** podaj, ile was jest (dorośli, dzieci, seniorzy, zwierzęta) i czy mieszkacie w mieszkaniu, czy w domu. Na tej podstawie aplikacja obliczy zapasy i dopasuje poradnik.
 4. **Gotowe:** możesz zacząć albo obejrzeć **przewodnik po aplikacji**.
 
@@ -70,7 +70,7 @@ Wprowadzenie możesz pominąć przyciskiem **Pomiń**. W każdej chwili uruchomi
 **Nagłówek** jest zawsze na górze:
 
 - oznaczenie wersji (**beta 3.0**),
-- przycisk z **paletą** – przełącza wygląd A, B, C,
+- przycisk z **paletą** – przełącza między dwoma wyglądami,
 - wybór **języka** (SK, CZ, EN, PL, HU),
 - czerwony przycisk **112** – jednym stuknięciem dzwoni na numer alarmowy.
 
@@ -79,30 +79,27 @@ Wprowadzenie możesz pominąć przyciskiem **Pomiń**. W każdej chwili uruchomi
 Na ekranie **Start** jest duży przycisk **Kryzys teraz** i kafelki: Przygotuj się, Poradnik, Mapa i Plan rodzinny. Niżej wskaźnik **Gotowość** pokazuje postęp i proponuje kolejny krok.
 
 ::: shots
-![Start (wygląd A)](shot:home-a)
+![Start](shot:home-a)
 
 ![Przewodnik po aplikacji](shot:tour)
 :::
 
 **Przewodnik po aplikacji** strzałkami pokaże, co gdzie jest. Uruchomisz go w części **Pomoc** albo w Ustawieniach. Dalej przechodzisz przyciskiem **Dalej**, a kończysz przyciskiem **Pomiń**.
 
-## Trzy wyglądy
+## Dwa wyglądy
 
-Aplikacja ma trzy wyglądy. Każdy ma własny ekran startowy i zmienia kolory oraz kształt wszystkich ekranów:
+Aplikacja ma dwa wyglądy. Każdy ma własny ekran startowy i zmienia kolory oraz kształt wszystkich ekranów:
 
-- **A · Spokojny przewodnik:** jasny i przejrzysty, z kafelkami. Dobry do codziennych przygotowań.
-- **B · Sygnał alarmowy:** ciemny, z dużym tekstem i przyciskami. Przydaje się w nocy i w stresie, a na telefonach z ekranem OLED oszczędza baterię.
-- **C · Poradnik kieszonkowy:** wygląd papierowy, na pierwszym planie książka i wyszukiwarka.
+- **1 · Ziemiste karty** (domyślny): ciepłe ziemiste kolory, zestaw kart, pionowa data i zegar. Przyciski i nagłówki mają techniczną czcionkę.
+- **2 · Kafelki:** chłodne kafelki z cienkimi liniami, duży cienki zegar i przejrzysta siatka.
 
 ::: {.shots .wide}
-![A · Spokojny przewodnik](shot:home-a)
+![1 · Ziemiste karty](shot:home-a)
 
-![B · Sygnał alarmowy](shot:home-b)
-
-![C · Poradnik kieszonkowy](shot:home-c)
+![2 · Kafelki](shot:home-b)
 :::
 
-Wygląd zmienisz przyciskiem z paletą w nagłówku albo w **Ustawieniach**. Gdy telefon ma włączony tryb ciemny, aplikacja sama przełączy się na wygląd B. Wyłączysz to w Ustawieniach opcją **Tryb ciemny telefonu = wygląd B**. Tam ustawisz też **Rozmiar tekstu**: normalny, większy lub największy.
+Wygląd zmienisz przyciskiem z paletą w nagłówku albo w **Ustawieniach**. Tam ustawisz też **Rozmiar tekstu**: normalny, większy lub największy.
 
 ## Kryzys teraz
 
@@ -200,7 +197,7 @@ Wszystko drukuje się na A4, jest czytelne także w czerni i bieli, z polami do 
 
 W **Ustawieniach** (Więcej → Ustawienia) zmienisz:
 
-- **wygląd**, tryb ciemny i **rozmiar tekstu**,
+- **wygląd** i **rozmiar tekstu**,
 - **język**,
 - sposób otwierania **Kryzys teraz** (krok po kroku lub cała lista),
 - **Tryb offline**: stan, zapis poradnika offline, pakiet offline ZIP i instalację.
@@ -241,7 +238,7 @@ W części **Więcej → Pomoc** znajdziesz:
 | Moje dane zniknęły | Dane są w przeglądarce. Jeśli ją wyczyścisz albo użyjesz okna prywatnego, znikną. Przywróć je z kopii zapasowej. |
 | Mapa nie ma szczegółów | Poza Słowacją mapa offline jest tylko poglądowa. Połącz się z internetem i obejrzyj okolicę, a zostanie zapisana. |
 | PDF się nie pobiera | Sprawdź połączenie. Do użytku offline zapisz pliki wcześniej w Ustawieniach. |
-| Tekst jest za mały | Ustawienia → Rozmiar tekstu albo wygląd B. |
+| Tekst jest za mały | Ustawienia → Rozmiar tekstu. |
 | Nie działa lokalizacja (GPS) | Zezwól przeglądarce na dostęp do lokalizacji. W przeciwnym razie wyszukaj adres albo kliknij na mapie. |
 
 **Stan danych:** poradnik, instrukcje i numery sprawdzono w październiku 2026. Polecenia władz mogą się zmieniać. W czasie kryzysu zawsze obowiązują aktualne polecenia gminy, policji, straży pożarnej i sztabów kryzysowych.

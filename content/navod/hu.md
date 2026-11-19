@@ -51,7 +51,7 @@ Az első megnyitáskor az alkalmazás elmenti magát az eszközre, a könyvvel, 
 Az első megnyitáskor egy rövid, négylépéses bevezető fogad:
 
 1. **Nyelv:** válassz az öt nyelv közül. A lengyel és a magyar változat „nem ellenőrzött” jelölést kapott, amíg anyanyelvi beszélő át nem nézi.
-2. **Megjelenés:** válaszd az A, B vagy C megjelenést és a betűméretet (lásd lent).
+2. **Megjelenés:** válassz a két megjelenés közül, Földszínű kártyák vagy Csempék, és add meg a betűméretet (lásd lent).
 3. **Háztartás:** add meg, hányan vagytok (felnőttek, gyerekek, idősek, háziállatok), és hogy lakásban vagy családi házban laktok-e. Ebből számolja ki az alkalmazás a készleteket, és ehhez igazítja a könyvet.
 4. **Kész:** kezdheted a használatot, vagy megnézheted **az alkalmazás bemutatóját**.
 
@@ -70,7 +70,7 @@ A bevezetőt a **Kihagyás** gombbal átugorhatod. Bármikor újraindíthatod a 
 A **fejléc** mindig felül van:
 
 - a verzió jelölése (**beta 3.0**),
-- a **paletta** gomb – vált az A, B és C megjelenés között,
+- a **paletta** gomb – vált a két megjelenés között,
 - a **nyelv** választója (SK, CZ, EN, PL, HU),
 - a piros **112** gomb – egy koppintással hívja a segélyhívó számot.
 
@@ -79,30 +79,27 @@ Az **alsó menüben** öt pont van: **Kezdőlap**, **Válság**, **Kézikönyv**
 A **Kezdőlapon** egy nagy **Válság most** gomb és csempék vannak: Felkészülés, Kézikönyv, Térkép és Családi terv. Lejjebb a **Felkészültség** mutató látható, a következő lépés javaslatával.
 
 ::: shots
-![Kezdőlap (A megjelenés)](shot:home-a)
+![Kezdőlap](shot:home-a)
 
 ![Az alkalmazás bemutatója](shot:tour)
 :::
 
 **Az alkalmazás bemutatója** nyilakkal mutatja meg, mi hol van. A **Súgó** részben vagy a Beállításokban indíthatod el. A **Tovább** gombbal haladsz, a **Kihagyás** gombbal fejezed be.
 
-## Három megjelenés
+## Két megjelenés
 
-Az alkalmazásnak három megjelenése van. Mindegyiknek saját kezdőképernyője van, és minden képernyő színét és formáját megváltoztatja:
+Az alkalmazásnak két megjelenése van. Mindegyiknek saját kezdőképernyője van, és minden képernyő színét és formáját megváltoztatja:
 
-- **A · Nyugodt kalauz:** világos és áttekinthető, csempékkel. A mindennapi felkészüléshez.
-- **B · Vészjelzés:** sötét, nagy betűkkel és gombokkal. Éjszaka és stresszhelyzetben jó, OLED-kijelzős telefonon pedig kíméli az akkumulátort.
-- **C · Zsebkönyv:** papírszerű megjelenés, amely a könyvet és a keresést helyezi előtérbe.
+- **1 · Földszínű kártyák** (alapértelmezett): meleg földszínek, kártyák egymásra rétegezve, függőleges dátum és óra. A gombok és a címsorok technikai betűtípust használnak.
+- **2 · Csempék:** hűvös csempék vékony vonalakkal, nagy vékony óra és áttekinthető rács.
 
 ::: {.shots .wide}
-![A · Nyugodt kalauz](shot:home-a)
+![1 · Földszínű kártyák](shot:home-a)
 
-![B · Vészjelzés](shot:home-b)
-
-![C · Zsebkönyv](shot:home-c)
+![2 · Csempék](shot:home-b)
 :::
 
-A megjelenést a fejlécben lévő paletta gombbal vagy a **Beállításokban** változtathatod meg. Ha a telefonon be van kapcsolva a sötét mód, az alkalmazás magától a B megjelenésre vált. Ezt a Beállításokban a **Telefon sötét módja = B megjelenés** opcióval kapcsolhatod ki. Ugyanitt állíthatod be a **Betűméretet** is: normál, nagyobb vagy legnagyobb.
+A megjelenést a fejlécben lévő paletta gombbal vagy a **Beállításokban** változtathatod meg. Ugyanitt állíthatod be a **Betűméretet** is: normál, nagyobb vagy legnagyobb.
 
 ## Válság most
 
@@ -200,7 +197,7 @@ Minden A4-es lapra nyomtatódik, fekete-fehérben is olvasható, és vannak benn
 
 A **Beállításokban** (Továbbiak → Beállítások) módosíthatod:
 
-- a **megjelenést**, a sötét módot és a **betűméretet**,
+- a **megjelenést** és a **betűméretet**,
 - a **nyelvet**,
 - hogyan nyíljon meg a **Válság most** (lépésenként vagy teljes listaként),
 - az **Offline módot**: állapot, a könyvek offline mentése, az offline ZIP-csomag és a telepítés.
@@ -241,7 +238,7 @@ A **Továbbiak → Súgó** részben ezeket találod:
 | Eltűntek az adataim | Az adatok a böngészőben vannak. Ha törlöd a böngészési adatokat vagy privát ablakot használsz, eltűnnek. Állítsd vissza őket a mentésből. |
 | A térkép nem részletes | Szlovákián kívül az offline térkép csak áttekintő. Csatlakozz az internethez és nézd meg a környéket, így elmentődik. |
 | Nem töltődik le a PDF | Ellenőrizd a kapcsolatot. Offline használathoz előre mentsd el a fájlokat a Beállításokban. |
-| Túl kicsi a szöveg | Beállítások → Betűméret, vagy a B megjelenés. |
+| Túl kicsi a szöveg | Beállítások → Betűméret. |
 | Nem működik a helymeghatározás (GPS) | Engedélyezd a böngészőnek a helyadatokhoz való hozzáférést. Különben keress rá a címre, vagy kattints a térképre. |
 
 **Az adatok állapota:** a kézikönyvet, a teendőket és a telefonszámokat 2026 októberében ellenőriztük. A hatósági utasítások változhatnak. Válsághelyzetben mindig az önkormányzat, a rendőrség, a tűzoltóság és a katasztrófavédelem aktuális utasításai az irányadók.

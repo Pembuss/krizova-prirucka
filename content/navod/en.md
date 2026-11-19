@@ -51,7 +51,7 @@ The first time you open the app, it saves itself on your device together with th
 The first time you open the app, a short welcome guide takes you through four steps:
 
 1. **Language:** pick one of five languages. The Polish and Hungarian versions are marked as unverified until a native speaker has reviewed them.
-2. **Look:** pick look A, B or C and the text size (see below).
+2. **Look:** pick one of two looks, Earth tabs or Tiles, and the text size (see below).
 3. **Household:** say how many of you there are (adults, children, seniors, pets) and whether you live in a flat or a house. The app uses this to calculate supplies and tailor the book.
 4. **Done:** start using the app, or take the **app tour**.
 
@@ -70,7 +70,7 @@ You can skip the guide with **Skip**. You can run it again at any time from **He
 The **header** is always at the top:
 
 - the version label (**beta 3.0**),
-- the **palette** button – switches between looks A, B and C,
+- the **palette** button – switches between the two looks,
 - the **language** selector (SK, CZ, EN, PL, HU),
 - the red **112** button – calls the emergency number with one tap.
 
@@ -79,30 +79,27 @@ The **bottom menu** has five items: **Home**, **Crisis**, **Handbook**, **Map** 
 The **Home** screen has a large **Crisis now** button and tiles for Prepare, Handbook, Map and Family plan. Below them, **Readiness** shows your progress and suggests the next step.
 
 ::: shots
-![Home (look A)](shot:home-a)
+![Home](shot:home-a)
 
 ![App tour](shot:tour)
 :::
 
 The **app tour** uses arrows to show what is where. Start it from **Help** or from Settings. Tap **Next** to continue and **Skip** to end it.
 
-## Three looks
+## Two looks
 
-The app has three looks. Each has its own home screen and changes the colours and shapes of every screen:
+The app has two looks. Each has its own home screen and changes the colours and shapes of every screen:
 
-- **A · Calm guide:** light and clear, with tiles. Good for everyday preparation.
-- **B · Emergency signal:** dark, with large text and buttons. Useful at night and under stress, and it saves battery on phones with OLED screens.
-- **C · Pocket handbook:** a paper look that puts the book and search first.
+- **1 · Earth tabs** (default): warm earth tones, a stack of tab cards, a vertical date and a clock. Buttons and headings use a technical typeface.
+- **2 · Tiles:** cool tiles with thin lines, a large thin clock and a clear grid.
 
 ::: {.shots .wide}
-![A · Calm guide](shot:home-a)
+![1 · Earth tabs](shot:home-a)
 
-![B · Emergency signal](shot:home-b)
-
-![C · Pocket handbook](shot:home-c)
+![2 · Tiles](shot:home-b)
 :::
 
-Change the look with the palette button in the header or in **Settings**. When your phone is in dark mode, the app switches to look B automatically. You can turn this off in Settings with **Phone dark mode = look B**. That is also where you set the **Text size**: normal, larger or largest.
+Change the look with the palette button in the header or in **Settings**. That is also where you set the **Text size**: normal, larger or largest.
 
 ## Crisis now
 
@@ -200,7 +197,7 @@ Everything prints on A4, is readable in black and white, and has boxes to tick. 
 
 In **Settings** (More → Settings) you can change:
 
-- the **look**, dark mode and **text size**,
+- the **look** and **text size**,
 - the **language**,
 - how **Crisis now** opens (step by step or as a full list),
 - **Offline mode**: status, saving the books offline, the offline ZIP package and installation.
@@ -241,7 +238,7 @@ Under **More → Help** you will find:
 | My data is gone | Data is stored in the browser. Clearing it or using a private window removes it. Restore it from a backup. |
 | The map has no detail | Outside Slovakia, the offline map is an overview only. Go online and look at the area, and it will be saved. |
 | A PDF does not download | Check your connection. To use the files offline, save them in advance in Settings. |
-| The text is too small | Settings → Text size, or switch to look B. |
+| The text is too small | Settings → Text size. |
 | Location (GPS) does not work | Allow the browser to access your location. Otherwise, search for the address or click on the map. |
 
 **Data as of:** the book, the action steps and the numbers were checked in October 2026. Official instructions can change. In a crisis, the current instructions of your municipality, police, fire brigade and crisis staff always come first.

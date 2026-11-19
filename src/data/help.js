@@ -47,9 +47,9 @@ export const FAQ = [
   {
     q: L('Ako zmením vzhľad alebo veľkosť písma?', 'Jak změním vzhled nebo velikost písma?', 'How do I change the look or text size?'),
     a: L(
-      'Ťukni na tlačidlo s paletou v hlavičke. Na výber sú tri vzhľady: A – pokojný sprievodca, B – núdzový signál (tmavý, veľké písmo a tlačidlá, šetrí batériu) a C – príručka do vrecka. Keď má telefón tmavý režim, aplikácia sa sama prepne na B – dá sa to vypnúť. Veľkosť písma zmeníš v Nastaveniach.',
-      'Ťukni na tlačítko s paletou v záhlaví. Na výběr jsou tři vzhledy: A – klidný průvodce, B – nouzový signál (tmavý, velké písmo a tlačítka, šetří baterii) a C – příručka do kapsy. Když má telefon tmavý režim, aplikace se sama přepne na B – dá se to vypnout. Velikost písma změníš v Nastavení.',
-      'Tap the palette button in the header. There are three looks: A – calm guide, B – emergency signal (dark, large text and buttons, saves battery) and C – pocket handbook. When your phone is in dark mode the app switches to B automatically – you can turn that off. Text size is in Settings.'),
+      'Ťukni na tlačidlo s paletou v hlavičke. Na výber sú dva vzhľady: 1 – Zemité karty (predvolený) a 2 – Dlaždice. Veľkosť písma zmeníš v Nastaveniach.',
+      'Ťukni na tlačítko s paletou v záhlaví. Na výběr jsou dva vzhledy: 1 – Zemité karty (výchozí) a 2 – Dlaždice. Velikost písma změníš v Nastavení.',
+      'Tap the palette button in the header. There are two looks: 1 – Earth tabs (default) and 2 – Tiles. You can change the text size in Settings.'),
   },
   {
     q: L('Ako zmením jazyk?', 'Jak změním jazyk?', 'How do I change the language?'),
@@ -107,7 +107,7 @@ export const CHANGES = [
   L('Zálohovanie údajov cez ponuku telefónu, pripomienka zálohy, aktualizácia a oprava nainštalovanej aplikácie', 'Zálohování dat přes nabídku telefonu, připomínka zálohy, aktualizace a oprava nainstalované aplikace', 'Backups via the phone share menu, backup reminders, update and repair of the installed app'),
   L('Inštalácia do telefónu pri prvom otvorení: jedným ťuknutím alebo s návodom pre iPhone, Android a počítač', 'Instalace do telefonu při prvním otevření: jedním ťuknutím nebo s návodem pro iPhone, Android a počítač', 'Install on your phone when you first open the app: with one tap or with steps for iPhone, Android and computer'),
   L('Nová aplikácia: všetko na jednom mieste – kniha, kríza teraz, plán, mapa', 'Nová aplikace: vše na jednom místě – kniha, krize teď, plán, mapa', 'New app: everything in one place – book, crisis now, plan, map'),
-  L('Tri vzhľady (A, B, C), automatický tmavý režim', 'Tři vzhledy (A, B, C), automatický tmavý režim', 'Three looks (A, B, C), automatic dark mode'),
+  L('Dva vzhľady: Zemité karty a Dlaždice', 'Dva vzhledy: Zemité karty a Dlaždice', 'Two looks: Earth tabs and Tiles'),
   L('„Kríza teraz“ po krokoch s odškrtávaním', '„Krize teď“ po krocích s odškrtáváním', '“Crisis now” step by step with tick-off'),
   L('Úvodná inštruktáž, prehliadka a pomoc', 'Úvodní instruktáž, prohlídka a nápověda', 'Welcome guide, tour and help'),
   L('Celá príručka na stiahnutie v PDF a EPUB priamo v aplikácii', 'Celá příručka ke stažení v PDF a EPUB přímo v aplikaci', 'Whole handbook as PDF and EPUB right in the app'),
