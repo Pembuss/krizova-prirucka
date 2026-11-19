@@ -586,7 +586,7 @@ export default {
   'look.a': '1 · Földszínű kártyák',
   'look.aDesc': 'Meleg földszínek, kártyák és technikai betűtípus',
   'look.b': '2 · Csempék',
-  'look.bDesc': 'Egyszínű fehér és szürke felületek, vékony fekete vonalak és nagy óra',
+  'look.bDesc': 'Matt fehér és szürke, lágy árnyékolás, finom csillanás és nagy óra',
   'home.hello': 'Jó napot',
   'home.helloName': 'Szia, {name}',
   'home.question': 'Mire van szükséged?',

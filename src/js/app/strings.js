@@ -547,7 +547,7 @@ export const S = {
   'look.a': ['1 · Zemité karty', '1 · Zemité karty', '1 · Earth tabs'],
   'look.aDesc': ['Teplé zemité farby, karty a technické písmo', 'Teplé zemité barvy, karty a technické písmo', 'Warm earth tones, tab cards and technical type'],
   'look.b': ['2 · Dlaždice', '2 · Dlaždice', '2 · Tiles'],
-  'look.bDesc': ['Biele a sivé jednoliate plochy, tenké čierne linky a veľké hodiny', 'Bílé a šedé jednolité plochy, tenké černé linky a velké hodiny', 'Uniform white and grey surfaces, thin black lines and a large clock'],
+  'look.bDesc': ['Matná biela a sivá, mäkké tienenie, decentný odlesk a veľké hodiny', 'Matná bílá a šedá, měkké stínování, decentní odlesk a velké hodiny', 'Matte white and grey, soft shading, a subtle sheen and a large clock'],
 
   'home.hello': ['Dobrý deň', 'Dobrý den', 'Hello'],
   'home.helloName': ['Ahoj, {name}', 'Ahoj, {name}', 'Hi, {name}'],
