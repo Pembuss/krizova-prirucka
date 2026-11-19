@@ -3,7 +3,7 @@
 import { store } from './store.js';
 
 export const THEMES = ['a', 'b'];
-export const THEME_COLOR = { a: '#A39896', b: '#E4E9F1' };
+export const THEME_COLOR = { a: '#A39896', b: '#E8EAED' };
 export const THEME_NUM = { a: '1', b: '2' };
 
 // Zvolený vzhľad; neznámy (napr. zo staršej verzie) sa nahradí predvoleným

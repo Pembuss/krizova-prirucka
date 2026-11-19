@@ -586,7 +586,7 @@ export default {
   'look.a': '1 · Ziemiste karty',
   'look.aDesc': 'Ciepłe ziemiste kolory, karty i techniczna czcionka',
   'look.b': '2 · Kafelki',
-  'look.bDesc': 'Szklane kafelki w siatce z cienkimi liniami i duży cienki zegar',
+  'look.bDesc': 'Jednolite białe i szare powierzchnie, cienkie czarne linie i duży zegar',
   'home.hello': 'Dzień dobry',
   'home.helloName': 'Cześć, {name}',
   'home.question': 'Czego potrzebujesz?',
