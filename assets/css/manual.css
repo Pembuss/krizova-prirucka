@@ -1,0 +1,49 @@
+/* Návod k aplikácii (PDF A4) – zostavuje tools/manual.mjs */
+@page { size: A4; }
+:root {
+  --ink: #111827; --muted: #4b5563; --blue: #0B5C7A; --blue-soft: #e8f3f7; --orange: #c2410c; --orange-soft: #fff4e6;
+  --red: #b91c1c; --red-soft: #fef2f2; --green: #2F6F4E; --green-soft: #ecfdf5; --border: #d9dee5;
+}
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body.manual { margin: 0; font-family: "Inter", system-ui, "Noto Sans", Arial, sans-serif; font-size: 10.5pt; line-height: 1.5; color: var(--ink); }
+.m-cover { display: flex; gap: 8mm; align-items: center; padding: 0 0 6mm; margin: 0 0 6mm; border-bottom: 3px solid var(--orange); }
+.m-logo svg { width: 26mm; height: 26mm; display: block; }
+.m-kicker { margin: 0; font-size: 9pt; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--orange); }
+.m-title { margin: 1mm 0 2mm; font-size: 28pt; line-height: 1.1; color: var(--blue); }
+.m-version { display: inline-block; margin: 0; padding: .5mm 3mm; border-radius: 99px; background: var(--orange); color: #fff; font-weight: 800; font-size: 9pt; }
+.m-unverified { margin: 3mm 0 0; padding: 2mm 3mm; border: 1.5px dashed var(--orange); border-radius: 2mm; font-size: 8.5pt; font-weight: 600; }
+.m-body h2 { font-size: 16pt; color: var(--blue); margin: 8mm 0 2mm; padding-top: 2mm; border-top: 1px solid var(--border); break-after: avoid; }
+.m-body h2:first-of-type { border-top: 0; }
+.m-body h3 { font-size: 11.5pt; margin: 4mm 0 1mm; break-after: avoid; }
+.m-body p, .m-body li { orphans: 3; widows: 3; }
+.m-body ul, .m-body ol { padding-left: 6mm; margin: 1.5mm 0 3mm; }
+.m-body li { margin: .8mm 0; }
+.m-body a { color: var(--blue); }
+.m-body strong { font-weight: 700; }
+.m-body code, .m-body kbd { font-family: inherit; font-weight: 700; background: var(--blue-soft); border-radius: 1mm; padding: 0 1mm; }
+/* Obsah */
+.m-toc { columns: 2; column-gap: 10mm; margin: 0 0 4mm; padding: 3mm 5mm; background: var(--blue-soft); border-radius: 3mm; }
+.m-toc h2 { column-span: all; border: 0; margin: 0 0 1mm; padding: 0; font-size: 11pt; }
+.m-toc ol { margin: 0; padding-left: 5mm; }
+.m-toc li { margin: .5mm 0; break-inside: avoid; }
+.m-toc a { text-decoration: none; color: var(--ink); }
+/* Rámčeky */
+.tip, .warn, .note { margin: 3mm 0; padding: 2.5mm 4mm; border-left: 4px solid; border-radius: 0 2mm 2mm 0; break-inside: avoid; }
+.tip { background: var(--green-soft); border-color: var(--green); }
+.warn { background: var(--red-soft); border-color: var(--red); }
+.note { background: var(--orange-soft); border-color: var(--orange); }
+.tip > :first-child, .warn > :first-child, .note > :first-child { margin-top: 0; }
+.tip > :last-child, .warn > :last-child, .note > :last-child { margin-bottom: 0; }
+/* Snímky obrazoviek ako telefóny (inline-block sa pri tlači nedelí medzi strany) */
+.shots { margin: 4mm 0 5mm; text-align: center; break-inside: avoid; }
+.shots > p { margin: 0; }
+.m-body figure { display: inline-block; vertical-align: top; margin: 0 3.5mm; width: 46mm; text-align: center; break-inside: avoid; }
+.m-body > figure { display: block; margin: 4mm auto 5mm; }
+.m-body figure img { display: block; width: 100%; border-radius: 4.5mm; border: 2.2mm solid #1f2937; }
+.m-body figcaption { margin-top: 1.8mm; font-size: 8.5pt; line-height: 1.3; color: var(--muted); }
+.shots.wide figure { width: 42mm; }
+/* Tabuľka */
+.m-body table { width: 100%; border-collapse: collapse; margin: 2mm 0 4mm; font-size: 9.5pt; break-inside: avoid; }
+.m-body th, .m-body td { border-bottom: 1px solid var(--border); padding: 1.5mm 2mm; text-align: left; vertical-align: top; }
+.m-body th { background: var(--blue-soft); }

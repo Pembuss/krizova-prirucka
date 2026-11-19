@@ -1,0 +1,35 @@
+{
+ "name": "Krizova-prirucka-beta-3.0.zip",
+ "size": 59260250,
+ "sha256": "a96371e292763dd00d43c622749bdd4d474f60f01a8b458f7105fd8ade414539",
+ "parts": [
+  {
+   "file": "downloads/offline/part-01.bin",
+   "size": 9437184
+  },
+  {
+   "file": "downloads/offline/part-02.bin",
+   "size": 9437184
+  },
+  {
+   "file": "downloads/offline/part-03.bin",
+   "size": 9437184
+  },
+  {
+   "file": "downloads/offline/part-04.bin",
+   "size": 9437184
+  },
+  {
+   "file": "downloads/offline/part-05.bin",
+   "size": 9437184
+  },
+  {
+   "file": "downloads/offline/part-06.bin",
+   "size": 9437184
+  },
+  {
+   "file": "downloads/offline/part-07.bin",
+   "size": 2637146
+  }
+ ]
+}

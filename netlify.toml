@@ -1,0 +1,5 @@
+# Nastavenia Netlify pre vetvu „netlify“ (hotový web zo zostavenia v GitHub Actions).
+# Netlify nič nezostavuje – iba zverejní súbory tak, ako sú. Hlavičky sú v súbore _headers
+# (vytvára ho tools/build.mjs; rovnaký súbor funguje aj na Cloudflare Pages).
+[build]
+  publish = "."

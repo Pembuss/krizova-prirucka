@@ -1,0 +1,37 @@
+body { font-family: serif; line-height: 1.45; }
+h1, h2, h3, h4 { font-family: sans-serif; line-height: 1.2; page-break-after: avoid; }
+h1 { font-size: 1.6em; margin: 0 0 .6em; }
+.ch-label { display: block; font-size: .55em; text-transform: uppercase; letter-spacing: .08em; }
+.box, div.urgent, div.tip, div.warning, div.note { border: 2px solid #000; border-left-width: 6px; padding: .4em .8em; margin: 1em 0; page-break-inside: avoid; }
+.box.urgent { border-width: 3px; border-left-width: 8px; }
+.box-title { font-weight: bold; font-family: sans-serif; margin: 0 0 .3em; }
+ol.steps li { font-weight: bold; }
+ul.checklist { list-style: none; padding-left: 0; }
+ul.checklist li { border-bottom: 1px dotted #888; padding: .2em 0; }
+.checklist-title { font-weight: bold; font-family: sans-serif; }
+table { border-collapse: collapse; width: 100%; font-size: .85em; }
+th, td { border: 1px solid #666; padding: .2em .35em; vertical-align: top; }
+.country, .source { border: 1px solid #888; padding: .4em .7em; margin: .8em 0; }
+.country dt { font-weight: bold; margin-top: .3em; }
+.country dd { margin-left: 0; }
+.field { border-bottom: 1px solid #000; margin: .6em 0; padding-top: 1em; }
+.wallet { border: 1px dashed #000; margin: .5em 0; padding: .3em; }
+.helpcard { border: 3px solid #000; padding: .6em; }
+
+/* Kniha-hra */
+.choices { border: 1px solid #555; border-radius: 6px; padding: .4em .8em; margin: 1em 0; }
+.choices-label { font-weight: bold; font-size: .8em; text-transform: uppercase; letter-spacing: .05em; margin: .2em 0; }
+.choices ul { list-style: none; padding-left: 0; margin: .3em 0; }
+.choices li { margin: .35em 0; }
+.choices .ch-t { font-weight: bold; }
+.choices .xr { display: block; font-size: .85em; color: #555; }
+.choices .for { margin-left: .3em; }
+.gb-node { border-left: 3px solid #999; padding-left: .7em; margin: .9em 0; }
+.gb-num { font-weight: bold; margin: 0; }
+.gb-tip { font-size: .9em; }
+.sc-setting { font-style: italic; }
+
+.pref { font-size: .85em; color: #555; }
+.choices .ch-page { white-space: nowrap; }
+.pagebreak { display: block; height: 0; margin: 0; }
+p:has(> .pagebreak:only-child) { margin: 0; }
