@@ -200,3 +200,54 @@ dialog::backdrop { background: rgba(0, 0, 0, .45); }
 .leaflet-container:has(.kp-offline) { background: #f2efe9; }
 .kp-labels { pointer-events: none; }
 .mk.mk-sm span { width: 14px; height: 14px; border-width: 3px; background: var(--c); box-shadow: 0 0 0 1.5px #fff, 0 1px 3px rgba(0, 0, 0, .4); }
+
+/* ---------- Tabuľky na telefóne: riadok = karta so štítkami stĺpcov (JS: tables.js), bez posúvania do strán ---------- */
+@media screen and (max-width: 700px) {
+  .table-wrap { overflow-x: visible; }
+  table.stack, table.stack tbody, table.stack tfoot, table.stack tr, table.stack td, table.stack th, table.stack caption { display: block; width: auto; box-sizing: border-box; }
+  table.stack { border: 0; margin: .6rem 0 1rem; font-size: .95rem; }
+  table.stack caption { font-weight: 700; margin-bottom: .4rem; text-align: left; }
+  table.stack thead, table.stack tr.stack-head { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  table.stack tr { margin: 0 0 .5rem; padding: .4rem .75rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+  table.stack td, table.stack th { border: 0; padding: .22rem 0; white-space: normal !important; text-align: left; background: none; min-height: 0; }
+  table.stack td[data-label] { display: grid; grid-template-columns: minmax(0, 42%) minmax(0, 1fr); column-gap: .9rem; align-items: baseline; white-space: normal !important; }
+  table.stack td[data-label]::before { content: attr(data-label); font-size: .82rem; font-weight: 600; color: var(--muted); text-align: left; }
+  table.stack td[data-label] > .cv { min-width: 0; text-align: right; overflow-wrap: anywhere; }
+  table.stack td[data-label].stack-long { grid-template-columns: minmax(0, 1fr); row-gap: .1rem; }
+  table.stack td[data-label].stack-long > .cv { text-align: left; }
+  table.stack td[data-label].stack-long::before { text-transform: uppercase; letter-spacing: .04em; font-size: .72rem; }
+  table.stack td[data-label] small { white-space: normal; }
+  /* názov riadku (th na začiatku) je nadpis karty */
+  table.stack tbody th, table.stack tr > th:first-child { font-weight: 700; padding-bottom: .3rem; margin-bottom: .15rem; border-bottom: 1px solid var(--border); }
+  table.stack tr.stack-group { background: none; border: 0; padding: .9rem 0 .2rem; }
+  table.stack tr.stack-group th { border: 0; font-family: var(--head); font-size: 1.05rem; padding: 0; margin: 0; }
+  table.stack tfoot tr { background: var(--surface-2); }
+  table.stack tfoot th { border: 0; margin: 0; padding-bottom: .1rem; }
+  table.stack tfoot td { display: flex; justify-content: flex-end; text-align: right; }
+  table.stack input { max-width: 8rem; }
+  table.stack td .btn, table.stack td button { margin-left: auto; }
+  /* Zásoby: názov s ikonou hore, pod ním v jednom riadku Potreba / Mám / Kúpiť a potom Cena za kus / Cena */
+  table.shop tbody tr:not(.stack-group) { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); column-gap: .6rem; row-gap: .25rem; }
+  table.shop tbody tr > td:first-child:not([data-label]) { grid-column: 1; grid-row: 1; padding: 0; font-size: 1.4rem; align-self: center; }
+  table.shop tbody tr > th[scope="row"] { grid-column: 2 / -1; grid-row: 1; margin: 0; }
+  table.shop tbody td[data-label] { grid-template-columns: minmax(0, 1fr); row-gap: .1rem; padding: .1rem 0; align-content: start; }
+  table.shop tbody td[data-label]::before { font-size: .66rem; text-transform: uppercase; letter-spacing: .04em; }
+  table.shop tbody td[data-label] > .cv { text-align: left; font-size: 1.05rem; }
+  table.shop tbody td[data-label]:nth-child(3) { grid-column: 1 / 3; }
+  table.shop tbody td[data-label]:nth-child(4) { grid-column: 3 / 5; }
+  table.shop tbody td[data-label]:nth-child(5) { grid-column: 5 / 7; }
+  table.shop tbody td[data-label]:nth-child(6) { grid-column: 1 / 4; }
+  table.shop tbody td[data-label]:nth-child(7) { grid-column: 4 / 7; }
+  table.shop input { width: 100%; max-width: 7rem; }
+  table.shop tr.done { opacity: .6; }
+  /* pole formulára v knihe (Šablóny): dlhý popis sa zalomí a čiara ide pod neho */
+  .form .field { flex-wrap: wrap; }
+  .field span:first-child { white-space: normal; }
+  .form .field .line { flex: 1 0 100%; }
+  /* kartičky do peňaženky: na úzkej obrazovke pod sebou, každá v celej šírke */
+  .wallet-sheet { grid-template-columns: minmax(0, 1fr); }
+  .wallet { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .wallet-side { min-width: 0; overflow-wrap: anywhere; }
+  .reader-pager { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .reader-pager a { min-width: 0; overflow-wrap: anywhere; }
+}

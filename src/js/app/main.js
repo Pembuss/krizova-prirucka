@@ -7,6 +7,7 @@ import { THEMES, THEME_NUM, applyTheme, activeTheme, chosenTheme, setTheme, onTh
 import { ROUTES, NAV_GROUPS, TABS, UNDER_MORE } from './routes.js';
 import { offerOnFirstRun, isStandalone } from './install.js';
 import { initUpdates, applyUpdate } from './update.js';
+import { watchTables } from './tables.js';
 import { keepStorage } from './store.js';
 
 const navLink = (k, active, cls = '', tab = false) => {
@@ -115,6 +116,7 @@ $('#app-lang').addEventListener('change', async (e) => {
 onThemeChange(() => rerender());
 window.addEventListener('hashchange', route);
 applyTheme();
+watchTables(document.querySelector('.app-body'));
 // preklad PL/HU sa načíta pred prvým vykreslením
 ensureLang(LANG).then(() => { setLang(LANG); route(); });
 

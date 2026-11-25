@@ -161,6 +161,10 @@ Service worker sa posiela s `Cache-Control: no-cache`, aby sa nové verzie dosta
 
 Build prevedie kapitoly cez pandoc a prepíše odkazy na `#/kniha/<kapitola>/<id>`. Výsledok uloží ako `assets/book/<jazyk>/<kapitola>.js`. Index (`index.js`) obsahuje obsah, nadpisy pre vyhľadávanie, značky čitateľa, odporúčania a texty čítačky. Ak kniha v danom jazyku nie je, aplikácia zobrazí anglickú.
 
+### Tabuľky na telefóne
+
+Na obrazovke užšej ako 700 px sa každá tabuľka zobrazí ako zoznam kariet (riadok = karta), aby sa nemuselo posúvať do strán. `tables.js` doplní bunkám štítok stĺpca (`data-label` z hlavičky) a tabuľke triedu `stack`, vzhľad je v `app.css` (blok „Tabuľky na telefóne“). `MutationObserver` upraví aj tabuľky, ktoré sa načítajú neskôr (kapitola knihy, prekreslenie Zásob). Tlač sa nemení, pravidlá platia len pre obrazovku. Test `npm test` kontroluje šírku 360 px v 5 jazykoch. Zásoby majú vlastné kompaktné rozloženie karty (`table.shop`).
+
 ### Aktualizácia a záloha nainštalovanej aplikácie
 
 - **Aktualizácia** (`update.js`): service worker novú verziu stiahne a aktivuje sám (`skipWaiting`), ale otvorená stránka beží so starým kódom. `main.js` preto po zmene riadiaceho workera (`controllerchange`) ukáže pás **Aktualizovať** a stránku obnoví až po ťuknutí, aby sa neprerušilo čítanie postupu v kríze. Kontrola prebehne pri štarte a pri návrate do aplikácie (najviac raz za hodinu). V Nastaveniach je ručná kontrola a **Opraviť aplikáciu** (zmaže `kp-core-*` cache a odhlási service worker, údaje v `localStorage` sa nedotknú).

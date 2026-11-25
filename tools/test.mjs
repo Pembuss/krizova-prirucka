@@ -24,7 +24,7 @@ const fail = (msg) => { failed++; console.log('  ✗ ' + msg); };
 const check = (cond, msg) => (cond ? ok(msg) : fail(msg));
 
 function loadPlaywright() {
-  for (const id of ['playwright', process.env.PLAYWRIGHT_MODULE, '/opt/node-tools/node_modules/playwright'].filter(Boolean)) {
+  for (const id of [process.env.PLAYWRIGHT_MODULE, 'playwright', '/opt/node-tools/node_modules/playwright'].filter(Boolean)) {
     try { return require(id); } catch { /* ďalší */ }
   }
   throw new Error('Chýba Playwright (npm install).');
@@ -163,6 +163,28 @@ async function main() {
       for (const r of ['teraz/blackout/1', 'kniha/vypadok-elektriny', 'viac', 'nastavenia']) { await page.evaluate((h) => { location.hash = h; }, '#/' + r); await page.waitForTimeout(250); }
       check(okHome && !errors.length, okHome ? (errors.length ? `vzhľad ${look === 'a' ? 1 : 2}: chyby ${errors.slice(0, 2).join(' | ')}` : `vzhľad ${look === 'a' ? 1 : 2}: domov a obrazovky bez chýb`) : `vzhľad ${look === 'a' ? 1 : 2}: domovská obrazovka sa nezobrazila`);
       await ctx.close();
+    }
+
+    console.log('Tabuľky na telefóne (360 px): bez posúvania do strán');
+    {
+      const TABLE_CH = ['rozcestnik', 'principy', 'varovanie', 'plan', 'horucavy', 'prva-pomoc', 'sebestacnost', 'kryty-europa', 'nakupne-zoznamy', 'energie-scenare', 'sablony', 'zdroje', 'slovnik'];
+      for (const lang of QUICK ? ['sk'] : langs) {
+        const { ctx, page } = await newPage(browser, base, lang, { viewport: { width: 360, height: 800 } });
+        await page.addInitScript(() => localStorage.setItem('kp.state', JSON.stringify({ wizardDone: true })));
+        const routes = ['zasoby', 'plan', 'kryty', 'krajiny', ...(QUICK ? CHAPTERS.map((c) => c.id) : TABLE_CH).map((c) => 'kniha/' + c)];
+        const bad = [];
+        for (const r of routes) {
+          await page.goto(base + 'index.html#/' + r); await page.waitForTimeout(450);
+          const o = await page.evaluate(() => {
+            const de = document.documentElement;
+            const wide = [...document.querySelectorAll('.table-wrap, table.stack')].filter((e) => e.scrollWidth > e.clientWidth + 1).length;
+            return { page: de.scrollWidth > window.innerWidth + 1, wide, stacked: document.querySelectorAll('table.stack').length, tables: document.querySelectorAll('table').length };
+          });
+          if (o.page || o.wide || o.stacked !== o.tables) bad.push(`${r}${o.page ? ' (strana)' : ''}${o.wide ? ' (tabuľka)' : ''}${o.stacked !== o.tables ? ' (nezostavená)' : ''}`);
+        }
+        check(!bad.length, bad.length ? `${lang}: ${bad.slice(0, 5).join(', ')}` : `${lang}: ${routes.length} obrazoviek bez bočného posúvania`);
+        await ctx.close();
+      }
     }
 
     console.log('Záloha a obnova údajov');

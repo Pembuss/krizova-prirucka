@@ -516,7 +516,7 @@ function bigFiles(dir = DIST, max = 10 * 1024 * 1024) {
 // ---------- Ikony, obálka, PDF, EPUB (Chromium) ----------
 function loadPlaywright() {
   // Bežne z devDependencies; v predpripravenom prostredí z globálnej inštalácie.
-  for (const id of ['playwright', process.env.PLAYWRIGHT_MODULE, '/opt/node-tools/node_modules/playwright'].filter(Boolean)) {
+  for (const id of [process.env.PLAYWRIGHT_MODULE, 'playwright', '/opt/node-tools/node_modules/playwright'].filter(Boolean)) {
     try { return require(id); } catch { /* skús ďalší */ }
   }
   throw new Error('Chýba Playwright: spusti „npm install“ a „npx playwright install chromium“, alebo build s --no-pdf --no-epub.');
