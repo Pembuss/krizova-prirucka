@@ -1,0 +1,43 @@
+KRÍZOVÁ PRÍRUČKA – AKO JU SPUSTIŤ                       verzia beta 3.0
+==================================
+
+Nič netreba inštalovať. Stačí počítač (Windows, Mac alebo Linux)
+a webový prehliadač (Chrome, Edge, Safari alebo Firefox).
+
+1. Rozbaľ ZIP súbor.
+   Windows: pravé tlačidlo na súbor → „Extrahovať všetko…“
+   Mac: dvojklik na ZIP súbor.
+
+2. Otvor rozbalený priečinok.
+
+3. Dvojklikom otvor súbor  OTVOR-PRIRUCKU.html
+   Aplikácia sa otvorí v prehliadači.
+
+Pri prvom spustení ťa privíta krátka inštruktáž: jazyk → vzhľad →
+domácnosť. Na konci si môžeš pozrieť prehliadku so šípkami.
+
+SPODNÉ MENU
+  Domov     – prehľad, pripravenosť, ďalší krok
+  Kríza     – čo robiť TERAZ, krok za krokom (alebo celý zoznam)
+  Príručka  – celá kniha, vyhľadávanie, rozcestník, príbehy, PDF a EPUB
+  Mapa      – úkryty, dôležité miesta, únikové trasy (aj offline)
+  Viac      – plán, zásoby, batohy, rodina, karty, zoznamy, tlač,
+              pomoc, nastavenia
+
+VZHĽAD A JAZYK (vpravo hore)
+  1 – Zemité karty (predvolený), 2 – Dlaždice (tlačidlo s paletou).
+  Jazyky SK, CZ, EN, PL, HU.
+
+DOBRÉ VEDIEŤ
+- Kniha, postupy, zoznamy, plánovač, mapa, vyhľadanie a trasy fungujú
+  bez internetu.
+- Tvoje údaje sa ukladajú iba v tomto prehliadači na tomto počítači.
+  Zálohu si urobíš v aplikácii: Viac → Nastavenia → Stiahnuť zálohu.
+- Knihu na tlač alebo do čítačky (PDF, EPUB) stiahneš v časti Príručka;
+  súbory sú aj v priečinku „downloads“.
+- Priečinok môžeš skopírovať aj na USB kľúč – funguje rovnako.
+
+Mapové údaje: © prispievatelia OpenStreetMap (ODbL), Natural Earth.
+Stav mapových údajov: 27. 10. 2026.
+
+Príručka nenahrádza pokyny úradov. V ohrození života volaj 112.

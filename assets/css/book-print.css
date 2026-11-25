@@ -1,0 +1,31 @@
+/* Celá kniha – obálka, obsah, kapitoly na novej strane (tlač a PDF) */
+.fullbook { max-width: 820px; margin: 0 auto; padding: 1rem; }
+.pdf-marker { position: absolute; top: 0; left: 0; font-size: 2px; line-height: 2px; color: #fff; white-space: nowrap; pointer-events: none; }
+[data-pm] { position: relative; }
+.cover { min-height: 96vh; display: flex; flex-direction: column; justify-content: center; gap: .6rem; padding: 2rem 0; border-bottom: 6px solid var(--orange); }
+.cover-logo svg { width: 120px; height: 120px; }
+.cover-kicker { text-transform: uppercase; letter-spacing: .12em; font-weight: 800; color: var(--orange-strong); margin: 1rem 0 0; }
+.cover-title { font-size: 3.4rem; margin: 0; color: var(--blue-strong); border: 0; }
+.cover-sub { font-size: 1.3rem; max-width: 30ch; margin: 0 0 1rem; }
+.cover-list { columns: 2; list-style: none; padding: 0; font-weight: 600; font-size: .95rem; }
+.cover-list li { margin: .15rem 0; }
+.cover-foot { margin-top: auto; color: var(--muted); font-size: .85rem; }
+.cover-version { display: inline-block; align-self: flex-start; margin: 0; padding: .2rem .7rem; border-radius: 999px; background: var(--orange-strong); color: #fff; font-weight: 800; font-size: .9rem; }
+.toc-heading { border-top: 0; }
+.fulltoc, .fulltoc ol { list-style: none; padding: 0; margin: 0; }
+.toc-part { font-weight: 800; text-transform: uppercase; font-size: .8rem; letter-spacing: .06em; color: var(--muted); margin: 1rem 0 .3rem; }
+.toc-part ol li { text-transform: none; letter-spacing: 0; font-size: .95rem; font-weight: 500; color: var(--ink); }
+.toc-part a { display: flex; justify-content: space-between; gap: 1rem; text-decoration: none; color: var(--ink); border-bottom: 1px dotted var(--border); padding: .2rem 0; }
+.toc-page { font-variant-numeric: tabular-nums; min-width: 2.5em; text-align: right; }
+.chapter { position: relative; }
+@media print {
+  .fullbook { max-width: none; padding: 0 15mm; }
+  .cover { min-height: 0; height: 255mm; border-bottom: 0; break-after: page; }
+  .cover-title { font-size: 40pt; }
+  .toc-page-wrap { break-after: page; }
+  .chapter { break-before: page; }
+  .chapter > h1 { margin-top: 0; }
+  .fulltoc { font-size: 10pt; }
+  .toc-part { margin-top: 5mm; }
+}
+.cover-unverified { margin: .6rem 0 0; padding: .45rem .7rem; border: 2px dashed var(--orange-strong); border-radius: 8px; font-size: .85rem; font-weight: 600; }

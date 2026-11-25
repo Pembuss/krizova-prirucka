@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="sk" data-look="a">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Krízová príručka</title>
+<meta name="description" content="Krízová príručka pre domácnosti: postupy krok za krokom, plán a zásoby, offline mapa úkrytov a únikových trás, celá príručka na čítanie aj v PDF. EN · CZ · SK · PL · HU.">
+<meta name="theme-color" content="#A39896">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/img/icon-180.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Krízová príručka">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/app.css">
+<link rel="stylesheet" href="assets/css/theme.css">
+<link rel="stylesheet" href="assets/css/print.css">
+<script>try{var s=JSON.parse(localStorage.getItem('kp.prefs')||'{}'),d=document.documentElement;d.dataset.look=['a','b'].indexOf(s.look)>=0?s.look:'a';if(s.size)d.dataset.size=s.size;if(s.lang)d.lang=s.lang;var m=document.querySelector('meta[name=theme-color]');if(m&&s.look==='b')m.content='#ECEEF1';}catch(e){}</script>
+<script src="assets/vendor/leaflet/leaflet.js" defer></script>
+</head>
+<body class="app">
+<a class="skip" href="#view" data-t="c.skip">Preskočiť na obsah</a>
+<header class="app-header no-print">
+  <a class="brand" href="#/" data-tour="brand"><span class="brand-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Krízová príručka"><rect width="64" height="64" rx="14" fill="#E8590C"/><path d="M32 9.5 50.5 16.5V31c0 12.2-8 20.5-18.5 24.5C21.5 51.5 13.5 43.2 13.5 31V16.5Z" fill="#fff"/><path d="m23 32 6.5 6.5L42 25.5" fill="none" stroke="#0B3D91" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="brand-name" data-t="app.title">Krízová príručka</span><span class="ver-badge">beta 3.0</span></a>
+  <div class="hdr-tools">
+    <button type="button" class="hdr-btn" data-look-menu aria-haspopup="true" aria-expanded="false" data-tour="look"></button>
+    <label class="visually-hidden" for="app-lang" data-t="c.language">Jazyk</label>
+    <select class="langsel hdr-btn" id="app-lang" data-tour="lang"></select>
+    <a class="hdr-btn hdr-112" href="tel:112" data-tour="call"></a>
+  </div>
+  <div class="look-pop" id="look-pop" hidden></div>
+</header>
+<div class="app-body">
+  <nav class="app-nav no-print" id="app-nav" aria-label="Menu"></nav>
+  <main id="view" tabindex="-1"></main>
+</div>
+<nav class="app-tabs no-print" id="app-tabs" aria-label="Menu" data-tour="tabs"></nav>
+<div id="print-root" class="print-root"></div>
+<script defer src="assets/downloads.js"></script>
+<script defer src="assets/js/app.js"></script>
+</body>
+</html>
