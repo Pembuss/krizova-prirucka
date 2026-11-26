@@ -46,7 +46,7 @@ const chLabel = (c) => {
 function topBar(c) {
   return `<div class="step-top">
 <a class="hdr-btn" href="#/teraz" aria-label="${esc(t('c.back'))}">${icon('back', 22)}</a>
-<div class="st-title"><small class="muted">${esc(t('nav.now'))}</small><strong>${c.icon} ${esc(T(c.name))}</strong></div></div>`;
+<div class="st-title"><small class="muted">${esc(t('nav.now'))}</small><h1 class="st-h1">${c.icon} ${esc(T(c.name))}</h1></div></div>`;
 }
 function extras(c, mode) {
   const links = [];

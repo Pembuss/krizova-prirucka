@@ -526,7 +526,18 @@ a.b-call:active { background: linear-gradient(160deg, #202329, #0A0B0D); }
 /* Odznak Netlify v pravom dolnom rohu: menu sa zdvihne nad neho, aby boli tlačidlá vidieť */
 @media (max-width: 999px) and (min-height: 521px) {
   body.net-badge .app-tabs { bottom: 62px; border-bottom: 1px solid var(--border); }
-  body.net-badge.app { padding-bottom: calc(var(--tab-h) + 62px + env(safe-area-inset-bottom)); }
+  body.net-badge.app { padding-bottom: calc(var(--tab-h) + 78px + env(safe-area-inset-bottom)); }
   body.net-badge.more-open .app-nav { bottom: calc(var(--tab-h) + 62px); }
 }
 @media (max-width: 899px) { body.net-badge .back-pill { bottom: calc(var(--tab-h, 64px) + 78px + env(safe-area-inset-bottom, 0px)); } }
+
+/* UX audit: dotykové plochy a čitateľnosť */
+.step-top .st-title h1 { display: block; margin: 0; padding: 0; border: 0; font-family: var(--head); font-size: 1.2rem; line-height: 1.2; }
+.choices .you, span.unverified, .badge { font-size: max(.72rem, 11.5px); }
+.app-header .brand { display: inline-flex; align-items: center; min-height: 44px; }
+.tlink { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; margin-left: 0; }
+body.app { padding-bottom: calc(var(--tab-h) + 16px + env(safe-area-inset-bottom)); }
+@media (min-width: 1000px) { body.app { padding-bottom: 0; } }
+@media (min-height: 521px) { :root .app-header .hdr-btn, :root .app-header select.langsel { min-height: 44px; } }
+.b-place { min-height: 44px; padding: .4rem 0; }
+@media (max-height: 520px) and (orientation: landscape) and (max-width: 999px) { body.app { padding-bottom: 0; } }

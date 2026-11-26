@@ -148,12 +148,12 @@ ${opts.standalone ? `<h2 id="trasy">${esc(t('rt.title'))}</h2>` : `<h1>${esc(t('
     results.forEach((r) => (byDest[r.dest] ||= []).push(r));
     const h = home();
     if (L && map) {
-      if (h) L.marker([h.lat, h.lon]).addTo(layer).bindTooltip(t('rt.home'));
+      if (h) L.marker([h.lat, h.lon], { alt: t('rt.home'), title: t('rt.home') }).addTo(layer).bindTooltip(t('rt.home'));
       results.forEach((r, i) => {
         const line = L.polyline(r.geometry, { color: COLORS[i % COLORS.length], weight: r.kind === 'fastest' ? 6 : 4, opacity: 0.85, dashArray: DASH[r.mode] }).addTo(layer);
         line.bindTooltip(`${r.dest} – ${t('mode.' + r.mode)} – ${t('rt.' + r.kind)}`);
       });
-      for (const d of destinations()) L.marker([d.lat, d.lon], { title: d.name }).addTo(layer).bindTooltip('🏁 ' + (d.name || ''));
+      for (const d of destinations()) L.marker([d.lat, d.lon], { title: d.name, alt: d.name || t('rt.dest') }).addTo(layer).bindTooltip('🏁 ' + (d.name || ''));
       const all = results.flatMap((r) => r.geometry);
       if (all.length) map.fitBounds(L.latLngBounds(all).pad(0.1));
     }

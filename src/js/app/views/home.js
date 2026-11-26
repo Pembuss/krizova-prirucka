@@ -80,7 +80,8 @@ export function render(el) {
   // pripomienka zálohy údajov (nikdy nezálohované, alebo záloha staršia ako 30 dní)
   const bkHint = !hint && backupDue() ? `<div class="install-hint" role="note">${icon('shield', 22)}<span>${esc(t('bk.hint'))}</span><a class="btn btn-sm" href="#/nastavenia/zaloha">${esc(t('bk.hintBtn'))}</a><button type="button" class="hint-x" data-bk-off aria-label="${esc(t('c.close'))}">${icon('close', 18)}</button></div>` : '';
   // vzhľad 1: Kríza teraz je prvá a upozornenia idú pod karty; vzhľad 2 ich má navrchu
-  el.innerHTML = look === 'b' ? hint + bkHint + homeB(s) : homeA(s) + hint + bkHint;
+  const h1 = `<h1 class="visually-hidden">${esc(t('app.title'))}</h1>`;
+  el.innerHTML = h1 + (look === 'b' ? hint + bkHint + homeB(s) : homeA(s) + hint + bkHint);
   el.addEventListener('click', (e) => {
     if (e.target.closest('[data-bk-off]')) { store.prefs.backupSnooze = Date.now() + 14 * 864e5; store.savePrefs(); el.querySelector('.install-hint')?.remove(); return; }
     if (e.target.closest('[data-hint-off]')) { store.prefs.installHintOff = true; store.savePrefs(); el.querySelector('.install-hint')?.remove(); return; }

@@ -10,6 +10,8 @@
     "package:web": "node tools/package.mjs --web",
     "test": "node tools/test.mjs",
     "test:quick": "node tools/test.mjs --quick",
+    "test:ux": "node tools/ux.mjs",
+    "test:ux:quick": "node tools/ux.mjs --quick",
     "serve": "npx http-server dist -p 8080 -c-1",
     "i18n": "node tools/i18n.mjs"
   },

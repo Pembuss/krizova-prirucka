@@ -46,6 +46,7 @@ Zostavenie robí `tools/build.mjs`: Markdown → HTML (pandoc), kniha v aplikác
 | `tools/manual.mjs` | snímky obrazoviek a HTML návodu |
 | `tools/package.mjs` | offline balík ZIP (pre web po častiach, alebo celý balík so zdrojákmi) |
 | `tools/test.mjs` | automatické testy |
+| `tools/ux.mjs` | UX audit: zrozumiteľnosť, ergonómia, grafika, rozloženie, ovládateľnosť |
 | `tools/i18n*.mjs` | kontrola a zlučovanie prekladov |
 | `tools/mapdata/` | skripty na vygenerovanie offline mapy (Python) |
 | `deploy/netlify.toml` | nastavenia Netlify (kopíruje sa do vetvy `netlify`); hlavičky sú v `dist/_headers`, ktorý vytvára build |
@@ -73,6 +74,7 @@ Zostavenie robí `tools/build.mjs`: Markdown → HTML (pandoc), kniha v aplikác
 | `npm run package:web` | offline balík ZIP rozdelený na časti do `dist/downloads/offline/` |
 | `npm run package` | balík na odovzdanie (aplikácia, PDF, EPUB, zdrojový kód) do `vystupy/` |
 | `npm test` | testy (`--quick`: len slovenčina, bez balíka) |
+| `npm run test:ux` | UX audit v 8 konfiguráciách zariadení (`test:ux:quick`: 3); správa v `tools/.tmp/ux-report.md`; FAIL = chyba, WARN = odporúčanie |
 | `npm run i18n` | koľko textov chýba v PL a HU |
 | `npm run serve` | lokálny server na http://localhost:8080 |
 
