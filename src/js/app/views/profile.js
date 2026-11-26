@@ -50,7 +50,7 @@ ${check('risks.slope', t('risk.slope'))}${check('risks.forest', t('risk.forest')
       case 3:
         return `${p.pets.length ? p.pets.map((x, i) => `<fieldset class="person"><legend>🐾 ${esc(x.name || t('pet.' + x.type))}</legend>
 ${select(`pets.${i}.type`, t('pet.type'), [['dog', t('pet.dog')], ['cat', t('pet.cat')], ['other', t('pet.other')]])}
-${input(`pets.${i}.name`, t('pet.name'))}${input(`pets.${i}.weight`, t('pet.weight'), { type: 'number', attrs: 'min="0" step="0.5" inputmode="decimal"' })}
+${input(`pets.${i}.name`, t('pet.name'), { attrs: 'maxlength="40"' })}${input(`pets.${i}.weight`, t('pet.weight'), { type: 'number', attrs: 'min="0" step="0.5" inputmode="decimal"' })}
 <button class="btn btn-ghost btn-sm" type="button" data-del-pet="${i}">${esc(t('c.delete'))}</button></fieldset>`).join('') : `<p class="muted">${esc(t('pet.none'))}</p>`}
 <button class="btn btn-ghost" type="button" data-add-pet>＋ ${esc(t('pet.add'))}</button>`;
       case 4:
@@ -95,7 +95,7 @@ ${check('supplies.hygieneWater', t('sup.hygiene'))}${check('supplies.heat', t('s
     const b = `members.${i}`;
     const age = Number(m.age);
     return `<fieldset class="person"><legend>${esc(m.name || t('mem.person', { n: i + 1 }))}</legend>
-<div class="two">${input(`${b}.name`, t('mem.name'))}${input(`${b}.age`, t('mem.age'), { type: 'number', attrs: 'min="0" max="120" step="0.5" inputmode="decimal"' })}</div>
+<div class="two">${input(`${b}.name`, t('mem.name'), { attrs: 'maxlength="40"' })}${input(`${b}.age`, t('mem.age'), { type: 'number', attrs: 'min="0" max="120" step="0.5" inputmode="decimal"' })}</div>
 <div class="field-row"><span class="lbl">${esc(t('mem.sex'))}</span>${chips(`${b}.sex`, [['f', t('sex.f')], ['m', t('sex.m')], ['x', t('sex.x')]])}</div>
 <div class="checks">${m.sex === 'f' && age >= 14 && age <= 50 ? check(`${b}.pregnant`, t('mem.pregnant')) + check(`${b}.breastfeeding`, t('mem.breastfeeding')) : ''}
 ${age < 1 ? check(`${b}.breastfed`, t('mem.breastfed')) : ''}${age < 3 ? check(`${b}.diapers`, t('mem.diapers'), { value: m.diapers !== false }) : ''}

@@ -25,7 +25,7 @@ export function render(el) {
     el.innerHTML = `<div class="wrap">
 <h1>${esc(t('plan.title'))}</h1>
 ${store.state.wizardDone ? '' : `<p class="notice">${esc(t('plan.empty'))} <a href="#/profil">${esc(t('home.startWizard'))}</a></p>`}
-<div class="meter" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${r.pct}"><span style="width:${r.pct}%"></span></div>
+<div class="meter" role="meter" aria-label="${esc(t('home.readiness'))}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${r.pct}"><span style="width:${r.pct}%"></span></div>
 <p class="muted">${esc(t('home.tasksDone', { done: r.done, total: r.total }))}</p>
 <section>
 <h2>${esc(t('plan.risks'))}</h2>

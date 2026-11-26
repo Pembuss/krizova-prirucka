@@ -56,7 +56,8 @@ ${line(t('mem.mobility'), t('mob.' + (m.mobility || 'full')))}${m.powerDevice ? 
   cards() {
     const risk = riskProfile(store.profile);
     const ids = [...risk.list.filter((x) => x.score >= 3).map((x) => x.id), ...ACTIONS.map((a) => a.id)];
-    return ids.map((id, i) => (i ? '<div class="page-break"></div>' : '') + cardHtml(id)).join('');
+    // dve karty na jednu stranu A4, medzi nimi čiara na vystrihnutie
+    return ids.map((id, i) => (i && i % 2 === 0 ? '<div class="page-break"></div>' : '') + `<div class="print-card${i % 2 ? ' second' : ''}">${cardHtml(id)}</div>`).join('');
   },
   shopping(opts) {
     const days = opts.days || store.profile.supplies.targetDays || 7;
@@ -71,7 +72,7 @@ ${cats.map((c) => `<h3>${c.icon} ${esc(T(c.name))}</h3><table class="data"><tbod
     const days = opts.days || store.profile.supplies.targetDays || 7;
     const list = computeList(store.profile, days);
     const s = purchaseSchedule(list.rows.map((r) => ({ ...r, qty: r.buy, cost: r.buyCost })).filter((r) => r.qty > 0), store.profile.supplies.budgetMonthly || 60);
-    return `<h1>${esc(t('pr.purchase'))}</h1><p>${esc(t('sup.weekly', { eur: money(s.weekly), n: s.weeks.length }))}</p>
+    return `<h1>${esc(t('pr.purchase'))}</h1><p>${esc(tp('sup.weekly', s.weeks.length, { eur: money(s.weekly) }))}</p>
 <table class="data"><tbody>${s.weeks.map((w, i) => `<tr><td class="cbcell">${box}</td><th>${esc(t('sup.week', { n: i + 1 }))}</th><td>${w.items.map((x) => `${x.qty}× ${esc(T(itemById(x.id).name))}`).join('; ')}</td><td class="num">${money(w.cost)}</td></tr>`).join('')}</tbody></table>`;
   },
   rotation() {

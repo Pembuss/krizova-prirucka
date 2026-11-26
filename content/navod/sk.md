@@ -99,7 +99,7 @@ Aplikácia má dva vzhľady. Každý má vlastnú úvodnú obrazovku a mení far
 ![2 · Dlaždice](shot:home-b)
 :::
 
-Vzhľad zmeníš tlačidlom s paletou v hlavičke alebo v **Nastaveniach**. Tam nastavíš aj **Veľkosť písma**: normálna, väčšia alebo najväčšia.
+Vzhľad zmeníš tlačidlom s paletou v hlavičke alebo v **Nastaveniach**. Tam nastavíš aj **Veľkosť písma**: normálna alebo najväčšia.
 
 ## Kríza teraz
 

@@ -28,8 +28,14 @@ export function waterFactorForAge(age) {
   return 1;
 }
 
+// Vek člena: neplatná alebo prázdna hodnota (mimo 0–120) sa vo výpočtoch berie ako dospelý (30).
+export function ageOf(m) {
+  const a = m.age === '' || m.age == null ? NaN : Number(m.age);
+  return Number.isFinite(a) && a >= 0 && a <= 120 ? a : 30;
+}
+
 export function personNeeds(m, supplies = {}) {
-  const age = Number(m.age ?? 30);
+  const age = ageOf(m);
   let kcal = kcalForAge(age);
   if (m.pregnant) kcal += 300;
   if (m.breastfeeding) kcal += 500;
@@ -75,7 +81,7 @@ export function householdNeeds(profile, days) {
 
 function dietKey(m) {
   const d = m.diet || {};
-  if (Number(m.age) < 1) return 'infant';
+  if (ageOf(m) < 1) return 'infant';
   return [d.vegan ? 'vegan' : d.vegetarian ? 'veg' : '', d.glutenFree ? 'gf' : '', d.lactoseFree ? 'lf' : ''].join('|');
 }
 
@@ -120,7 +126,7 @@ export function foodPlan(profile, days) {
   }
   const qty = new Map();
   let kcalPlanned = 0;
-  const hasKids = (profile.members || []).some((m) => Number(m.age) >= 1 && Number(m.age) < 10);
+  const hasKids = (profile.members || []).some((m) => ageOf(m) >= 1 && ageOf(m) < 10);
   for (const [key, kcal] of groups) {
     for (const [g, meta] of Object.entries(FOOD_GROUPS)) {
       const groupKcal = kcal * meta.share;

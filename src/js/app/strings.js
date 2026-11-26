@@ -21,7 +21,9 @@ export const S = {
   // Spoločné
   'c.save': ['Uložiť', 'Uložit', 'Save'],
   'c.cancel': ['Zrušiť', 'Zrušit', 'Cancel'],
+  'c.dlOffline': ['Si offline a tento súbor nie je uložený v telefóne. Stiahni ho po pripojení na internet.', 'Jsi offline a tento soubor není uložen v telefonu. Stáhni ho po připojení k internetu.', 'You are offline and this file is not saved on your phone. Download it when you are connected.'],
   'c.delete': ['Odstrániť', 'Odstranit', 'Remove'],
+  'c.range': ['Povolený rozsah je {min} až {max}. Hodnota sa neuložila.', 'Povolený rozsah je {min} až {max}. Hodnota se neuložila.', 'Allowed range is {min} to {max}. The value was not saved.'],
   'c.add': ['Pridať', 'Přidat', 'Add'],
   'c.yes': ['Áno', 'Ano', 'Yes'],
   'c.no': ['Nie', 'Ne', 'No'],
@@ -290,7 +292,7 @@ export const S = {
   'sup.tabList': ['Nákupný zoznam', 'Nákupní seznam', 'Shopping list'],
   'sup.tabPlan': ['Postupný nákup', 'Postupný nákup', 'Buying plan'],
   'sup.tabRot': ['Obmena zásob', 'Obměna zásob', 'Stock rotation'],
-  'sup.weekly': ['Týždenný rozpočet {eur} → {n} týždňov', 'Týdenní rozpočet {eur} → {n} týdnů', 'Weekly budget {eur} → {n} weeks'],
+  'sup.weekly': [['Týždenný rozpočet {eur} → {n} týždeň', 'Týždenný rozpočet {eur} → {n} týždne', 'Týždenný rozpočet {eur} → {n} týždňov'], ['Týdenní rozpočet {eur} → {n} týden', 'Týdenní rozpočet {eur} → {n} týdny', 'Týdenní rozpočet {eur} → {n} týdnů'], ['Weekly budget {eur} → {n} week', 'Weekly budget {eur} → {n} weeks', 'Weekly budget {eur} → {n} weeks']],
   'sup.week': ['{n}. týždeň', '{n}. týden', 'Week {n}'],
   'sup.prices': ['Ceny sú orientačné (slovenský maloobchod, október 2026). Prepíš ich podľa svojho obchodu – uložia sa.', 'Ceny jsou orientační (slovenský maloobchod, říjen 2026). Přepiš je podle svého obchodu – uloží se.', 'Prices are indicative (Slovak retail, October 2026). Edit them to match your shop – they are saved.'],
   'sup.resetPrices': ['Obnoviť predvolené ceny', 'Obnovit výchozí ceny', 'Reset default prices'],
@@ -593,6 +595,7 @@ export const S = {
   'now.again': ['Prejsť znova', 'Projít znovu', 'Go through again'],
 
   'book.chShort': ['kap.', 'kap.', 'ch.'],
+  'book.chNotFound': ['Kapitola sa nenašla. Odkaz je možno starý alebo chybný – vyber ju zo zoznamu nižšie.', 'Kapitola nebyla nalezena. Odkaz je možná starý nebo chybný – vyber ji ze seznamu níže.', 'Chapter not found. The link may be old or wrong – pick one from the list below.'],
   'book.search': ['Hľadať v príručke', 'Hledat v příručce', 'Search the handbook'],
   'book.searchShort': ['Zadaj aspoň 2 znaky.', 'Zadej alespoň 2 znaky.', 'Type at least 2 characters.'],
   'book.found': [['Nájdené: {n} miesto', 'Nájdené: {n} miesta', 'Nájdené: {n} miest'], ['Nalezeno: {n} místo', 'Nalezeno: {n} místa', 'Nalezeno: {n} míst'], ['Found: {n} place', 'Found: {n} places', 'Found: {n} places']],

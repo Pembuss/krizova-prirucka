@@ -44,7 +44,7 @@ ${dev === 'ios' ? `<p class="box tip small">${esc(t('inst.iosNote'))}</p>` : ''}
 <h1>${esc(t('inst.howTitle'))}</h1>
 <button type="button" class="btn btn-block btn-lg" data-onetap ${canPrompt() && dev !== 'ios' && dev !== 'inapp' ? '' : 'hidden'}>${icon('download', 22)} ${esc(t('inst.oneTap'))}</button>
 <div><p class="small" style="margin:0 0 .2rem"><strong>${esc(t('inst.device'))}</strong></p>
-<div class="chips" role="group">${PLATFORMS.map(([id, k, ic]) => `<a class="chip inst-dev" href="#/instalacia/navod/${id}" aria-pressed="${id === dev}">${icon(ic, 18)} ${esc(t(k))}</a>`).join('')}</div></div>
+<div class="chips" role="group">${PLATFORMS.map(([id, k, ic]) => `<a class="chip inst-dev" href="#/instalacia/navod/${id}" ${id === dev ? 'aria-current="true"' : ''}>${icon(ic, 18)} ${esc(t(k))}</a>`).join('')}</div></div>
 <ol class="onb-steps inst-steps">${steps}</ol>
 ${dev === 'inapp' ? `<div class="inst-copy"><input type="text" readonly value="${esc(appUrl())}" aria-label="URL"><button type="button" class="btn btn-sm" data-copy>${icon('copy', 18)} ${esc(t('inst.copy'))}</button></div>` : ''}
 ${dev === 'ios' ? `<p class="small muted">${rich('inst.iosOther')}</p><p class="box tip small">${esc(t('inst.iosNote'))}</p>` : ''}

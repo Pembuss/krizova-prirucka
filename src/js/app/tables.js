@@ -2,6 +2,8 @@
 // JS doplní atribút data-label z hlavičky tabuľky a triedu „stack“; vzhľad rieši CSS (@media max-width: 700px) v app.css.
 // Tlač sa nemení (CSS platí len pre obrazovku). Funkcia je idempotentná, takže ju možno volať po každom prekreslení.
 
+import { t } from './core.js';
+
 const text = (c) => c.textContent.replace(/\s+/g, ' ').trim();
 
 function labelsOf(row) {
@@ -33,6 +35,13 @@ export function stackTables(root = document) {
       if (first && first.cells.length > 1 && [...first.cells].every((c) => c.tagName === 'TH') && rows.slice(1).some((r) => r.querySelector('td'))) { head = first; first.classList.add('stack-head'); }
     }
     const labels = head ? labelsOf(head) : [];
+    // prázdna hlavička (napr. stĺpec s odrážkami) dostane skrytý názov pre čítače obrazovky
+    for (const th of tb.querySelectorAll('thead th, tr.stack-head th')) {
+      if (!th.textContent.trim() && !th.querySelector('img,svg,input')) { th.innerHTML = `<span class="visually-hidden">${t('rot.item')}</span>`; }
+    }
+    // posuvná oblasť s tabuľkou sa dá ovládať aj klávesnicou
+    const w = tb.closest('.table-wrap');
+    if (w && w.scrollWidth > w.clientWidth + 1 && !w.hasAttribute('tabindex')) { w.tabIndex = 0; w.setAttribute('role', 'region'); w.setAttribute('aria-label', tb.caption?.textContent.trim() || document.title); }
     tb.classList.add('stack');
     for (const tr of tb.rows) {
       if (tr === head || tr.closest('thead')) continue;

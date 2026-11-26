@@ -99,7 +99,7 @@ Az alkalmazásnak két megjelenése van. Mindegyiknek saját kezdőképernyője 
 ![2 · Csempék](shot:home-b)
 :::
 
-A megjelenést a fejlécben lévő paletta gombbal vagy a **Beállításokban** változtathatod meg. Ugyanitt állíthatod be a **Betűméretet** is: normál, nagyobb vagy legnagyobb.
+A megjelenést a fejlécben lévő paletta gombbal vagy a **Beállításokban** változtathatod meg. Ugyanitt állíthatod be a **Betűméretet** is: normál vagy legnagyobb.
 
 ## Válság most
 

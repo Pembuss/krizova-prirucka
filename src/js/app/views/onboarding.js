@@ -48,7 +48,7 @@ ${LANG_INFO.map((l) => `<label class="radio-card"><input type="radio" name="lang
 <fieldset class="look-cards" style="border:0;margin:0;padding:0"><legend class="visually-hidden">${esc(t('onb.look'))}</legend>
 ${LOOKS.map(([id, n, d]) => `<label class="look-card"><input type="radio" name="look" value="${id}" ${id === cur ? 'checked' : ''}><span class="look-prev look-prev-${id}" aria-hidden="true"><i></i><i></i><i></i></span><span class="rc-main"><strong>${esc(t(n))}</strong><small class="muted" style="display:block">${esc(t(d))}</small></span></label>`).join('')}
 </fieldset>
-<div><p class="small" style="margin:.2rem 0"><strong>${esc(t('set.size'))}</strong></p><div class="chips">${[['', 'size.normal'], ['l', 'size.l'], ['xl', 'size.xl']].map(([v, k]) => `<button type="button" class="chip" data-size="${v}" aria-pressed="${(store.prefs.size || '') === v}">${esc(t(k))}</button>`).join('')}</div></div>`;
+<div><p class="small" style="margin:.2rem 0"><strong>${esc(t('set.size'))}</strong></p><div class="chips">${[['', 'size.normal'], ['xl', 'size.xl']].map(([v, k]) => `<button type="button" class="chip" data-size="${v}" aria-pressed="${((store.prefs.size === 'l' ? 'xl' : store.prefs.size) || '') === v}">${esc(t(k))}</button>`).join('')}</div></div>`;
     actions = `<button type="button" class="btn btn-block" data-go="2">${esc(t('onb.next'))} ${icon('next', 20)}</button>${back}`;
   } else if (step === 2) {
     const has = store.state.wizardDone;

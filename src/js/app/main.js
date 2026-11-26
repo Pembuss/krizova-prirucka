@@ -1,6 +1,6 @@
 // Aplikácia: smerovanie, navigácia, jazyk, vzhľad, service worker.
 import { store } from './store.js';
-import { t, LANG, setLang, switchLang, ensureLang, $, $$, esc } from './core.js';
+import { t, LANG, setLang, switchLang, ensureLang, $, $$, esc, toast } from './core.js';
 import { LANGS as LANG_INFO } from '../../data/ui.js';
 import { icon } from './icons.js';
 import { THEMES, THEME_NUM, applyTheme, activeTheme, chosenTheme, setTheme, onThemeChange } from './theme.js';
@@ -37,7 +37,13 @@ function lookPopHtml() {
   return `<p class="look-pop-title">${esc(t('look.title'))}</p>
 ${THEMES.map((id) => `<button type="button" class="look-opt" data-look="${id}" aria-pressed="${id === cur}"><span class="look-swatch look-sw-${id}" aria-hidden="true"></span><span><strong>${esc(t('look.' + id))}</strong><small>${esc(t('look.' + id + 'Desc'))}</small></span></button>`).join('')}`;
 }
-function closeLookPop() { const p = $('#look-pop'); p.hidden = true; $('[data-look-menu]').setAttribute('aria-expanded', 'false'); }
+function closeLookPop() {
+  const p = $('#look-pop'), btn = $('[data-look-menu]');
+  // ak bol fokus vo vyskakovacom menu, vráti sa na tlačidlo palety (inak by spadol na celú stránku)
+  const had = !p.hidden && p.contains(document.activeElement);
+  p.hidden = true; btn.setAttribute('aria-expanded', 'false');
+  if (had) btn.focus();
+}
 
 let cleanup = null, current = { key: null, mod: null, view: null };
 let renderSeq = 0;
@@ -108,6 +114,21 @@ document.addEventListener('click', (e) => {
   if (!e.target.closest('#look-pop')) closeLookPop();
 });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLookPop(); });
+// Sťahovanie PDF/EPUB bez internetu: uložený súbor sa stiahne z pamäte aplikácie, inak ukážeme vysvetlenie
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a[download]');
+  if (!a || navigator.onLine !== false || !a.getAttribute('href')) return;
+  e.preventDefault();
+  const url = a.href;
+  (typeof caches !== 'undefined' ? caches.match(url) : Promise.resolve(null)).then(async (r) => {
+    if (!r) { toast(t('c.dlOffline'), 5000); return; }
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(await r.blob());
+    link.download = url.split('/').pop();
+    document.body.appendChild(link); link.click(); link.remove();
+    setTimeout(() => URL.revokeObjectURL(link.href), 4000);
+  }).catch(() => toast(t('c.dlOffline'), 5000));
+});
 $('#app-lang').addEventListener('change', async (e) => {
   await switchLang(e.target.value);
   rerender();
@@ -149,3 +170,26 @@ window.addEventListener('appinstalled', () => {
   window.dispatchEvent(new Event('kp-installed'));
 });
 export { route };
+
+// Netlify (bezplatný plán) na stránku lepí odznak „Powered by Netlify“ v pravom dolnom rohu a zakrýva spodné menu.
+// Ak je nad menu cudzí prvok, menu sa zdvihne nad neho (trieda net-badge).
+function checkOverlay() {
+  const bar = document.querySelector('.app-tabs');
+  if (!bar || bar.offsetParent === null && getComputedStyle(bar).position !== 'fixed') return;
+  const r = bar.getBoundingClientRect();
+  if (!r.height || getComputedStyle(bar).display === 'none') return;
+  const was = document.body.classList.contains('net-badge');
+  // pri zdvihnutom menu kontrolujeme pôvodné miesto (dolný okraj okna)
+  const y = Math.min(window.innerHeight - 6, (was ? window.innerHeight - 24 : r.bottom - 24));
+  const xs = [window.innerWidth - 40, window.innerWidth - 120, window.innerWidth - 200];
+  const foreign = xs.some((x) => {
+    const el = document.elementsFromPoint(x, y).find((e) => e !== document.documentElement && e !== document.body);
+    return el && !el.closest('.app-tabs, #toast, .update-banner, .back-pill, .tour-tip, .tour-shade, .tour-hole, #look-pop, .app-nav, #app-tabs');
+  });
+  document.body.classList.toggle('net-badge', foreign);
+}
+if (!matchMedia('print').matches) {
+  [1200, 3000, 6000].forEach((ms) => setTimeout(checkOverlay, ms));
+  window.addEventListener('resize', () => setTimeout(checkOverlay, 300));
+  window.addEventListener('hashchange', () => setTimeout(checkOverlay, 600));
+}

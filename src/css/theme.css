@@ -33,14 +33,14 @@
 
 /* ---------- Premenné vzhľadov ---------- */
 :root, :root[data-look="a"] {
-  --bg: #A39896; --surface: #E7E1D7; --surface-2: #D3CAC0; --ink: #18120F; --muted: #3D3331; --border: rgba(24, 18, 15, .26);
+  --bg: #A39896; --surface: #E7E1D7; --surface-2: #D3CAC0; --ink: #18120F; --muted: #2B2321; --border: rgba(24, 18, 15, .26);
   --primary: #6E4A3E; --primary-strong: #54372D; --primary-soft: #CDBDB3; --on-primary: #F8F1E8;
-  --urgent: #9A3B2A; --urgent-strong: #7A2D1F; --urgent-soft: #D9C3B9; --on-urgent: #FFF4EB;
+  --urgent: #9A3B2A; --urgent-strong: #5F2015; --urgent-soft: #D9C3B9; --on-urgent: #FFF4EB;
   --call: #8E2A2A; --on-call: #FFFFFF; --heading: #18120F; --link: #3E1F19;
   --ok: #1F4A2B; --danger: #7F1D1D;
   --urgent-bg: #E9D5C8; --urgent-border: #9A3B2A; --tip-bg: #D7E0D0; --tip-border: #3F6B47; --warn-bg: #EBCFCB; --warn-border: #8E2A2A; --note-bg: #DDD4DB; --note-border: #6B4F63;
   --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; --head: 'Oxanium', 'Inter', system-ui, sans-serif;
-  --radius: 20px; --btn-radius: 16px; --tap: 52px; --fs: 17px; --tab-h: 68px;
+  --radius: 20px; --btn-radius: 16px; --tap: 52px; --fs: 15px; --tab-h: 66px;
   --shadow: 0 5px 0 rgba(24, 18, 15, .26);
   color-scheme: light;
 }
@@ -52,11 +52,10 @@
   --ok: #3B5B45; --danger: #8A2B2B;
   --urgent-bg: #EEF0F3; --urgent-border: #14161A; --tip-bg: #EAF0EC; --tip-border: #5B7C66; --warn-bg: #F4E8E8; --warn-border: #A24A4A; --note-bg: #E9ECF3; --note-border: #5A6A8C;
   --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; --head: 'Inter', system-ui, sans-serif;
-  --radius: 5px; --btn-radius: 4px; --tap: 50px; --fs: 17px; --tab-h: 64px;
+  --radius: 5px; --btn-radius: 4px; --tap: 50px; --fs: 15px; --tab-h: 62px;
   --shadow: 0 1px 2px rgba(14, 16, 19, .05), 0 8px 24px rgba(14, 16, 19, .07);
   color-scheme: light;
 }
-:root[data-size="l"] { --fs: 19px; }
 :root[data-size="xl"] { --fs: 21px; }
 /* staršie názvy premenných (kniha, karty, zoznamy) */
 :root {
@@ -88,7 +87,7 @@ a { color: var(--link); }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
 a.card:hover { border-color: var(--primary); }
 .chip { min-height: calc(var(--tap) - 4px); border-radius: 999px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); }
-.chip[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
+.chip[aria-pressed="true"], .chip[aria-current="true"] { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
 input, select, textarea { font: inherit; color: var(--ink); }
 input[type="text"], input[type="search"], input[type="number"], input[type="tel"], input[type="date"], input:not([type]), select, textarea {
   background: var(--surface); border: 2px solid var(--border); border-radius: calc(var(--btn-radius) - 2px); min-height: var(--tap);
@@ -410,7 +409,7 @@ a.chip { display: inline-flex; align-items: center; gap: .35rem; text-decoration
   background: radial-gradient(130% 120% at 0% 0%, rgba(255, 255, 255, .95) 0%, rgba(255, 255, 255, 0) 60%), linear-gradient(180deg, #FFFFFF 0%, #EEF0F3 100%);
   box-shadow: inset 0 1px 0 #FFFFFF, 0 1px 1px rgba(14, 16, 19, .08), 0 4px 10px rgba(14, 16, 19, .08);
   transition: transform .08s ease, box-shadow .08s ease, filter .12s ease; }
-:root[data-look="b"] .btn:not(.btn-ghost), :root[data-look="b"] .chip[aria-pressed="true"], :root[data-look="b"] .hdr-112, :root[data-look="b"] .lang-pick button[aria-pressed="true"] {
+:root[data-look="b"] .btn:not(.btn-ghost), :root[data-look="b"] .chip[aria-pressed="true"], :root[data-look="b"] .chip[aria-current="true"], :root[data-look="b"] .hdr-112, :root[data-look="b"] .lang-pick button[aria-pressed="true"] {
   color: #FFFFFF; border-color: #0A0B0D;
   background: radial-gradient(130% 120% at 0% 0%, rgba(255, 255, 255, .24) 0%, rgba(255, 255, 255, 0) 55%), linear-gradient(180deg, #30333A 0%, #14161A 55%, #0B0C0E 100%);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .22), inset 0 -1px 0 rgba(0, 0, 0, .5), 0 1px 2px rgba(14, 16, 19, .35), 0 6px 14px rgba(14, 16, 19, .22); }
@@ -478,3 +477,56 @@ a.b-call:active { background: linear-gradient(160deg, #202329, #0A0B0D); }
 .b-pale .b-lab { font-size: .68rem; color: var(--muted); font-weight: 500; }
 .home-b .b-foot { margin: .9rem .3rem 0; font-size: .8rem; }
 @media print { .home-b { display: none; } }
+
+/* Najmenšie písma neklesnú pod 11,5 px ani pri menšej základnej veľkosti */
+.app-tabs a { font-size: max(.72rem, 11.5px); }
+.b-lab { font-size: max(.76rem, 12px); }
+.b-lab small, .b-pale .b-lab { font-size: max(.68rem, 11.5px); }
+.a-tab .a-lab small { font-size: max(.78rem, 12px); }
+.d-day, .a-day { font-size: max(.95rem, 13px); }
+@media (max-width: 700px) { table.stack td[data-label]::before { font-size: max(.82rem, 12px); } table.shop tbody td[data-label]::before { font-size: max(.66rem, 11px); } }
+
+/* ---------- Najväčšie písmo: Domov a zoznam kríz sa prestavia, aby sa nič neprekrývalo ani nelámalo po slabikách ---------- */
+:root[data-size="xl"] .crisis-grid { grid-template-columns: minmax(0, 1fr); }
+:root[data-size="xl"] .crisis-grid a { flex-direction: row; align-items: center; gap: .8rem; min-height: 4.2rem; }
+.crisis-grid a { hyphens: auto; overflow-wrap: break-word; }
+:root[data-size="xl"] .b-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: auto; }
+:root[data-size="xl"] .b-tile { min-height: 5.2rem; }
+:root[data-size="xl"] .b-big { grid-column: 1 / -1; grid-row: auto; }
+:root[data-size="xl"] .b-urgent { order: -1; min-height: 8rem; }
+:root[data-size="xl"] .b-clock { min-height: 9rem; }
+:root[data-size="xl"] .b-ready { min-height: 8rem; }
+:root[data-size="xl"] .b-time { font-size: 3.6rem; }
+:root[data-size="xl"] .b-row4 { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-column: 1 / -1; }
+:root[data-size="xl"] .b-lab { font-size: .95rem; }
+:root[data-size="xl"] .a-tab { min-height: 5.4rem; flex-wrap: nowrap; }
+:root[data-size="xl"] .a-tab .a-lab { overflow-wrap: break-word; hyphens: auto; }
+:root[data-size="xl"] .a-month { font-size: 2rem; }
+:root[data-size="xl"] .home-a { grid-template-columns: 3.6rem minmax(0, 1fr); }
+
+/* N12: výrazný fokus aj na poliach a výbere jazyka (app.css ich fokus vypína) */
+:root select:focus-visible, :root input:focus-visible, :root textarea:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+:root .langsel:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+
+/* N09: telefón na šírku (nízka obrazovka) – menu ako úzky bočný panel, menšia hlavička */
+@media (max-height: 520px) and (orientation: landscape) and (max-width: 999px) {
+  body.app { padding-bottom: 0; padding-left: calc(78px + env(safe-area-inset-left, 0px)); }
+  .app-header { padding: .15rem .6rem; min-height: 0; }
+  .app-header .hdr-btn, .app-header .iconbtn, .app-header select { min-height: 36px; }
+  .app-tabs { top: 0; bottom: 0; right: auto; left: 0; width: calc(78px + env(safe-area-inset-left, 0px)); padding: 0 0 0 env(safe-area-inset-left, 0px); grid-template-columns: 1fr; grid-template-rows: repeat(5, minmax(0, 1fr)); border-top: 0; border-right: 1px solid var(--border); box-shadow: none; z-index: 62; }
+  .app-tabs a, .app-tabs button { min-height: 0; padding: .1rem .15rem; font-size: max(.68rem, 11.5px); }
+  .app-tabs .ico, .app-tabs svg { width: 22px; height: 22px; }
+  body.more-open .app-nav { left: calc(78px + env(safe-area-inset-left, 0px)); bottom: 0; top: 0; right: auto; width: min(320px, 70vw); max-height: none; }
+  .app-header { position: sticky; }
+  #view { min-height: 0; }
+  /* hlavné tlačidlá (Ďalší krok, Nainštalovať) zostanú pri spodnom okraji */
+  .step-nav, .onb-actions { position: sticky; bottom: 0; z-index: 5; background: var(--bg); padding: .4rem 0; }
+}
+
+/* Odznak Netlify v pravom dolnom rohu: menu sa zdvihne nad neho, aby boli tlačidlá vidieť */
+@media (max-width: 999px) and (min-height: 521px) {
+  body.net-badge .app-tabs { bottom: 62px; border-bottom: 1px solid var(--border); }
+  body.net-badge.app { padding-bottom: calc(var(--tab-h) + 62px + env(safe-area-inset-bottom)); }
+  body.net-badge.more-open .app-nav { bottom: calc(var(--tab-h) + 62px); }
+}
+@media (max-width: 899px) { body.net-badge .back-pill { bottom: calc(var(--tab-h, 64px) + 78px + env(safe-area-inset-bottom, 0px)); } }

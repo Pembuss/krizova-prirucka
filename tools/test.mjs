@@ -187,6 +187,70 @@ async function main() {
       }
     }
 
+    console.log('Opravy z testovania s virtuálnymi používateľmi');
+    {
+      // výpočty: dojča (vek 0 a 0,5), neplatný vek a množné číslo týždňov
+      const calc = await import('../src/js/calc.js');
+      const infant = (age) => ({ members: [{ id: 'a', name: 'Bábätko', age, diet: {} }], supplies: { targetDays: 3 }, pets: [] });
+      for (const age of [0, 0.5]) {
+        const n = calc.householdNeeds(infant(age), 3);
+        check(n.kcalPerDay === 700 && n.kcalTotal === 2100, `vek ${age}: energia spolu ${n.kcalTotal} kcal pri ${n.kcalPerDay} kcal na deň`);
+      }
+      check(calc.ageOf({ age: 999999 }) === 30 && calc.ageOf({ age: -5 }) === 30 && calc.ageOf({ age: '' }) === 30 && calc.ageOf({ age: 0 }) === 0, 'neplatný alebo prázdny vek sa vo výpočtoch berie ako dospelý, 0 ostáva dojča');
+      const { ctx, page, errors } = await newPage(browser, base, 'sk');
+      await page.addInitScript(() => localStorage.setItem('kp.state', JSON.stringify({ wizardDone: true })));
+      // vek mimo 0–120: upozornenie a hodnota sa neuloží
+      await page.goto(base + 'index.html#/profil/2'); await page.waitForSelector('input[data-bind$=".age"]');
+      const age = page.locator('input[data-bind="members.0.age"]');
+      await age.fill('36'); await age.fill('999999');
+      check(await page.locator('.field-err').count() === 1 && await page.evaluate(() => JSON.parse(localStorage.getItem('kp.profile') || '{}').members?.[0]?.age !== 999999), 'vek 999999: upozornenie pod poľom a hodnota sa neuloží');
+      await age.fill('0.5');
+      check(await page.locator('.field-err').count() === 0, 'platný vek upozornenie odstráni');
+      // dlhé meno: obmedzenie na 40 znakov a bez presahu strany
+      await page.locator('input[data-bind="members.0.name"]').fill('M'.repeat(80));
+      check(await page.evaluate(() => document.querySelector('input[data-bind="members.0.name"]').value.length <= 40 && document.documentElement.scrollWidth <= window.innerWidth + 1), 'dlhé meno sa obmedzí a nerozšíri stránku');
+      // kroky profilu sú v jednom riadku
+      check(await page.evaluate(() => { const t = [...document.querySelectorAll('.steps-nav li')].map((e) => e.getBoundingClientRect().top); return t.length === 8 && Math.max(...t) - Math.min(...t) < 4; }), 'všetkých 8 krokov profilu je v jednom riadku');
+      // plán: celá karta rizika je odkaz s výškou aspoň 44 px
+      await page.goto(base + 'index.html#/plan'); await page.waitForSelector('.risk-table a');
+      check(await page.evaluate(() => { const a = document.querySelector('.risk-table th a'); const r = a.getBoundingClientRect(); const tr = a.closest('tr').getBoundingClientRect(); const cs = getComputedStyle(a, '::after'); return r.height >= 44 && cs.position === 'absolute' && tr.height >= 44; }), 'karta rizika v pláne sa dá ťuknúť na celej ploche');
+      // neplatná kapitola: hláška
+      await page.goto(base + 'index.html#/kniha/neexistuje'); await page.waitForSelector('.book-wrap h1');
+      check(await page.locator('.book-wrap [role="alert"]').count() === 1, 'neexistujúca kapitola ukáže hlášku „Kapitola sa nenašla“');
+      // Rozcestník nepresahuje stránku ani na tablete
+      await page.setViewportSize({ width: 768, height: 900 });
+      await page.goto(base + 'index.html#/kniha/rozcestnik'); await page.waitForTimeout(500);
+      check(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), 'Rozcestník na tablete (768 px) nepresahuje stránku');
+      check(!errors.length, errors.length ? `chyby: ${errors.slice(0, 3).join(' | ')}` : 'bez chýb v konzole');
+      await ctx.close();
+    }
+    for (const look of ['a', 'b']) {
+      // prehliadka má všetkých 7 krokov a Kríza teraz je na Domove prvá
+      const { ctx, page } = await newPage(browser, base, 'sk');
+      await ctx.addInitScript((l) => localStorage.setItem('kp.prefs', JSON.stringify({ lang: 'sk', look: l, onboarded: true, tourDone: true, installChoice: 'browser', installHintOff: true })), look);
+      await page.addInitScript(() => localStorage.setItem('kp.state', JSON.stringify({ wizardDone: true })));
+      await page.goto(base + 'index.html#/'); await page.waitForSelector('[data-tour="crisis"]');
+      check(await page.evaluate(() => ['crisis', 'tiles', 'ready'].every((k) => document.querySelector(`[data-tour="${k}"]`))), `vzhľad ${look === 'a' ? 1 : 2}: prehliadka nájde Krízu teraz, dlaždice aj pripravenosť`);
+      if (look === 'a') check(await page.evaluate(() => document.querySelector('.a-stack > :first-child').dataset.tour === 'crisis'), 'vzhľad 1: Kríza teraz je na Domove prvá');
+      await ctx.close();
+    }
+    {
+      // telefón na šírku: bočné menu a hlavné tlačidlo v zornom poli
+      const { ctx, page } = await newPage(browser, base, 'sk', { viewport: { width: 844, height: 390 } });
+      await page.goto(base + 'index.html#/teraz/flood/1'); await page.waitForTimeout(600);
+      check(await page.evaluate(() => { const t = document.querySelector('.app-tabs').getBoundingClientRect(); return t.width < 120 && t.height >= window.innerHeight - 2; }), 'telefón na šírku: menu je úzky bočný panel');
+      await ctx.close();
+    }
+
+    {
+      // odznak Netlify (cudzí prvok v pravom dolnom rohu) nesmie zakrývať spodné menu
+      const { ctx, page } = await newPage(browser, base, 'sk');
+      await page.goto(base + 'index.html#/'); await page.waitForSelector('.app-tabs a');
+      await page.evaluate(() => { const d = document.createElement('div'); d.style.cssText = 'position:fixed;right:16px;bottom:16px;width:230px;height:52px;z-index:2147483647'; document.body.appendChild(d); });
+      await page.waitForTimeout(3300);
+      check(await page.evaluate(() => document.body.classList.contains('net-badge') && document.querySelector('.app-tabs').getBoundingClientRect().bottom <= window.innerHeight - 60), 'spodné menu sa zdvihne nad odznak Netlify');
+      await ctx.close();
+    }
     console.log('Záloha a obnova údajov');
     {
       const { ctx, page, errors } = await newPage(browser, base, 'sk');

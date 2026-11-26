@@ -131,7 +131,7 @@ Obrazovka (`views/*.js`) exportuje `render(el, params)` a môže vrátiť funkci
 
 ### Vzhľady
 
-`html[data-look="a|b"]` a `html[data-size=""|l|xl]` nastavuje `theme.js`. Vzhľad `a` (Zemité karty) je predvolený, `b` je Dlaždice. Neznáma hodnota (napr. zo staršej verzie) sa nahradí predvoleným. Štýly vzhľadov sú v `theme.css`: každý vzhľad je blok premenných (`:root[data-look="…"]`) a pár úprav tvaru komponentov. Každý vzhľad má vlastné rozloženie domovskej obrazovky (`views/home.js`: `homeA`, `homeB`). Nový vzhľad pridáš v `theme.js` (`THEMES`, `THEME_COLOR`, `THEME_NUM`), v `index.html` (zoznam v úvodnom skripte), v `LOOKS` v `settings.js` a `onboarding.js`, v `theme.css` (premenné, náhľad `.look-prev-…`, `.look-sw-…`) a v textoch `look.<id>` (strings.js a src/i18n).
+`html[data-look="a|b"]` a `html[data-size=""|xl]` (staršia hodnota `l` sa berie ako `xl`) nastavuje `theme.js`. Vzhľad `a` (Zemité karty) je predvolený, `b` je Dlaždice. Neznáma hodnota (napr. zo staršej verzie) sa nahradí predvoleným. Štýly vzhľadov sú v `theme.css`: každý vzhľad je blok premenných (`:root[data-look="…"]`) a pár úprav tvaru komponentov. Každý vzhľad má vlastné rozloženie domovskej obrazovky (`views/home.js`: `homeA`, `homeB`). Nový vzhľad pridáš v `theme.js` (`THEMES`, `THEME_COLOR`, `THEME_NUM`), v `index.html` (zoznam v úvodnom skripte), v `LOOKS` v `settings.js` a `onboarding.js`, v `theme.css` (premenné, náhľad `.look-prev-…`, `.look-sw-…`) a v textoch `look.<id>` (strings.js a src/i18n).
 
 ### Úložisko v prehliadači
 

@@ -21,7 +21,7 @@ export async function render(el, [ch, anchor]) {
   cur = null;
   if (!ch) return home(el, idx);
   if (ch === 'hladat') return search(el, idx, anchor || '');
-  if (!idx.chapters.some((c) => c.id === ch)) return home(el, idx);
+  if (!idx.chapters.some((c) => c.id === ch)) return home(el, idx, true);
   return reader(el, idx, ch, anchor);
 }
 // tá istá kapitola, iná kotva → len posun
@@ -59,13 +59,14 @@ function tocHtml(idx, current = '') {
 }
 
 // ---------- Úvod knihy ----------
-function home(el, idx) {
+function home(el, idx, missing = false) {
   const D = idx.D;
   const read = readMap();
   const nRead = idx.chapters.filter((c) => read[c.id]).length;
   const startCh = idx.chapters[0];
   el.innerHTML = `<div class="book-wrap">
 <div class="page-head"><h1>${esc(idx.title)}</h1></div>
+${missing ? `<p class="box warn" role="alert">${esc(t('book.chNotFound'))}</p>` : ''}
 <p class="lead">${esc(idx.subtitle)}</p>
 ${langNote()}
 <form class="search-box" data-search role="search">${icon('search', 20)}<label class="visually-hidden" for="book-q">${esc(t('book.search'))}</label><input id="book-q" type="search" placeholder="${esc(t('home.searchPh'))}" autocomplete="off"></form>

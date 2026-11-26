@@ -29,7 +29,7 @@ export function render(el, [tab = 'list']) {
 <div class="field-row"><span class="lbl">${esc(t('sup.forDays'))}</span><div class="chips">${[3, 7, 14, 30].map((d) => `<button type="button" class="chip" data-days="${d}" aria-pressed="${d === days}">${esc(tp('c.days', d))}</button>`).join('')}</div></div>
 <div class="grid stats">
   <div class="stat"><span class="stat-ico">💧</span><span>${esc(t('sup.water', { l: list.need.waterTotal, d: list.need.waterPerDay }))}</span></div>
-  <div class="stat"><span class="stat-ico">🍽️</span><span>${esc(t('sup.kcal', { kcal: num(list.food.kcalNeeded), kpd: num(list.need.kcalPerDay) }))}</span></div>
+  <div class="stat"><span class="stat-ico">🍽️</span><span>${esc(t('sup.kcal', { kcal: num(list.need.kcalTotal), kpd: num(list.need.kcalPerDay) }))}</span></div>
   <div class="stat"><span class="stat-ico">🔥</span><span>${esc(t('sup.noCook', { p: Math.round(list.food.noCookShare * 100) }))}</span></div>
   <div class="stat"><span class="stat-ico">💶</span><span>${esc(t('sup.cash', { eur: money(list.cashSuggested) }))}</span></div>
 </div>
@@ -52,7 +52,7 @@ ${section(cons, t('sup.consumables'))}${section(eq, t('sup.equipment'))}
       const rows = list.rows.map((r) => ({ ...r, qty: r.buy, cost: r.buyCost })).filter((r) => r.qty > 0);
       const s = purchaseSchedule(rows, p.supplies.budgetMonthly || 60);
       body = `<label class="field-row"><span class="lbl">${esc(t('sup.budget'))}</span><input type="number" min="0" step="any" data-budget value="${toLocal(p.supplies.budgetMonthly || 60)}"></label>
-<p><strong>${esc(t('sup.weekly', { eur: money(s.weekly), n: s.weeks.length }))}</strong></p>
+<p><strong>${esc(tp('sup.weekly', s.weeks.length, { eur: money(s.weekly) }))}</strong></p>
 <ol class="weeks">${s.weeks.map((w, i) => `<li><div class="week-h"><strong>${esc(t('sup.week', { n: i + 1 }))}</strong><span>${money(w.cost)}</span></div><ul>${w.items.map((x) => `<li>${x.qty}× ${esc(T(itemById(x.id).name))}</li>`).join('')}</ul></li>`).join('')}</ol>
 <div class="btn-row"><button class="btn" data-print-plan>🖨️ ${esc(t('pr.purchase'))}</button></div>`;
     } else {

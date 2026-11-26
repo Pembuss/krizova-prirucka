@@ -119,6 +119,19 @@ export function bindForm(root, onChange) {
     if (!el) return;
     let v = el.value;
     if (el.dataset.kind === 'num') v = v === '' ? '' : Number(String(v).replace(',', '.'));
+    // hodnota mimo povoleného rozsahu (min/max poľa) sa neuloží; pod poľom sa ukáže upozornenie
+    if (el.dataset.kind === 'num' && el.min !== '' && el.max !== '') {
+      const lo = el.min === '' ? null : Number(el.min), hi = el.max === '' ? null : Number(el.max);
+      const bad = v !== '' && (!Number.isFinite(v) || (lo !== null && v < lo) || (hi !== null && v > hi));
+      let msg = el.parentElement?.querySelector(':scope > .field-err');
+      if (bad) {
+        if (!msg) { msg = document.createElement('small'); msg.className = 'field-err'; msg.setAttribute('role', 'alert'); el.insertAdjacentElement('afterend', msg); }
+        msg.textContent = t('c.range', { min: lo, max: hi });
+        el.setAttribute('aria-invalid', 'true');
+        return;
+      }
+      msg?.remove(); el.removeAttribute('aria-invalid');
+    }
     if (el.dataset.kind === 'money') v = v === '' ? '' : fromLocal(v);
     if (el.dataset.kind === 'bool') v = el.checked;
     setPath(store.profile, el.dataset.bind, v);

@@ -99,7 +99,7 @@ Aplikacja ma dwa wyglądy. Każdy ma własny ekran startowy i zmienia kolory ora
 ![2 · Kafelki](shot:home-b)
 :::
 
-Wygląd zmienisz przyciskiem z paletą w nagłówku albo w **Ustawieniach**. Tam ustawisz też **Rozmiar tekstu**: normalny, większy lub największy.
+Wygląd zmienisz przyciskiem z paletą w nagłówku albo w **Ustawieniach**. Tam ustawisz też **Rozmiar tekstu**: normalny lub największy.
 
 ## Kryzys teraz
 

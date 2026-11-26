@@ -57,7 +57,8 @@ function renderChapters(lang) {
     let html = pandoc(md);
     const label = chapterLabel(ch.id, lang);
     html = html.replace(/<h1 id="([^"]+)">([\s\S]*?)<\/h1>/, (m, id, title) => `<h1 id="${id}">${label ? `<span class="ch-label">${esc(label)}</span>` : ''}${title}</h1>`);
-    html = html.replace(/<table>/g, '<div class="table-wrap"><table>').replace(/<\/table>/g, '</table></div>');
+    // aj tabuľky s triedou (napr. Rozcestník) idú do posuvného kontajnera; už obalené sa nedvojnásobia
+    html = html.replace(/(?<!<div class="table-wrap">)<table(\s[^>]*)?>/g, (m) => `<div class="table-wrap">${m}`).replace(/<\/table>(?!<\/div>)/g, '</table></div>');
     return { ...ch, label, html, title: t(ch.title, lang) };
   });
   // Druhý krok: voľby a krížové odkazy potrebujú nadpisy zo všetkých kapitol.

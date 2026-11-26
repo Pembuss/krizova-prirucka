@@ -28,7 +28,7 @@ export function render(el, [section] = []) {
 ${LOOKS.map(([id, n, d]) => `<label class="look-card"><input type="radio" name="look" value="${id}" ${id === cur ? 'checked' : ''}><span class="look-prev look-prev-${id}" aria-hidden="true"><i></i><i></i><i></i></span><span class="rc-main"><strong>${esc(t(n))}</strong><small class="muted" style="display:block">${esc(t(d))}</small></span></label>`).join('')}
 </fieldset>
 <h3 class="card-h">${esc(t('set.size'))}</h3>
-<div class="chips">${[['', 'size.normal'], ['l', 'size.l'], ['xl', 'size.xl']].map(([v, k]) => `<button type="button" class="chip" data-size="${v}" aria-pressed="${(pr.size || '') === v}">${esc(t(k))}</button>`).join('')}</div></section>
+<div class="chips">${[['', 'size.normal'], ['xl', 'size.xl']].map(([v, k]) => `<button type="button" class="chip" data-size="${v}" aria-pressed="${((pr.size === 'l' ? 'xl' : pr.size) || '') === v}">${esc(t(k))}</button>`).join('')}</div></section>
 
 <section class="card"><h2 class="card-h">${icon('globe', 22)} ${esc(t('set.language'))}</h2>
 <div class="chips">${LANG_INFO.map((l) => `<button type="button" class="chip" data-lang="${l.id}" aria-pressed="${l.id === LANG}">${esc(l.name)}</button>`).join('')}</div>

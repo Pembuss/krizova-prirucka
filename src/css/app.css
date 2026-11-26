@@ -77,7 +77,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--orange); outline
 .checks { display: flex; flex-wrap: wrap; gap: 0 1.2rem; }
 .chips { display: flex; flex-wrap: wrap; gap: .45rem; margin: .3rem 0 .6rem; }
 .chip { min-height: 44px; padding: .35rem .9rem; border-radius: 999px; border: 2px solid var(--border); background: var(--surface); color: var(--ink); font: inherit; font-weight: 700; font-size: .92rem; cursor: pointer; }
-.chip[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+.chip[aria-pressed="true"], .chip[aria-current="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
 .chip { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 .chip[data-multi="true"][aria-pressed="true"]::before { content: "✓ "; }
 @media (forced-colors: active) { .chip[aria-pressed="true"] { forced-color-adjust: none; background: Highlight; color: HighlightText; border-color: Highlight; } }
@@ -115,8 +115,8 @@ fieldset.person { background: var(--surface); }
 .stats { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin: .8rem 0; }
 .stat { display: flex; gap: .6rem; align-items: center; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: .7rem .9rem; font-weight: 600; }
 .stat-ico { font-size: 1.5rem; }
-.tabs { display: flex; gap: .3rem; border-bottom: 2px solid var(--border); margin: 1rem 0; overflow-x: auto; }
-.tabs a { padding: .6rem 1rem; text-decoration: none; color: var(--muted); font-weight: 700; border-bottom: 3px solid transparent; margin-bottom: -2px; white-space: nowrap; }
+.tabs { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: .2rem; border-bottom: 2px solid var(--border); margin: 1rem 0; }
+.tabs a { padding: .6rem .4rem; text-decoration: none; color: var(--muted); font-weight: 700; border-bottom: 3px solid transparent; margin-bottom: -2px; text-align: center; line-height: 1.2; display: flex; align-items: center; justify-content: center; overflow-wrap: anywhere; }
 .tabs a[aria-selected="true"] { color: var(--orange-strong); border-color: var(--orange-strong); }
 table.shop input { width: 5.5rem; min-height: 40px; padding: .3rem .4rem; }
 table.shop tr.done th, table.shop tr.done td { color: var(--muted); }
@@ -251,3 +251,28 @@ dialog::backdrop { background: rgba(0, 0, 0, .45); }
   .reader-pager { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .reader-pager a { min-width: 0; overflow-wrap: anywhere; }
 }
+
+/* N05: celý riadok/karta rizika je odkaz (min. 48 px) */
+.risk-table tr { position: relative; }
+.risk-table th a { display: block; padding: .8rem 0; min-height: 48px; }
+.risk-table th a::after { content: ""; position: absolute; inset: 0; }
+.risk-table th a:focus-visible { outline-offset: -2px; }
+
+/* N06: upozornenie pod poľom */
+.field-err { display: block; margin-top: .25rem; color: var(--urgent-strong, #8a1f11); font-weight: 600; }
+input[aria-invalid="true"] { border-color: var(--urgent-strong, #8a1f11); }
+
+/* N13: všetkých osem krokov sa vždy zmestí do jedného riadku */
+.steps-nav { flex-wrap: nowrap; justify-content: space-between; gap: .25rem; }
+.steps-nav li { flex: 1 1 0; min-width: 0; max-width: 2.6rem; }
+.steps-nav a { width: 100%; height: auto; aspect-ratio: 1; min-width: 1.9rem; }
+
+/* N15: dlhé slovo (napr. meno) nerozšíri kartu */
+fieldset.person { min-width: 0; }
+fieldset.person legend { max-width: 100%; overflow-wrap: anywhere; }
+.person .two > *, .field-row { min-width: 0; }
+.person input, .person select, .person textarea { max-width: 100%; min-width: 0; }
+
+/* N20: nadpisy v Trasách po úprave úrovne vyzerajú rovnako ako predtým */
+.routes-view section > h2, .routes-view .route-group > h2 { font-size: 1.15rem; border-top: 0; padding-top: 0; margin-top: .8rem; }
+.table-wrap[tabindex]:focus-visible { outline: 3px solid var(--ink, #000); outline-offset: 2px; }

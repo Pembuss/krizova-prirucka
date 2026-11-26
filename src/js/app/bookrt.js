@@ -195,6 +195,7 @@ export function bindChecklists(root, keyPrefix) {
     const block = ul.closest('[data-persist]') || ul.closest('.checklist-block');
     const key = block?.dataset.persist || block?.id || `${keyPrefix}#${listIdx}`;
     const state = checks[key] || [];
+    ul.setAttribute('role', 'group'); // položky majú rolu checkbox, zoznam teda nesmie zostať list
     $$('li', ul).forEach((li, i) => {
       const cb = $('.cb', li);
       if (!cb) return;

@@ -116,17 +116,18 @@ export function render(el, params, opts = {}) {
   const destinations = () => [...(p.mobility.destinations || []), ...(p.places || []).filter((x) => ['family', 'shelter', 'meet'].includes(x.type)).map((x) => ({ ...x, label: x.name }))];
   const home = () => (p.location.lat != null ? { lat: p.location.lat, lon: p.location.lon } : null);
 
+  const H = opts.standalone ? 'h3' : 'h2'; // úroveň nadpisov bez preskakovania
   el.innerHTML = `<div class="wrap routes-view">
 ${opts.standalone ? `<h2 id="trasy">${esc(t('rt.title'))}</h2>` : `<h1>${esc(t('rt.title'))}</h1>`}
 <p class="lead">${esc(t('rt.lead'))}</p>
 <div class="grid two-col">
-<section><h3>${esc(t('rt.origin'))}</h3><p id="rt-origin"></p>
-<h3>${esc(t('rt.dest'))}</h3><ul class="destpick" id="rt-dests"></ul>
+<section><${H}>${esc(t('rt.origin'))}</${H}><p id="rt-origin"></p>
+<${H}>${esc(t('rt.dest'))}</${H}><ul class="destpick" id="rt-dests"></ul>
 <details class="add-dest" id="rt-add"><summary>＋ ${esc(t('dest.add'))}</summary>
 <label class="field-row"><span class="lbl">${esc(t('dest.name'))}</span><input type="text" id="rt-dest-name"></label>
 <div id="rt-dest-picker"></div>
 <div class="btn-row"><button class="btn" type="button" data-add-dest>${esc(t('dest.addBtn'))}</button></div></details>
-<h3>${esc(t('rt.modes'))}</h3><div class="chips">${['car', 'foot', 'bike'].map((m) => `<button type="button" class="chip" data-mode="${m}" aria-pressed="${modes.has(m)}">${m === 'car' ? '🚗' : m === 'foot' ? '🚶' : '🚲'} ${esc(t('mode.' + m))}</button>`).join('')}</div>
+<${H}>${esc(t('rt.modes'))}</${H}><div class="chips">${['car', 'foot', 'bike'].map((m) => `<button type="button" class="chip" data-mode="${m}" aria-pressed="${modes.has(m)}">${m === 'car' ? '🚗' : m === 'foot' ? '🚶' : '🚲'} ${esc(t('mode.' + m))}</button>`).join('')}</div>
 <div class="btn-row"><button class="btn" data-compute>🧭 ${esc(t('rt.compute'))}</button><button class="btn btn-ghost" data-print>🖨️ ${esc(t('rt.print'))}</button></div>
 <p id="rt-status" class="muted" aria-live="polite"></p></section>
 <section><div class="mapwrap"><div id="rt-map" class="bigmap"></div></div></section></div>
@@ -157,7 +158,7 @@ ${opts.standalone ? `<h2 id="trasy">${esc(t('rt.title'))}</h2>` : `<h1>${esc(t('
       if (all.length) map.fitBounds(L.latLngBounds(all).pad(0.1));
     }
     const walkKm = Number(p.mobility.walkKm) || 0;
-    $('#rt-list', el).innerHTML = Object.entries(byDest).map(([dest, list]) => `<section class="route-group"><h3>🏁 ${esc(dest)}</h3>
+    $('#rt-list', el).innerHTML = Object.entries(byDest).map(([dest, list]) => `<section class="route-group"><${H}>🏁 ${esc(dest)}</${H}>
 ${list.map((r) => { const i = results.indexOf(r); const long = r.mode === 'foot' && walkKm && r.distance / 1000 > walkKm; return `<article class="route-card" style="--rc:${COLORS[i % COLORS.length]}">
 <header><span class="swatch"></span><strong>${String.fromCharCode(65 + list.indexOf(r))} · ${r.mode === 'car' ? '🚗' : r.mode === 'foot' ? '🚶' : '🚲'} ${esc(t('mode.' + r.mode))} – ${esc(t('rt.' + r.kind))}</strong>
 <span>${num(r.distance / 1000, 1)} km · ${fmtDuration(r.duration)}</span></header>

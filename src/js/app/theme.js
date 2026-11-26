@@ -18,7 +18,8 @@ export function applyTheme() {
   const root = document.documentElement;
   const changed = root.dataset.look !== th;
   root.dataset.look = th;
-  root.dataset.size = store.prefs.size || '';
+  // dve veľkosti písma: normálna a najväčšia (staršia voľba „väčšia“ sa berie ako najväčšia)
+  root.dataset.size = store.prefs.size === 'xl' || store.prefs.size === 'l' ? 'xl' : '';
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) meta.content = THEME_COLOR[th];
   if (changed) for (const fn of listeners) fn(th);

@@ -28,18 +28,20 @@ function homeA(s) {
   const place = (s.p.location?.label || '').split(',')[0].trim();
   const cards = [
     ['#/teraz', 'bolt', 'home.crisisNow', 'home.crisisSub', 'a-urgent', 'crisis'],
-    ['#/plan', 'flag', 'home.tPrepare', 'home.tPrepareSub', 'a-c1'],
+    ['#/plan', 'flag', 'home.tPrepare', 'home.tPrepareSub', 'a-c1', 'tiles'],
     ['#/kniha', 'book', 'nav.book', 'home.tBookSub', 'a-c2'],
     ['#/mapa', 'pin', 'home.tMap', 'home.tMapSub', 'a-c3'],
     ['#/rodina', 'family', 'nav.family', 'home.tFamilySub', 'a-c4'],
   ];
+  const card = ([h, i, a, b, c, tour]) => `<a class="a-tab ${c}" href="${h}"${tour ? ` data-tour="${tour}"` : ''}><span class="a-ic">${icon(i, 26)}</span><span class="a-lab">${esc(t(a))}<small>${esc(t(b))}</small></span></a>`;
   return `<div class="home-a">
 <div class="a-date" aria-hidden="true"><span class="a-month">${esc(month)}</span><span class="a-day">${esc(dayLine)}</span></div>
 <div class="a-stack">
+${card(cards[0])}
 <div class="a-tab a-clock" data-clock role="timer" aria-label="${esc(t('home.dClock'))}">${timeText()}</div>
 <a class="a-tab a-place" href="${place ? '#/mapa' : '#/profil'}"><span class="a-ic">${icon('pin', 26)}</span><span class="a-lab">${esc(place || t('home.dPlace'))}</span></a>
-${cards.map(([h, i, a, b, c, tour]) => `<a class="a-tab ${c}" href="${h}"${tour ? ` data-tour="${tour}"` : ''}><span class="a-ic">${icon(i, 26)}</span><span class="a-lab">${esc(t(a))}<small>${esc(t(b))}</small></span></a>`).join('')}
-<a class="a-tab a-ready" href="${s.done ? '#/plan' : '#/profil'}" data-tour="ready"><span class="a-ic">${icon('check', 26)}</span><span class="a-lab">${esc(t('home.readiness'))}<small>${esc(s.done ? (s.next ? s.next.text : t('home.allDone')) : t('home.startWizard'))}</small></span><b>${s.r.pct} %</b><span class="ready-bar" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${s.r.pct}"><span style="width:${s.r.pct}%"></span></span></a>
+${cards.slice(1).map(card).join('')}
+<a class="a-tab a-ready" href="${s.done ? '#/plan' : '#/profil'}" data-tour="ready"><span class="a-ic">${icon('check', 26)}</span><span class="a-lab">${esc(t('home.readiness'))}<small>${esc(s.done ? (s.next ? s.next.text : t('home.allDone')) : t('home.startWizard'))}</small></span><b>${s.r.pct} %</b><span class="ready-bar" role="meter" aria-label="${esc(t('home.readiness'))}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${s.r.pct}"><span style="width:${s.r.pct}%"></span></span></a>
 <a class="a-tab a-call" href="tel:112"><span class="a-ic">${icon('phone', 26)}</span><span class="a-lab">${esc(t('home.call112'))}</span></a>
 </div>
 <p class="a-foot muted">${esc(t('c.disclaimer'))}</p>
@@ -61,9 +63,9 @@ ${small('#/kniha', 'book', 'nav.book')}
 ${small('#/rodina', 'family', 'nav.family')}
 <a class="b-tile b-big b-urgent" href="#/teraz" data-tour="crisis">${icon('bolt', 52)}<span class="b-lab">${esc(t('home.crisisNow'))}<small>${esc(t('home.crisisSub'))}</small></span></a>
 ${small('#/mapa', 'pin', 'home.tMap')}
-${small('#/plan', 'flag', 'home.tPrepare')}
+<a class="b-tile" href="#/plan" data-tour="tiles">${icon('flag', 26)}<span class="b-lab">${esc(t('home.tPrepare'))}</span></a>
 <a class="b-tile b-big b-ready" href="${s.done ? '#/plan' : '#/profil'}" data-tour="ready"><span><span class="b-pct">${s.r.pct}<small> %</small></span><span class="b-lab">${esc(t('home.readiness'))}<small>${esc(s.done ? (s.next ? s.next.text : t('home.allDone')) : t('home.startWizard'))}</small></span></span>
-<span class="b-seg" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${s.r.pct}">${Array.from({ length: 8 }, (_, i) => `<span class="${i < on ? 'on' : ''}"></span>`).join('')}</span></a>
+<span class="b-seg" role="meter" aria-label="${esc(t('home.readiness'))}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${s.r.pct}">${Array.from({ length: 8 }, (_, i) => `<span class="${i < on ? 'on' : ''}"></span>`).join('')}</span></a>
 ${small('tel:112', 'phone', 'home.call112', 'b-call')}
 ${small('#/pomoc', 'help', 'nav.help')}
 <div class="b-row4">${pale('#/zoznamy', 'list', 'nav.lists')}${pale('#/karty', 'cards', 'nav.cards')}${pale('#/krajiny', 'globe', 'nav.countries')}${pale('#/nastavenia', 'settings', 'nav.settings')}</div>
@@ -77,7 +79,8 @@ export function render(el) {
   const hint = showInstallHint() ? `<div class="install-hint" role="note">${icon('mobile', 22)}<span>${esc(t('inst.hint'))}</span><a class="btn btn-sm" href="#/instalacia/navod">${esc(t('inst.hintBtn'))}</a><button type="button" class="hint-x" data-hint-off aria-label="${esc(t('c.close'))}">${icon('close', 18)}</button></div>` : '';
   // pripomienka zálohy údajov (nikdy nezálohované, alebo záloha staršia ako 30 dní)
   const bkHint = !hint && backupDue() ? `<div class="install-hint" role="note">${icon('shield', 22)}<span>${esc(t('bk.hint'))}</span><a class="btn btn-sm" href="#/nastavenia/zaloha">${esc(t('bk.hintBtn'))}</a><button type="button" class="hint-x" data-bk-off aria-label="${esc(t('c.close'))}">${icon('close', 18)}</button></div>` : '';
-  el.innerHTML = hint + bkHint + (look === 'b' ? homeB(s) : homeA(s));
+  // vzhľad 1: Kríza teraz je prvá a upozornenia idú pod karty; vzhľad 2 ich má navrchu
+  el.innerHTML = look === 'b' ? hint + bkHint + homeB(s) : homeA(s) + hint + bkHint;
   el.addEventListener('click', (e) => {
     if (e.target.closest('[data-bk-off]')) { store.prefs.backupSnooze = Date.now() + 14 * 864e5; store.savePrefs(); el.querySelector('.install-hint')?.remove(); return; }
     if (e.target.closest('[data-hint-off]')) { store.prefs.installHintOff = true; store.savePrefs(); el.querySelector('.install-hint')?.remove(); return; }

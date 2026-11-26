@@ -43,3 +43,7 @@
   .source a[href^="http"]::after { content: ""; }
   img, svg { break-inside: avoid; }
 }
+
+/* N17: dve postupové karty na stranu A4 */
+.print-card { break-inside: avoid; }
+.print-card.second { margin-top: 8mm; padding-top: 6mm; border-top: 1px dashed #000; }

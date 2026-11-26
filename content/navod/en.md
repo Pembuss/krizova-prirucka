@@ -99,7 +99,7 @@ The app has two looks. Each has its own home screen and changes the colours and 
 ![2 · Tiles](shot:home-b)
 :::
 
-Change the look with the palette button in the header or in **Settings**. That is also where you set the **Text size**: normal, larger or largest.
+Change the look with the palette button in the header or in **Settings**. That is also where you set the **Text size**: normal or largest.
 
 ## Crisis now
 
